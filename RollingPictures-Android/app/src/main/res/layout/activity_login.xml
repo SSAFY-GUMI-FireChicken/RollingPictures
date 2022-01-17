@@ -22,6 +22,7 @@
         app:layout_constraintWidth_percent="0.7" />
 
     <androidx.appcompat.widget.AppCompatEditText
+        style="@style/Text.EditTextHintStyle"
         android:id="@+id/appCompatEditText"
         android:layout_width="0dp"
         android:layout_height="64dp"
@@ -37,6 +38,7 @@
         app:layout_constraintWidth_percent="0.8" />
 
     <androidx.appcompat.widget.AppCompatButton
+        style="@style/Text.ButtonOkStyle"
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:background="@drawable/bg_button_ok"
