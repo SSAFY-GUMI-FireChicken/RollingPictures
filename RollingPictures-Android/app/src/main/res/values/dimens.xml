@@ -12,5 +12,6 @@
 
     <dimen name="margin_size_18">18dp</dimen>
     <dimen name="padding_size_20">20dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

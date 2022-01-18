@@ -10,17 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RollingPicturesAndroid">
         <activity
-            android:name=".GameFinishActivity"
-            android:exported="true" />
-        <activity
-            android:name=".GameWritingActivity"
-            android:exported="true" />
-        <activity
-            android:name=".GameDrawingActivity"
-            android:exported="true" />
-        <activity
             android:name=".GameActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:label="@string/title_activity_game"
+            android:theme="@style/Theme.RollingPicturesAndroid.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
