@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    tools:context=".GameDrawingActivity">
+
+    <ProgressBar
+        android:id="@+id/timeProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/headSetImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_headset_off_24"
+        app:layout_constraintEnd_toStartOf="@+id/micImageView"
+        app:layout_constraintTop_toTopOf="@+id/roundTextView" />
+
+    <ImageView
+        android:id="@+id/micImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/ic_baseline_mic_off_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/headSetImageView" />
+
+    <TextView
+        android:id="@+id/roundTextView"
+        style="@style/Text.TitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeProgressBar"
+        tools:text="@string/current_round" />
+
+    <TextView
+        android:id="@+id/slashRoundTextView"
+        style="@style/Text.RoundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_round"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@+id/roundTextView"
+        app:layout_constraintTop_toBottomOf="@+id/roundTextView"
+        tools:text="@string/slash_round" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/writingEditText"
+        style="@style/Text.EditTextHintStyle"
+        android:layout_width="329dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_input"
+        android:padding="@dimen/padding_size_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/slashRoundTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/completeButton"
+        style="@style/Text.ButtonOkStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/bg_button_ok"
+        android:text="@string/complete_round"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
