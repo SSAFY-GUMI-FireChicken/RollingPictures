@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RollingPicturesAndroid">
         <activity
+            android:name=".GameWaitingActivity"
+            android:exported="true" />
+        <activity
             android:name=".GameFinishActivity"
             android:exported="true" />
         <activity
@@ -17,9 +20,6 @@
             android:exported="true" />
         <activity
             android:name=".GameDrawingActivity"
-            android:exported="true" />
-        <activity
-            android:name=".GameActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
