@@ -9,6 +9,8 @@
     <!-- Layout dimens -->
     <dimen name="radius">20dp</dimen>
     <dimen name="box_height">64dp</dimen>
+    <dimen name="player_box_height">68dp</dimen>
+    <dimen name="player_box_width">170dp</dimen>
 
     <dimen name="margin_size_18">18dp</dimen>
     <dimen name="padding_size_20">20dp</dimen>

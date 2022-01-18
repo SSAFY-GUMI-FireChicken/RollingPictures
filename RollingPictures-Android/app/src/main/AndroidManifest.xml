@@ -15,6 +15,9 @@
             android:label="@string/title_activity_game"
             android:theme="@style/Theme.RollingPicturesAndroid.NoActionBar" />
         <activity
+            android:name=".GameWaitingActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity

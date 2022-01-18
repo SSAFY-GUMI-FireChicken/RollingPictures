@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    tools:context=".GameWaitingActivity">
+
+    <ProgressBar
+        android:id="@+id/timeProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:scaleY="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/headSetImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_headset_off_24"
+        app:layout_constraintEnd_toStartOf="@+id/micImageButton"
+        app:layout_constraintTop_toTopOf="@+id/waitingRoomTextView"
+        android:background="@android:color/transparent" />
+
+    <ImageButton
+        android:id="@+id/micImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/ic_baseline_mic_off_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/headSetImageButton"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/waitingRoomTextView"
+        style="@style/Text.TitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeProgressBar"
+        android:text="@string/waiting_room" />
+
+    <TextView
+        android:id="@+id/playerTitleTextView"
+        style="@style/Text.PlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomCodeTextView"
+        tools:text="@string/player" />
+
+    <TextView
+        android:id="@+id/playerCountTextView"
+        style="@style/Text.PlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="28dp"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/playerTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/roomCodeTextView"
+        tools:text="6/10" />
+
+    <TextView
+        android:id="@+id/guideCodeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waitingRoomTextView"
+        android:text="@string/guide_code" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/playerButton"
+        style="@style/Text.ButtonOkStyle"
+        android:layout_width="@dimen/player_box_width"
+        android:layout_height="@dimen/player_box_height"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/bg_round_player"
+        android:text="푸읍"
+        app:layout_constraintEnd_toStartOf="@+id/playerButton2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerTitleTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/exitRoom"
+        style="@style/Text.ExitStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_button_exit"
+        android:text="@string/exit_room"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startGameButton"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/playerButton2"
+        style="@style/Text.ButtonOkStyle"
+        android:layout_width="@dimen/player_box_width"
+        android:layout_height="@dimen/player_box_height"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/bg_round_player"
+        android:text="풉"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playerButton"
+        app:layout_constraintTop_toBottomOf="@+id/playerTitleTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <TextView
+        android:id="@+id/roomCodeTextView"
+        style="@style/Text.EditTextHintStyle"
+        android:layout_width="329dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_input_dark"
+        android:padding="@dimen/padding_size_20"
+        android:text="4025QWd5"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideCodeTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <ImageButton
+        android:id="@+id/shareImageButton"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:scaleType="fitXY"
+        android:layout_marginStart="284dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/roomCodeTextView"
+        app:layout_constraintTop_toTopOf="@+id/roomCodeTextView"
+        app:srcCompat="@drawable/ic_baseline_share_24"
+        android:background="@android:color/transparent" />
+
+
+    <ImageButton
+        android:id="@+id/copyImageButton"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:scaleType="fitXY"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/shareImageButton"
+        app:layout_constraintTop_toTopOf="@+id/roomCodeTextView"
+        app:srcCompat="@drawable/ic_baseline_content_copy_24"
+        android:background="@android:color/transparent" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startGameButton"
+        style="@style/Text.ButtonOkStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginTop="194dp"
+        android:background="@drawable/bg_button_ok"
+        android:text="@string/start_game"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerButton"
+        app:layout_constraintWidth_percent="0.8" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
