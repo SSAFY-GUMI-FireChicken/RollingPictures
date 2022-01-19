@@ -12,8 +12,7 @@
         <activity
             android:name=".GameActivity"
             android:exported="true"
-            android:label="@string/title_activity_game"
-            android:theme="@style/Theme.RollingPicturesAndroid.NoActionBar" />
+            android:label="@string/title_activity_game" />
         <activity
             android:name=".GameWaitingActivity"
             android:exported="true" />
