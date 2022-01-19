@@ -14,11 +14,13 @@ class GameExitDialog(context: Context)
 
     fun showDialog()
     {
-        dialog.setContentView(R.layout.dialog_game_exit)
-        dialog.window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.setCancelable(true)
-        dialog.show()
+        dialog.apply {
+            setContentView(R.layout.dialog_game_exit)
+            window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+            setCancelable(true)
+            show()
+        }
 
         val exitButton = dialog.findViewById<TextView>(R.id.dialog_exit_button)
         val cancelButton = dialog.findViewById<TextView>(R.id.dialog_cancel_button)

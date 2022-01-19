@@ -8,28 +8,24 @@
 
     <TextView
         android:id="@+id/exitTitleTextView"
-        style="@style/Text.TitleStyle"
+        style="@style/Text.DialogTitleStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/gmarket_sans_medium"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/margin_size_32"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:text="게임방을 나가시겠습니까?"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/exitSubtitleTextView"
+        style="@style/Text.DialogSubTitleStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/gmarket_sans_medium"
-        android:text="입장 페이지로 이동하며,\n코드를 통해 다시 들어올 수 있습니다."
-        android:textColor="@color/cyan_deep_dark"
-        android:textSize="14sp" />
+        android:text="입장 페이지로 이동하며,\n코드를 통해 다시 들어올 수 있습니다." />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,17 +38,15 @@
 
         <TextView
             android:id="@+id/dialog_exit_button"
+            style="@style/Text.DialogButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:fontFamily="@font/gmarket_sans_medium"
-            android:text="나가기"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:text="나가기" />
 
         <View
-            android:background="#428188"
+            android:background="@color/cyan_deep_dark"
             android:layout_width="1dp"
             android:layout_height="15dp"
             android:layout_marginStart="30dp"
@@ -61,14 +55,13 @@
 
         <TextView
             android:id="@+id/dialog_cancel_button"
+            style="@style/Text.DialogButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:fontFamily="@font/gmarket_sans_medium"
             android:text="취소"
-            android:textColor="#D32F2F"
-            android:textSize="14sp" />
+            android:textColor="@color/red_medium" />
 
     </LinearLayout>
 

@@ -7,16 +7,6 @@
     android:background="@drawable/bg_activity"
     tools:context=".GameWaitingActivity">
 
-    <ProgressBar
-        android:id="@+id/timeProgressBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:scaleY="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/headSetImageButton"
@@ -47,7 +37,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeProgressBar"
+        app:layout_constraintTop_toTopOf="parent"
         android:text="@string/waiting_room" />
 
     <TextView
@@ -104,12 +94,12 @@
         style="@style/Text.ExitStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/box_height"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="@dimen/margin_size_24"
         android:background="@drawable/bg_button_exit"
         android:text="@string/exit_room"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startGameButton"
         app:layout_constraintWidth_percent="0.8" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -130,7 +120,7 @@
     <TextView
         android:id="@+id/roomCodeTextView"
         style="@style/Text.EditTextHintStyle"
-        android:layout_width="329dp"
+        android:layout_width="0dp"
         android:layout_height="@dimen/box_height"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_input_dark"
@@ -159,13 +149,13 @@
         android:id="@+id/copyImageButton"
         android:layout_width="13dp"
         android:layout_height="13dp"
-        android:scaleType="fitXY"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/shareImageButton"
+        android:layout_marginEnd="12dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="@+id/roomCodeTextView"
         app:layout_constraintTop_toTopOf="@+id/roomCodeTextView"
-        app:srcCompat="@drawable/ic_baseline_content_copy_24"
-        android:background="@android:color/transparent" />
+        app:srcCompat="@drawable/ic_baseline_content_copy_24" />
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -173,12 +163,12 @@
         style="@style/Text.ButtonOkStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/box_height"
-        android:layout_marginTop="194dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/bg_button_ok"
         android:text="@string/start_game"
+        app:layout_constraintBottom_toTopOf="@+id/exitRoom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerButton"
         app:layout_constraintWidth_percent="0.8" />
 
 
