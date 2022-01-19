@@ -7,13 +7,12 @@
     android:background="@drawable/bg_activity"
     tools:context=".GameWaitingActivity">
 
-
     <ImageButton
         android:id="@+id/headSetImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="@dimen/margin_size_8"
+        android:layout_marginEnd="@dimen/margin_size_16"
         android:src="@drawable/ic_baseline_headset_off_24"
         app:layout_constraintEnd_toStartOf="@+id/micImageButton"
         app:layout_constraintTop_toTopOf="@+id/waitingRoomTextView"
@@ -23,7 +22,7 @@
         android:id="@+id/micImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="@dimen/margin_size_32"
         android:src="@drawable/ic_baseline_mic_off_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/headSetImageButton"
@@ -34,8 +33,8 @@
         style="@style/Text.TitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/margin_size_48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/waiting_room" />
@@ -45,11 +44,11 @@
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="28dp"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomCodeTextView"
+        android:textSize="@dimen/player_list_title_size"
+        app:layout_constraintBottom_toTopOf="@+id/startGameButton"
+        app:layout_constraintStart_toStartOf="@+id/waitingRoomTextView"
+        app:layout_constraintTop_toBottomOf="@+id/waitingRoomTextView"
+        app:layout_constraintVertical_bias="0.377"
         tools:text="@string/player" />
 
     <TextView
@@ -57,21 +56,21 @@
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="28dp"
-        android:textSize="24sp"
+        android:layout_marginStart="@dimen/margin_size_10"
+        android:textSize="@dimen/player_list_title_size"
+        app:layout_constraintBottom_toBottomOf="@+id/playerTitleTextView"
         app:layout_constraintStart_toEndOf="@+id/playerTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/roomCodeTextView"
+        app:layout_constraintTop_toTopOf="@+id/playerTitleTextView"
         tools:text="6/10" />
 
     <TextView
         android:id="@+id/guideCodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="58dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/waitingRoomTextView"
+        app:layout_constraintBottom_toTopOf="@id/roomCodeTextView"
+        android:layout_marginBottom="@dimen/margin_size_10"
         android:text="@string/guide_code" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -79,13 +78,12 @@
         style="@style/Text.ButtonOkStyle"
         android:layout_width="@dimen/player_box_width"
         android:layout_height="@dimen/player_box_height"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="14dp"
         android:background="@drawable/bg_round_player"
         android:text="푸읍"
         app:layout_constraintEnd_toStartOf="@+id/playerButton2"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/playerTitleTextView"
         app:layout_constraintTop_toBottomOf="@+id/playerTitleTextView"
         app:layout_constraintWidth_percent="0.8" />
 
@@ -122,35 +120,35 @@
         style="@style/Text.EditTextHintStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/box_height"
-        android:layout_marginTop="10dp"
         android:background="@drawable/bg_input_dark"
         android:padding="@dimen/padding_size_20"
         android:text="4025QWd5"
         android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/playerTitleTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideCodeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/waitingRoomTextView"
         app:layout_constraintWidth_percent="0.8" />
 
     <ImageButton
         android:id="@+id/shareImageButton"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
-        android:layout_marginStart="284dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/code_button_size"
+        android:layout_height="@dimen/code_button_size"
+        android:layout_marginTop="@dimen/margin_size_8"
+        android:layout_marginEnd="@dimen/margin_size_12"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="@+id/roomCodeTextView"
+        app:layout_constraintEnd_toStartOf="@+id/copyImageButton"
         app:layout_constraintTop_toTopOf="@+id/roomCodeTextView"
         app:srcCompat="@drawable/ic_outline_share_24" />
 
 
     <ImageButton
         android:id="@+id/copyImageButton"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="@dimen/code_button_size"
+        android:layout_height="@dimen/code_button_size"
+        android:layout_marginTop="@dimen/margin_size_8"
+        android:layout_marginEnd="@dimen/margin_size_12"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/roomCodeTextView"
@@ -163,13 +161,12 @@
         style="@style/Text.ButtonOkStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/box_height"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/margin_size_8"
         android:background="@drawable/bg_button_ok"
         android:text="@string/start_game"
         app:layout_constraintBottom_toTopOf="@+id/exitRoom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.8" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

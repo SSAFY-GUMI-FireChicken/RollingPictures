@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_margin="@dimen/margin_size_16"
         android:background="@drawable/bg_round"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +24,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/writingTextView"
         style="@style/Text.EditTextHintStyle"
-        android:layout_width="329dp"
+        android:layout_width="0dp"
         android:layout_height="@dimen/box_height"
         android:layout_marginTop="@dimen/margin_size_24"
         android:background="@drawable/bg_input"

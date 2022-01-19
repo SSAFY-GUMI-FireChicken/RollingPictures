@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/exitButton"
         style="@style/Text.ExitStyle"
