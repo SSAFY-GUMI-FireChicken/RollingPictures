@@ -146,13 +146,13 @@
         android:id="@+id/shareImageButton"
         android:layout_width="13dp"
         android:layout_height="13dp"
-        android:scaleType="fitXY"
         android:layout_marginStart="284dp"
         android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="@+id/roomCodeTextView"
         app:layout_constraintTop_toTopOf="@+id/roomCodeTextView"
-        app:srcCompat="@drawable/ic_baseline_share_24"
-        android:background="@android:color/transparent" />
+        app:srcCompat="@drawable/ic_outline_share_24" />
 
 
     <ImageButton
