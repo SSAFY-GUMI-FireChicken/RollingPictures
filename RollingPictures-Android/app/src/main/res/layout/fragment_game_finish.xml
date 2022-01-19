@@ -10,9 +10,9 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/exitButton"
         style="@style/Text.ExitStyle"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/fragment_height"
         android:layout_height="@dimen/box_height"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/margin_size_24dp"
         android:background="@drawable/bg_button_exit"
         android:text="@string/exit_game"
         app:layout_constraintBottom_toBottomOf="parent"

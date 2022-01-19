@@ -15,5 +15,11 @@
     <dimen name="margin_size_18">18dp</dimen>
     <dimen name="padding_size_20">20dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_size_4dp">4dp</dimen>
+    <dimen name="margin_size_8dp">8dp</dimen>
+    <dimen name="margin_size_32dp">32dp</dimen>
+    <dimen name="margin_size_48dp">48dp</dimen>
+    <dimen name="fragment_height">0dp</dimen>
+    <dimen name="margin_size_24dp">24dp</dimen>
 
 </resources>

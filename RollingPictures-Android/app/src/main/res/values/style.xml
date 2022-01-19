@@ -36,11 +36,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#000000</item>
     </style>
+
     <style name="Text.PlayerText" parent="android:TextAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/gmarket_sans_medium</item>
         <item name="android:textColor">@color/green_deep_dark</item>
     </style>
-
 
 </resources>
