@@ -5,12 +5,40 @@
     <dimen name="title_text_size">36sp</dimen>
     <dimen name="default_text_size">18sp</dimen>
     <dimen name="button_text_size">24sp</dimen>
+    <dimen name="dialog_title_text_size">20sp</dimen>
+    <dimen name="dialog_subtitle_text_size">14sp</dimen>
+    <dimen name="player_list_title_size">24sp</dimen>
+
 
     <!-- Layout dimens -->
     <dimen name="radius">20dp</dimen>
     <dimen name="box_height">64dp</dimen>
+    <dimen name="player_box_height">68dp</dimen>
+    <dimen name="player_box_width">170dp</dimen>
+    <dimen name="code_button_size">13dp</dimen>
+    <dimen name="fragment_height">0dp</dimen>
+    <dimen name="box_width">50dp</dimen>
 
-    <dimen name="margin_size_18">18dp</dimen>
+
+    <!-- padding size -->
     <dimen name="padding_size_20">20dp</dimen>
+    <dimen name="padding_size_32">32dp</dimen>
+
+
+    <!-- margin size -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="margin_size_4">4dp</dimen>
+    <dimen name="margin_size_8">8dp</dimen>
+    <dimen name="margin_size_10">10dp</dimen>
+    <dimen name="margin_size_12">12dp</dimen>
+    <dimen name="margin_size_16">16dp</dimen>
+    <dimen name="margin_size_18">18dp</dimen>
+    <dimen name="margin_size_20">20dp</dimen>
+    <dimen name="margin_size_24">24dp</dimen>
+    <dimen name="margin_size_30">30dp</dimen>
+    <dimen name="margin_size_32">32dp</dimen>
+    <dimen name="margin_size_48">48dp</dimen>
+    <dimen name="margin_size_50">50dp</dimen>
 
 </resources>
