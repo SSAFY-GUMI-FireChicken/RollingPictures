@@ -22,10 +22,10 @@ subprojects {
     group = 'com.ssafy'
     version '0.0.1'
 
-//    targetCompatibility = 1.8
-//    sourceCompatibility = 1.8
-    targetCompatibility = 11
-    sourceCompatibility = 11
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+//    targetCompatibility = 11
+//    sourceCompatibility = 11
     compileJava.options.encoding = 'UTF-8'
 
     configurations {
@@ -75,6 +75,7 @@ project(":core-module") {
 //        runtime('com.h2database:h2')
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+        runtimeOnly 'mysql:mysql-connector-java'
         testImplementation("org.springframework.boot:spring-boot-starter-test")
 
         implementation fileTree(dir: 'libs', include: ['*.jar'])
