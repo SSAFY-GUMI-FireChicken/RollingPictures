@@ -10,6 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RollingPicturesAndroid">
         <activity
+            android:name=".GameActivity"
+            android:exported="true"
+            android:label="@string/title_activity_game" />
+        <activity
+            android:name=".GameWaitingActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
