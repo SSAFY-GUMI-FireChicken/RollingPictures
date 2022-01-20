@@ -1,7 +1,9 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.config.security.JwtTokenProvider;
+import com.ssafy.api.dto.req.LoginUserReqDTO;
 import com.ssafy.api.dto.req.SignUpReqDTO;
+import com.ssafy.api.dto.res.LoginUserResDTO;
 import com.ssafy.api.dto.res.UserIdResDTO;
 import com.ssafy.api.service.SignService;
 import com.ssafy.api.service.common.ResponseService;
@@ -56,20 +58,12 @@ public class SignController {
                 .joinType(JoinCode.valueOf(req.getType()))
                 .uid(req.getUid())
                 .password(passwordEncoder.encode(req.getPassword()))
-                .name(req.getName() == null ? "" : req.getName())
-                .email(req.getEmail() == null ? "" : req.getEmail())
-                .phone(req.getPhone())
-                .address(req.getAddress())
-                .addressDetail(req.getAddressDetail())
-
+                .nickname(req.getNickname())
                 // 가입 후 프로필 등록으로 받을 데이터는 우선 기본값으로 세팅
-                .age(0)
                 .img("")
-                .nickname("")
-                .gender(MFCode.NULL)
-
                 // 기타 필요한 값 세팅
-                .push(YNCode.Y)
+                .mute(YNCode.N)
+                .state(YNCode.N)
                 .isBind(YNCode.Y)
                 .roles(Collections.singletonList("ROLE_USER")) // 인증된 회원인지 확인하기 위한 JWT 토큰에 사용될 데이터
                 .build();
@@ -81,6 +75,36 @@ public class SignController {
             throw new ApiMessageException("회원가입에 실패했습니다. 다시 시도해 주세요.");
 
         return responseService.getSingleResult(UserIdResDTO.builder().id(userId).build());
+    }
+
+    // 로그인
+    @ApiOperation(value="로그인",notes="로그인")
+    @GetMapping(value="/login",produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception{
+        // UID 값과 회원가입 타입으로 해당되는 정보 조회
+        User user = signService.findUserByUidType(req.getUid(), JoinCode.valueOf(req.getType()));
+
+        // 조회된 회원정보가 없을 경우
+        if ( user == null ) {
+            throw new ApiMessageException("존재하지 않는 회원정보입니다. 입력 정보를 확인해주세요.");
+            // 조회한 회원정보와 비밀번호를 비교(미일치시 반환)
+        } else if ( !passwordEncoder.matches(req.getPassword(), user.getPassword())){
+            throw new ApiMessageException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // return 데이터 세팅
+        LoginUserResDTO dto = LoginUserResDTO.builder()
+                .id(user.getId())
+                .build();
+
+        // jwt token 세팅
+        dto.setToken(jwtTokenProvider.createToken(String.valueOf(user.getId()), Collections.singletonList("ROLE_USER")));
+
+        // 회원의 토큰값, 디바이스 정보 업데이트
+        user.updateToken(req.getToken());
+        signService.saveUser(user);
+
+        return responseService.getSingleResult(dto);
     }
 
 }

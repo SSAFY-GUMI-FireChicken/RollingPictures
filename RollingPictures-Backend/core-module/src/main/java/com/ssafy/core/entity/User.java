@@ -47,7 +47,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 5)
     private JoinCode joinType;
 
-    // 회원아이디(일반:아이디, 소셜회원가입:발급번호)
+    // 회원아이디(일반:SSAID, 소셜회원가입:발급번호)
     @Column(nullable = false, unique = true, length = 120)
     private String uid;
 
@@ -56,47 +56,24 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 255)
     private String password;
 
-    // 회원 이름
-    @Column(nullable = false, length = 32)
-    private String name;
 
     // 회원 닉네임
     @Column(nullable = false, length = 64)
     private String nickname;
 
-    // 회원 이메일
-    @Column(nullable = false, length = 255)
-    private String email;
-
-    // 회원 휴대폰
-    @Column(nullable = true, length = 32)
-    private String phone;
-
-    // 성별 (남자 M, 여자 F)
-    @Convert(converter = MFCodeConverter.class)
-    @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default ''")
-    private MFCode gender;
-
-    // 회원 나이
-    @Column(nullable = false, length = 3, columnDefinition = "int(3) default 0")
-    private int age;
-
     // 회원 프로필 이미지
     @Column(nullable = false, length = 255)
     private String img;
 
-    // 주소
-    @Column(length = 255)
-    private String address;
-
-    // 상세주소
-    @Column(length = 255)
-    private String addressDetail;
-
-    // 푸쉬알림 설정 (Y:on, N:off)
+    // 음소거 설정 (Y:on, N:off)
     @Convert(converter = YNCodeConverter.class)
-    @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'Y'")
-    private YNCode push;
+    @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'N'")
+    private YNCode mute;
+
+    // 게임 진행 상태 (Y:진행, N:대기)
+    @Convert(converter = YNCodeConverter.class)
+    @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'N'")
+    private YNCode state;
 
     // 장비 푸시용 토큰
     @Column(length = 255)
@@ -172,21 +149,19 @@ public class User extends BaseEntity implements UserDetails {
         this.nickname = nickname;
     }
 
-    public void updateAge(int age){
-        this.age = age;
-    }
-
-    public void updateGender(MFCode gender){
-        this.gender = gender;
-    }
 
     public void updateIsBind(YNCode isBind){
         this.isBind = isBind;
     }
 
-    public void updatePush(YNCode push){
-        this.push = push;
+    public void updatePush(YNCode mute){
+        this.mute = mute;
     }
+
+    public void updateState(YNCode push){
+        this.state = state;
+    }
+
 
     public void updateToken(String token){
         this.token = token;
