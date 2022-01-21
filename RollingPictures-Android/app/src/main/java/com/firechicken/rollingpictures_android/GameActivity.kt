@@ -14,11 +14,11 @@ class GameActivity : AppCompatActivity() {
         val activityGameActivity = ActivityGameBinding.inflate(layoutInflater)
         setContentView(activityGameActivity.root)
 
-        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameWritingFragment())
-        transaction.commit()
-
-//        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameDrawingFragment())
+//        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameWritingFragment())
 //        transaction.commit()
+
+        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameDrawingFragment())
+        transaction.commit()
 //
 //        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameFinishFragment())
 //        transaction.commit()

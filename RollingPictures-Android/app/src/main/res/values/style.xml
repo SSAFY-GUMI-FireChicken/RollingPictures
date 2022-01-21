@@ -11,7 +11,7 @@
     <style name="Text.EditTextHintStyle" parent="android:TextAppearance">
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/gray_light</item>
+        <item name="android:textColor">@color/gray</item>
         <item name="android:fontFamily">@font/gmarket_sans_light</item>
         <item name="android:includeFontPadding">false</item>
     </style>

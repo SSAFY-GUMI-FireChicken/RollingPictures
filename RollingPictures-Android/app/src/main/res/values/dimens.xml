@@ -18,12 +18,13 @@
     <dimen name="code_button_size">13dp</dimen>
     <dimen name="fragment_height">0dp</dimen>
     <dimen name="box_width">50dp</dimen>
+    <dimen name="palette_color_size">32dp</dimen>
 
 
     <!-- padding size -->
     <dimen name="padding_size_20">20dp</dimen>
     <dimen name="padding_size_32">32dp</dimen>
-
+    <dimen name="image_button_padding_size">16dp</dimen>
 
     <!-- margin size -->
     <dimen name="fab_margin">16dp</dimen>
