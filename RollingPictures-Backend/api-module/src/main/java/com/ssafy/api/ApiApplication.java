@@ -13,8 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableCaching
 @ComponentScan({"com.ssafy.core"})
 @ComponentScan({"com.ssafy.api"})
-@EntityScan("com.ssafy.core")
-@EnableJpaRepositories("com.ssafy.core")
+@EntityScan({"com.ssafy.core", "com.ssafy.api"})
+@EnableJpaRepositories({"com.ssafy.core", "com.ssafy.api"})
 public class ApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);

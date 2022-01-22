@@ -1,6 +1,19 @@
 plugins {
     id "org.asciidoctor.convert" version "1.5.3"
-    id "java"
+//    id "java"
+
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+group 'com.ssafy.api'
+version '0.0.1'
+sourceCompatibility = 1.8
+
+// My
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -15,8 +28,8 @@ dependencies {
     //JUnit4 추가
     testImplementation("org.junit.vintage:junit-vintage-engine") {
         exclude group: "org.hamcrest", module: "hamcrest-core"
-    }
 
+    }
 }
 
 ext {
@@ -51,3 +64,21 @@ task copyDocument(type: Copy) { // 생성된 docs 파일을 build시 static 아�
 build {
     dependsOn copyDocument // build시 copy 실행
 }
+
+// My: Querydsl 추가
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+

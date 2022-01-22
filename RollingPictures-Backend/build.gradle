@@ -18,14 +18,11 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
-
     group = 'com.ssafy'
     version '0.0.1'
 
     targetCompatibility = 1.8
     sourceCompatibility = 1.8
-//    targetCompatibility = 11
-//    sourceCompatibility = 11
     compileJava.options.encoding = 'UTF-8'
 
     configurations {
@@ -59,7 +56,7 @@ project(":core-module") {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation('org.springframework.boot:spring-boot-starter-data-jpa')
         implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation('org.projectlombok:lombok')
+        implementation('org.projectlombok:lombok') // My
         implementation 'io.jsonwebtoken:jjwt:0.9.1'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -72,7 +69,6 @@ project(":core-module") {
         // S3
 //        implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
 
-//        runtime('com.h2database:h2')
         runtimeOnly 'com.h2database:h2'
         runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
         runtimeOnly 'mysql:mysql-connector-java'
@@ -100,13 +96,15 @@ project(":api-module") {
     }
 
     dependencies {
-        implementation project(":core-module")
+        implementation project(path: ":core-module", configuration: 'default')
+
         implementation('org.springframework.boot:spring-boot-starter-data-jpa')
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'io.jsonwebtoken:jjwt:0.9.1'
         implementation 'com.google.code.gson:gson:2.8.5'
+
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -133,5 +131,9 @@ project(":api-module") {
         implementation group: 'commons-io', name: 'commons-io', version: '2.4'
         implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+        //querydsl 추가
+        implementation 'com.querydsl:querydsl-jpa'
+        //querydsl 추가
+        implementation 'com.querydsl:querydsl-apt'
     }
 }
