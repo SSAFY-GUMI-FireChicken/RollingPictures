@@ -34,6 +34,7 @@
     <color name="palette_green">#037003</color>
     <color name="palette_sky">#00B0FF</color>
     <color name="palette_blue">#0037FF</color>
+    <color name="palette_purple">#9B69FF</color>
     <color name="palette_black">@color/black</color>
     <color name="palette_white">@color/white</color>
     <color name="palette_light_gray">@color/gray_light</color>

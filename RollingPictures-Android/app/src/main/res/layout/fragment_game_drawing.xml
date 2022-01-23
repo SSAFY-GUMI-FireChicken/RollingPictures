@@ -36,18 +36,6 @@
             app:layout_constraintTop_toBottomOf="@+id/slashRoundTextView"
             app:layout_constraintWidth_percent="0.8" />
 
-        <com.firechicken.rollingpictures_android.draw.DrawView
-            android:id="@+id/drawView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/margin_size_16"
-            android:background="@color/white"
-            android:elevation="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/completeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/drawToolsConstraintLayout" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/drawToolsConstraintLayout"
             android:layout_width="match_parent"
@@ -70,18 +58,17 @@
                 android:clickable="true"
                 android:background="@drawable/rp_draw_tool"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/colorImageView"
+                app:layout_constraintEnd_toStartOf="@+id/circleView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/draw_tool" />
 
-            <ImageView
-                android:id="@+id/colorImageView"
+            <com.firechicken.rollingpictures_android.draw.CircleView
+                android:id="@+id/circleView"
                 android:layout_width="@dimen/palette_color_size"
                 android:layout_height="@dimen/palette_color_size"
                 android:clickable="true"
                 android:layout_margin="@dimen/image_button_padding_size"
-                android:background="@drawable/ic_circle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/brushImageButton"
                 app:layout_constraintHorizontal_bias="0.34"
@@ -101,7 +88,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/eraserImageButton"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@id/colorImageView"
+                app:layout_constraintStart_toEndOf="@id/circleView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/draw_tool" />
 
@@ -151,18 +138,37 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.7dp"
                 android:background="@color/tool_icon_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/redoImageButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.firechicken.rollingpictures_android.draw.DrawView
+            android:id="@+id/drawView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/margin_size_16"
+            android:background="@color/white"
+            android:elevation="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/completeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawToolsConstraintLayout" />
+
         <include
             android:id="@+id/colorPalette"
             layout="@layout/view_color_palette"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_size_4"
+            android:layout_marginStart="@dimen/margin_size_4"
+            android:padding="@dimen/padding_size_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/drawView" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/completeButton"
