@@ -1,8 +1,7 @@
-package com.firechicken.rollingpictures_android.draw
+package com.firechicken.rollingpictures.draw
 
 import android.graphics.Path
 import java.io.Writer
-import java.security.InvalidParameterException
 
 class Line(val x: Float, val y: Float) : Action {
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_activity"
-    tools:context=".GameWaitingActivity">
+    tools:context=".activity.GameWaitingActivity">
 
     <ImageButton
         android:id="@+id/headSetImageButton"

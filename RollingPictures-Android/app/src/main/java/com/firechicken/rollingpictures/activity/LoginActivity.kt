@@ -1,10 +1,9 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import com.firechicken.rollingpictures_android.databinding.ActivityLoginBinding
+import com.firechicken.rollingpictures.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 

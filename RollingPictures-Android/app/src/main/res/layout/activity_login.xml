@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_activity"
     android:padding="@dimen/padding_size_20"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView"

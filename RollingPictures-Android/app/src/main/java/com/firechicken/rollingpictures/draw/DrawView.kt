@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android.draw
+package com.firechicken.rollingpictures.draw
 
 import android.content.Context
 import android.graphics.*

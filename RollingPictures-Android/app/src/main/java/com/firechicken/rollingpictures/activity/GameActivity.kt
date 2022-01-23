@@ -1,9 +1,10 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.firechicken.rollingpictures_android.databinding.ActivityGameBinding
-import com.firechicken.rollingpictures_android.databinding.ActivityLoginBinding
+import com.firechicken.rollingpictures.fragment.GameDrawingFragment
+import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 
 class GameActivity : AppCompatActivity() {
 

@@ -1,8 +1,6 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.fragment
 
-import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -13,7 +11,8 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
-import com.firechicken.rollingpictures_android.databinding.FragmentGameDrawingBinding
+import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.databinding.FragmentGameDrawingBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

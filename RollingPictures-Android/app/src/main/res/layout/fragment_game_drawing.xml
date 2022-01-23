@@ -63,7 +63,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/draw_tool" />
 
-            <com.firechicken.rollingpictures_android.draw.CircleView
+            <com.firechicken.rollingpictures.draw.CircleView
                 android:id="@+id/circleView"
                 android:layout_width="@dimen/palette_color_size"
                 android:layout_height="@dimen/palette_color_size"
@@ -138,7 +138,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.firechicken.rollingpictures_android.draw.DrawView
+        <com.firechicken.rollingpictures.draw.DrawView
             android:id="@+id/drawView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
