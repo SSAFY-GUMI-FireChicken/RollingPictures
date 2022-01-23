@@ -1,6 +1,11 @@
 package com.firechicken.rollingpictures_android
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +14,9 @@ import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.firechicken.rollingpictures_android.databinding.FragmentGameDrawingBinding
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class GameDrawingFragment : Fragment() {
 
@@ -33,6 +41,11 @@ class GameDrawingFragment : Fragment() {
         setDrawTools()
         colorSelector()
         setBrushWidth()
+
+
+        binding.completeButton.setOnClickListener {
+            savePhoto()
+        }
     }
 
     private fun setDrawTools() {
@@ -162,6 +175,29 @@ class GameDrawingFragment : Fragment() {
             override fun onStopTrackingTouch(p0: SeekBar?) { }
 
         })
+    }
+
+    private fun savePhoto() {
+        // TODO: 2022-01-24 갤러리에 저장하는 코드인데, 갤러리 저장 대신 서버로 전송되게 변경해야 합니다 !!
+        val bStream = ByteArrayOutputStream()
+        val bitmap = binding.drawView.getBitmap()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+
+        val filename = "RP_${System.currentTimeMillis()}"
+        saveImage(bitmap, filename)
+    }
+
+    private fun saveImage(bitmap: Bitmap, fileName: String) {
+        val imageDir = "${Environment.DIRECTORY_PICTURES}/Android Draw/"
+        val path = Environment.getExternalStoragePublicDirectory(imageDir)
+        Log.e("path",path.toString())
+        val file = File(path, "$fileName.png")
+        path.mkdirs()
+        file.createNewFile()
+        val outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
+        outputStream.flush()
+        outputStream.close()
     }
 
     private fun setColor(color: Int) {
