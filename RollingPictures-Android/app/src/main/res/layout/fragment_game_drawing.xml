@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_size_16"
             android:background="@color/white"
-            android:elevation="5dp"
+            android:elevation="4dp"
             app:layout_constraintBottom_toTopOf="@+id/drawView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -136,13 +136,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/draw_tool" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.7dp"
-                android:background="@color/tool_icon_color"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/redoImageButton" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.firechicken.rollingpictures_android.draw.DrawView
@@ -151,22 +144,21 @@
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/margin_size_16"
             android:background="@color/white"
-            android:elevation="5dp"
+            android:elevation="3dp"
             app:layout_constraintBottom_toTopOf="@+id/completeButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawToolsConstraintLayout" />
 
         <include
-            android:id="@+id/colorPalette"
-            layout="@layout/view_color_palette"
+            android:id="@+id/brushSetting"
+            layout="@layout/view_brush_setting"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_size_4"
             android:layout_marginStart="@dimen/margin_size_4"
-            android:padding="@dimen/padding_size_10"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.11"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/drawView" />
 

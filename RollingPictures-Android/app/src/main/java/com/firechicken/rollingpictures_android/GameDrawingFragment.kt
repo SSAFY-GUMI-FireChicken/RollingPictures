@@ -1,12 +1,11 @@
 package com.firechicken.rollingpictures_android
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.firechicken.rollingpictures_android.databinding.FragmentGameDrawingBinding
@@ -14,6 +13,7 @@ import com.firechicken.rollingpictures_android.databinding.FragmentGameDrawingBi
 class GameDrawingFragment : Fragment() {
 
     private lateinit var binding: FragmentGameDrawingBinding
+    private var isBrushSettingOpen: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,117 +32,147 @@ class GameDrawingFragment : Fragment() {
 
         setDrawTools()
         colorSelector()
-
+        setBrushWidth()
     }
 
     private fun setDrawTools() {
         binding.clearImageButton.setOnClickListener {
+            brushSettingClose()
             binding.drawView.clearCanvas()
         }
 
+        binding.circleView.setOnClickListener {
+            setBrush()
+        }
 
         binding.brushImageButton.setOnClickListener {
-            binding.drawView.toggleEraser(false)
-
+            setBrush()
         }
 
         binding.eraserImageButton.setOnClickListener {
+            brushSettingClose()
             binding.drawView.toggleEraser(true)
-            // TODO: 2022-01-21 eraser 클릭됐을 때 색상 바꾸기 
+            // TODO: 2022-01-21 eraser 클릭됐을 때 진한 색상이 되었으면...
         }
 
         binding.undoImageButton.setOnClickListener {
+            brushSettingClose()
             binding.drawView.undo()
         }
 
         binding.redoImageButton.setOnClickListener {
+            brushSettingClose()
             binding.drawView.redo()
         }
     }
 
+    private fun setBrush() {
+        if (isBrushSettingOpen) {
+            binding.brushSetting.linearLayout.visibility = View.GONE
+            isBrushSettingOpen = false
+        } else {
+            binding.brushSetting.linearLayout.visibility = View.VISIBLE
+            isBrushSettingOpen = true
+        }
+
+        binding.drawView.toggleEraser(false)
+    }
+
     private fun colorSelector() {
-        binding.colorPalette.redImageView.setOnClickListener {
+        binding.brushSetting.redImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_red,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.apricotImageView.setOnClickListener {
+        binding.brushSetting.apricotImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_apricot,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.brownImageView.setOnClickListener {
+        binding.brushSetting.brownImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_brown,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.orangeImageView.setOnClickListener {
+        binding.brushSetting.orangeImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_orange,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.yellowImageView.setOnClickListener {
+        binding.brushSetting.yellowImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_yellow,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.lightGreenImageView.setOnClickListener {
+        binding.brushSetting.lightGreenImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_light_green,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.greenImageView.setOnClickListener {
+        binding.brushSetting.greenImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_green,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.skyImageView.setOnClickListener {
+        binding.brushSetting.skyImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_sky,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.blueImageView.setOnClickListener {
+        binding.brushSetting.blueImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_blue,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.purpleImageView.setOnClickListener {
+        binding.brushSetting.purpleImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_purple,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.blackImageView.setOnClickListener {
+        binding.brushSetting.blackImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_black,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.whiteImageView.setOnClickListener {
+        binding.brushSetting.whiteImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_white,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.lightGrayImageView.setOnClickListener {
+        binding.brushSetting.lightGrayImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_light_gray,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
         }
 
-        binding.colorPalette.grayImageView.setOnClickListener {
+        binding.brushSetting.grayImageView.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.palette_gray,null)
-            binding.drawView.setColor(color)
-            binding.circleView.setColor(color)
+            setColor(color)
+        }
+    }
+
+    private fun setBrushWidth() {
+        binding.brushSetting.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.drawView.setStrokeWidth(progress.toFloat())
+                binding.circleView.setCircleRadius(progress.toFloat())
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) { }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) { }
+
+        })
+    }
+
+    private fun setColor(color: Int) {
+        binding.drawView.setColor(color)
+        binding.circleView.setColor(color)
+    }
+
+    private fun brushSettingClose() {
+        if (isBrushSettingOpen) {
+            binding.brushSetting.linearLayout.visibility = View.GONE
+            isBrushSettingOpen = false
         }
     }
 
