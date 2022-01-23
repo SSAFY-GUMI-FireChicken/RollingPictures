@@ -7,6 +7,11 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 
+/**
+ * SPDX-FileCopyrightText: © 2018 Divyanshu Bhargava <https://github.com/divyanshub024/AndroidDraw>
+ * SPDX-License-Identifier: Apache-2.0 License
+ */
+
 class CircleView(context: Context, attrs: AttributeSet): View(context, attrs) {
     private var mPaint = Paint()
     var radius = 8f

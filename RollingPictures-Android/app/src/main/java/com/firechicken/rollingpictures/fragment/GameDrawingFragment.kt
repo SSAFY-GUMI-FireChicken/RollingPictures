@@ -64,7 +64,6 @@ class GameDrawingFragment : Fragment() {
         binding.eraserImageButton.setOnClickListener {
             brushSettingClose()
             binding.drawView.toggleEraser(true)
-            // TODO: 2022-01-21 eraser 클릭됐을 때 진한 색상이 되었으면...
         }
 
         binding.undoImageButton.setOnClickListener {

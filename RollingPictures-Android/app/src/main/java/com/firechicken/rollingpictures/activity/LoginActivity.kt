@@ -18,5 +18,10 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
         }
+
+        activityLoginBinding.infoImageButton.setOnClickListener {
+            val intent = Intent(this@LoginActivity, InfoActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
