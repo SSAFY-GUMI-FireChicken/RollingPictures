@@ -188,7 +188,7 @@ class GameDrawingFragment : Fragment() {
     }
 
     private fun saveImage(bitmap: Bitmap, fileName: String) {
-        val imageDir = "${Environment.DIRECTORY_PICTURES}/Android Draw/"
+        val imageDir = "${Environment.DIRECTORY_PICTURES}/RollingPictures/"
         val path = Environment.getExternalStoragePublicDirectory(imageDir)
         Log.e("path",path.toString())
         val file = File(path, "$fileName.png")
