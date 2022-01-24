@@ -10,7 +10,6 @@ import com.firechicken.rollingpictures.fragment.GameDrawingFragment
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import android.os.Handler
-import android.telecom.Call
 import android.util.Base64
 import android.util.Log
 import android.view.View
