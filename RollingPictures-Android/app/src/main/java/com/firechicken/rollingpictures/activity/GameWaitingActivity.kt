@@ -1,5 +1,6 @@
 package com.firechicken.rollingpictures.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.firechicken.rollingpictures.dialog.GameExitDialog
@@ -17,6 +18,11 @@ class GameWaitingActivity : AppCompatActivity() {
         activityGameWaitingBinding.exitRoom.setOnClickListener {
             val dialog = GameExitDialog(this)
             dialog.showDialog()
+        }
+
+        activityGameWaitingBinding.startGameButton.setOnClickListener {
+            val intent = Intent(this@GameWaitingActivity, GameActivity::class.java)
+            startActivity(intent)
         }
     }
 }
