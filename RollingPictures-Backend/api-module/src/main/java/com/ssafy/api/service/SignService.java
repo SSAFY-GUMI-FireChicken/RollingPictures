@@ -66,8 +66,8 @@ public class SignService {
      */
 
     @Transactional(readOnly = false)
-    public void saveUser(User user){
-        userRepository.save(user);
+    public User saveUser(User user){
+        return userRepository.save(user);
     }
 
 }
