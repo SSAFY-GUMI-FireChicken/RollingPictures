@@ -47,4 +47,22 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    /*
+    뷰바인딩을 위한 버터 나이프
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+     */
+
+    // 통신
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    implementation 'com.neovisionaries:nv-websocket-client:2.9'
+    implementation 'org.webrtc:google-webrtc:1.0.32006'
+
+    /*
+    테스트 관련
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+     */
+
 }

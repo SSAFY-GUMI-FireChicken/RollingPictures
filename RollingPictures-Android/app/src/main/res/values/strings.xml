@@ -28,4 +28,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="guide_code">지금 계신 방의 코드를 공유하세요!</string>
 
+    <string name="no_permissions_granted">We can not give you service without your permission</string>
+    <string name="permissions_dialog_title">We need your help</string>
+    <string name="accept_permissions_dialog">GIVE PERMISSIONS!</string>
+    <string name="cancel_dialog">CANCEL</string>
 </resources>
