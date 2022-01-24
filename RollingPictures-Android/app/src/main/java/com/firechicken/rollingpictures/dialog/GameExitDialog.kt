@@ -3,6 +3,8 @@ package com.firechicken.rollingpictures.dialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -18,7 +20,7 @@ class GameExitDialog(context: Context)
     {
         dialog.apply {
             setContentView(R.layout.dialog_game_exit)
-            window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setCanceledOnTouchOutside(true)
             setCancelable(true)
             show()

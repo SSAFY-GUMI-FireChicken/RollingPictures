@@ -1,5 +1,6 @@
 package com.firechicken.rollingpictures.fragment
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
@@ -12,6 +13,8 @@ import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.activity.GameActivity
+import com.firechicken.rollingpictures.activity.MainActivity
 import com.firechicken.rollingpictures.databinding.FragmentGameDrawingBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -30,7 +33,8 @@ class GameDrawingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
         return binding.root
     }
 
@@ -91,86 +95,87 @@ class GameDrawingFragment : Fragment() {
 
     private fun colorSelector() {
         binding.brushSetting.redImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_red,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_red, null)
             setColor(color)
         }
 
         binding.brushSetting.apricotImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_apricot,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_apricot, null)
             setColor(color)
         }
 
         binding.brushSetting.brownImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_brown,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_brown, null)
             setColor(color)
         }
 
         binding.brushSetting.orangeImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_orange,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_orange, null)
             setColor(color)
         }
 
         binding.brushSetting.yellowImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_yellow,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_yellow, null)
             setColor(color)
         }
 
         binding.brushSetting.lightGreenImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_light_green,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_light_green, null)
             setColor(color)
         }
 
         binding.brushSetting.greenImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_green,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_green, null)
             setColor(color)
         }
 
         binding.brushSetting.skyImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_sky,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_sky, null)
             setColor(color)
         }
 
         binding.brushSetting.blueImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_blue,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_blue, null)
             setColor(color)
         }
 
         binding.brushSetting.purpleImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_purple,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_purple, null)
             setColor(color)
         }
 
         binding.brushSetting.blackImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_black,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_black, null)
             setColor(color)
         }
 
         binding.brushSetting.whiteImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_white,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_white, null)
             setColor(color)
         }
 
         binding.brushSetting.lightGrayImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_light_gray,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_light_gray, null)
             setColor(color)
         }
 
         binding.brushSetting.grayImageView.setOnClickListener {
-            val color = ResourcesCompat.getColor(resources, R.color.palette_gray,null)
+            val color = ResourcesCompat.getColor(resources, R.color.palette_gray, null)
             setColor(color)
         }
     }
 
     private fun setBrushWidth() {
-        binding.brushSetting.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+        binding.brushSetting.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.drawView.setStrokeWidth(progress.toFloat())
                 binding.circleView.setCircleRadius(progress.toFloat())
             }
 
-            override fun onStartTrackingTouch(p0: SeekBar?) { }
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
 
-            override fun onStopTrackingTouch(p0: SeekBar?) { }
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
 
         })
     }
@@ -188,12 +193,12 @@ class GameDrawingFragment : Fragment() {
     private fun saveImage(bitmap: Bitmap, fileName: String) {
         val imageDir = "${Environment.DIRECTORY_PICTURES}/RollingPictures/"
         val path = Environment.getExternalStoragePublicDirectory(imageDir)
-        Log.e("path",path.toString())
+        Log.e("path", path.toString())
         val file = File(path, "$fileName.png")
         path.mkdirs()
         file.createNewFile()
         val outputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         outputStream.flush()
         outputStream.close()
     }
