@@ -1,8 +1,9 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.firechicken.rollingpictures_android.databinding.ActivityGameWaitingBinding
+import com.firechicken.rollingpictures.dialog.GameExitDialog
+import com.firechicken.rollingpictures.databinding.ActivityGameWaitingBinding
 
 //참여자 리스트는 데이터가 아직 없어 리사이클러뷰는 아직 생성X
 class GameWaitingActivity : AppCompatActivity() {

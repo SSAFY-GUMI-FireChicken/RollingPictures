@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -6,6 +6,8 @@ import android.content.Intent
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.activity.MainActivity
 
 class GameExitDialog(context: Context)
 {

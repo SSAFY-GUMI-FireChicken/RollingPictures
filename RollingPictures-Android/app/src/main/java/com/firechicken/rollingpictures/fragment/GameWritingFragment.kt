@@ -1,12 +1,13 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.firechicken.rollingpictures.R
 
-class GameDrawingFragment : Fragment() {
+class GameWritingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +17,6 @@ class GameDrawingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_game_drawing, container, false)
+        return inflater.inflate(R.layout.fragment_game_writing, container, false)
     }
 }

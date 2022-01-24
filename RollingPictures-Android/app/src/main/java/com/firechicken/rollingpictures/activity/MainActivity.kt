@@ -1,9 +1,9 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.firechicken.rollingpictures_android.databinding.ActivityMainBinding
+import com.firechicken.rollingpictures.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
