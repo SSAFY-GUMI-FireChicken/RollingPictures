@@ -8,7 +8,6 @@ import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import com.firechicken.rollingpictures.fragment.GameDrawingFragment
 import com.firechicken.rollingpictures.R
-import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import android.os.Handler
 import android.util.Base64
 import android.util.Log
@@ -17,6 +16,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 import com.firechicken.rollingpictures.webrtc.CustomHttpClient
 import com.firechicken.rollingpictures.webrtc.CustomWebSocket
@@ -43,14 +43,14 @@ class GameActivity : AppCompatActivity() {
     private var session: Session? = null
     private var httpClient: CustomHttpClient? = null
     private var isVoice: Boolean = false
-    private lateinit var activityGameActivity:ActivityGameBinding
+    private lateinit var activityGameActivity: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
-        val activityGameBinding = ActivityGameBinding.inflate(layoutInflater)
-        setContentView(activityGameBinding.root)
+        activityGameActivity = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(activityGameActivity.root)
 
         val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
         val timeProgressBar = findViewById<ProgressBar>(R.id.timeProgressBar)
