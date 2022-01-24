@@ -5,10 +5,7 @@ import com.ssafy.core.code.JoinCode;
 import com.ssafy.core.code.YNCode;
 import com.ssafy.core.converter.JoinCodeConverter;
 import com.ssafy.core.converter.YNCodeConverter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
