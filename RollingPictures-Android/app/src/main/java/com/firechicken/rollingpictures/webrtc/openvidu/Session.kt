@@ -30,7 +30,7 @@ class Session(
         this.websocket = websocket
     }
 
-    // ???????????
+    // 나라는 사람의 커넥션을 만듦
     fun createLocalPeerConnection(): PeerConnection? {
         val iceServers: MutableList<IceServer> = ArrayList()
         val iceServer =
@@ -55,7 +55,7 @@ class Session(
             })
     }
 
-    // ???????????
+    // 다른 사람과의 커넥션을 만듦
     fun createRemotePeerConnection(connectionId: String) {
         val iceServers: MutableList<IceServer> = ArrayList()
         val iceServer = IceServer.builder("stun:stun.l.google.com:19302").createIceServer()
@@ -102,7 +102,7 @@ class Session(
         remoteParticipants[connectionId]?.peerConnection = (peerConnection)
     }
 
-    // ???????????
+    // 커넥션에 offer를 만들고, 성공하면 미디어 송출
     fun createOfferForPublishing(constraints: MediaConstraints?) {
         localParticipant!!.peerConnection?.createOffer(object : CustomSdpObserver("createOffer") {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
@@ -121,7 +121,7 @@ class Session(
         }, constraints)
     }
 
-    // ???????????
+    // ((앱에서는 안 씀))
     fun createAnswerForSubscribing(
         remoteParticipant: RemoteParticipant,
         streamId: String?,
@@ -135,7 +135,7 @@ class Session(
                     remoteParticipant.peerConnection!!.setLocalDescription(object :
                         CustomSdpObserver("createAnswerSubscribing_setLocalDescription") {
                         override fun onSetSuccess() {
-                            Log.d("tete", "!5555")
+                            Log.d("teteaa", "!aaaaaaaaaaaaaaaaaa")
                             websocket?.receiveVideoFrom(
                                 sessionDescription,
                                 remoteParticipant,

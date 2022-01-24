@@ -80,12 +80,17 @@ class GameActivity : AppCompatActivity() {
             isVoice = false
             return
         }
-        // 권한이 있다면 통신 시작함
+        /* 권한이 있다면 통신 시작함
+            OPENVIDU_URL : AWS url
+            OPENVIDU_SECRET : AWS로 들어가기 위한 PW?
+            sessionId : 방
+            participantName : 사용자 입장 이름
+         */
         if (arePermissionGranted()) {
             isVoice = true
             activityGameActivity.headSetImageButton.setImageResource(R.drawable.ic_baseline_headset_24)
-            OPENVIDU_URL = "https://192.168.0.9:4443"
-            OPENVIDU_SECRET = "MY_SECRET"
+            OPENVIDU_URL = "https://jwsh.link:8011"
+            OPENVIDU_SECRET = "ssafy0107"
             httpClient = CustomHttpClient(
                 OPENVIDU_URL!!,
                 "Basic " + Base64.encodeToString(
