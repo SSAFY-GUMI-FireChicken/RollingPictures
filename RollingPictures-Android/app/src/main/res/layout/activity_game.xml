@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_size_8"
         android:layout_marginEnd="@dimen/fab_margin"
+        android:onClick="buttonPressed"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_baseline_headset_off_24"
         app:layout_constraintEnd_toStartOf="@+id/micImageButton"
