@@ -50,17 +50,12 @@ class GameActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        <<<<<<< HEAD
         val activityGameBinding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(activityGameBinding.root)
 
         val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
         val timeProgressBar = findViewById<ProgressBar>(R.id.timeProgressBar)
         timeProgressBar.startAnimation(progressGrow)
-        =======
-        activityGameActivity = ActivityGameBinding.inflate(layoutInflater)
-        setContentView(activityGameActivity.root)
-        >>>>>>> 3a41d0f7e7f53a8c175d9d4b39444b317d4e5fea
 
 //        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameWritingFragment())
 //        transaction.commit()
