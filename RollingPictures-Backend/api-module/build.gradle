@@ -3,6 +3,7 @@ plugins {
 //    id "java"
 
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "io.franzbecker.gradle-lombok" version "3.0.0"
 }
 
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
@@ -25,11 +26,15 @@ dependencies {
     implementation('com.h2database:h2')
     runtimeOnly 'mysql:mysql-connector-java'
 
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation 'mysql:mysql-connector-java'
+
     //JUnit4 추가
     testImplementation("org.junit.vintage:junit-vintage-engine") {
         exclude group: "org.hamcrest", module: "hamcrest-core"
 
     }
+
 }
 
 ext {
@@ -62,7 +67,7 @@ task copyDocument(type: Copy) { // 생성된 docs 파일을 build시 static 아�
 }
 
 build {
-    dependsOn copyDocument // build시 copy 실행
+    dependsOn copyDocument // build시 copy 실행D
 }
 
 // My: Querydsl 추가

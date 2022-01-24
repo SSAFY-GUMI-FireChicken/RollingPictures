@@ -1,8 +1,8 @@
-package com.ssafy.core.repository;
+package com.ssafy.api.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.ssafy.core.entity.QTest;
-import com.ssafy.core.entity.Test;
+import com.ssafy.api.domain.QTest;
+import com.ssafy.api.domain.Test;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.StringUtils;

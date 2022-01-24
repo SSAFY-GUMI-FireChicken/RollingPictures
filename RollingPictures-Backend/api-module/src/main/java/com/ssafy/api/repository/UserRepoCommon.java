@@ -1,8 +1,8 @@
-package com.ssafy.core.repository;
+package com.ssafy.api.repository;
 
+import com.ssafy.api.domain.User;
 import com.ssafy.core.code.JoinCode;
 import com.ssafy.core.code.YNCode;
-import com.ssafy.core.entity.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

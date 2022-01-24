@@ -1,10 +1,10 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.domain.User;
+import com.ssafy.api.repository.UserRepository;
 import com.ssafy.core.code.JoinCode;
 import com.ssafy.core.code.YNCode;
-import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.ApiMessageException;
-import com.ssafy.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
