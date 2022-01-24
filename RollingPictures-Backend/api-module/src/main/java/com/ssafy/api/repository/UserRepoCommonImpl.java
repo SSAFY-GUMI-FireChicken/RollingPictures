@@ -1,11 +1,11 @@
-package com.ssafy.core.repository;
+package com.ssafy.api.repository;
 
-import com.ssafy.core.entity.QUser;
-import com.ssafy.core.code.JoinCode;
-import com.ssafy.core.code.YNCode;
-import com.ssafy.core.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.api.domain.QUser;
+import com.ssafy.api.domain.User;
+import com.ssafy.core.code.JoinCode;
+import com.ssafy.core.code.YNCode;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class UserRepoCommonImpl implements UserRepoCommon{
+public class UserRepoCommonImpl implements UserRepoCommon {
     private final JPAQueryFactory queryFactory;
     private EntityManager em;
 

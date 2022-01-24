@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.AnimationUtils
+import android.widget.ProgressBar
 import com.firechicken.rollingpictures.fragment.GameDrawingFragment
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
@@ -44,17 +46,23 @@ class GameActivity : AppCompatActivity() {
     private lateinit var activityGameActivity:ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
-        activityGameActivity = ActivityGameBinding.inflate(layoutInflater)
-        setContentView(activityGameActivity.root)
+        val activityGameBinding = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(activityGameBinding.root)
+
+        val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
+        val timeProgressBar = findViewById<ProgressBar>(R.id.timeProgressBar)
+        timeProgressBar.startAnimation(progressGrow)
 
 //        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameWritingFragment())
 //        transaction.commit()
 
-        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameDrawingFragment())
+        val transaction =
+            supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameDrawingFragment())
         transaction.commit()
-//
+
 //        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameFinishFragment())
 //        transaction.commit()
 
@@ -219,9 +227,9 @@ class GameActivity : AppCompatActivity() {
     // 권한이 받아졌음을 boolean으로 return
     private fun arePermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.RECORD_AUDIO
-                ) != PackageManager.PERMISSION_DENIED
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) != PackageManager.PERMISSION_DENIED
     }
 
     // 어플리케이션이 Destroy 됐을 때

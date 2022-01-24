@@ -1,12 +1,10 @@
-package com.ssafy.core.entity;
+package com.ssafy.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.core.converter.JoinCodeConverter;
-import com.ssafy.core.converter.MFCodeConverter;
-import com.ssafy.core.converter.YNCodeConverter;
 import com.ssafy.core.code.JoinCode;
-import com.ssafy.core.code.MFCode;
 import com.ssafy.core.code.YNCode;
+import com.ssafy.core.converter.JoinCodeConverter;
+import com.ssafy.core.converter.YNCodeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -84,9 +82,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'Y'")
     private YNCode isBind;
 
-
-
-
+    @ManyToOne(targetEntity = Channel.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 
     // =================================================================================================
     // JWT

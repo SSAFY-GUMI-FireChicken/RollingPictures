@@ -1,8 +1,8 @@
 package com.ssafy.api.service.security;
 
 
+import com.ssafy.api.domain.User;
 import com.ssafy.api.service.SignService;
-import com.ssafy.core.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

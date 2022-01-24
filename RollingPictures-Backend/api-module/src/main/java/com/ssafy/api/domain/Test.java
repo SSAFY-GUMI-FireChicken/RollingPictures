@@ -1,4 +1,4 @@
-package com.ssafy.core.entity;
+package com.ssafy.api.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,11 +1,11 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.domain.Test;
 import com.ssafy.api.dto.req.TestReqDTO;
 import com.ssafy.api.dto.res.TestResDTO;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.SingleResult;
 import com.ssafy.api.service.TestService;
-import com.ssafy.core.entity.Test;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

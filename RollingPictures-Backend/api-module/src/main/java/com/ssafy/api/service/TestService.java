@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
-import com.ssafy.core.entity.Test;
-import com.ssafy.core.repository.TestRepository;
+import com.ssafy.api.domain.Test;
+import com.ssafy.api.repository.TestRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

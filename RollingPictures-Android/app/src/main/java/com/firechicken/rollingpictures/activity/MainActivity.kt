@@ -21,12 +21,12 @@ class MainActivity : AppCompatActivity() {
         val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        activityMainBinding.createButton.setOnClickListener{
+        activityMainBinding.createButton.setOnClickListener {
             val intent = Intent(this@MainActivity, GameActivity::class.java)
             startActivity(intent)
         }
 
-        activityMainBinding.entranceButton.setOnClickListener{
+        activityMainBinding.entranceButton.setOnClickListener {
             val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
             startActivity(intent)
         }
