@@ -82,9 +82,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'Y'")
     private YNCode isBind;
 
-
-
-
+    @ManyToOne(targetEntity = Channel.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 
     // =================================================================================================
     // JWT

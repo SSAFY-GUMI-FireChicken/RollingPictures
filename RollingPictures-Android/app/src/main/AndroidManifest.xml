@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.firechicken.rollingpictures">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,17 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RollingPicturesAndroid">
         <activity
-            android:name="com.firechicken.rollingpictures.activity.GameActivity"
+            android:name=".activity.GameActivity"
             android:exported="true"
-            android:label="@string/title_activity_game" />
+            android:label="@string/title_activity_game" >
+
+        </activity>
         <activity
-            android:name="com.firechicken.rollingpictures.activity.GameWaitingActivity"
+            android:name=".activity.GameWaitingActivity"
             android:exported="true" />
         <activity
-            android:name="com.firechicken.rollingpictures.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name="com.firechicken.rollingpictures.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
