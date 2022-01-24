@@ -1,8 +1,6 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc.openvidu
 
 import android.view.View
-import android.widget.TextView
-import org.webrtc.SurfaceViewRenderer
 
 // 나 말고 다
 class RemoteParticipant(connectionId: String?, participantName: String?, session: Session?) :

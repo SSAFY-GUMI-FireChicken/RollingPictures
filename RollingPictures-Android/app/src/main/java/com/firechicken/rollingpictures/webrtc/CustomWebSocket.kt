@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc
 
 import android.os.AsyncTask
 import android.os.Build
@@ -6,8 +6,12 @@ import android.os.Handler
 import android.util.Log
 import android.util.Pair
 import android.widget.Toast
+import com.firechicken.rollingpictures.activity.GameActivity
+import com.firechicken.rollingpictures.webrtc.observer.CustomSdpObserver
+import com.firechicken.rollingpictures.webrtc.openvidu.RemoteParticipant
+import com.firechicken.rollingpictures.webrtc.openvidu.Session
+import com.firechicken.rollingpictures.webrtc.util.JsonConstants
 import com.neovisionaries.ws.client.*
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.webrtc.*

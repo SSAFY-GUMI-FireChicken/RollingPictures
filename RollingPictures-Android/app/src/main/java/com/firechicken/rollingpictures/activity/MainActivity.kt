@@ -6,11 +6,10 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.firechicken.rollingpictures.databinding.ActivityMainBinding
-import android.util.Base64
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import com.firechicken.rollingpictures_android.databinding.ActivityMainBinding
+import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc.observer
 
 import android.util.Log
 import org.webrtc.*

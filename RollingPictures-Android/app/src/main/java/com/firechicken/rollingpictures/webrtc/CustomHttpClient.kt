@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc
 
 import okhttp3.Callback
 import okhttp3.OkHttpClient

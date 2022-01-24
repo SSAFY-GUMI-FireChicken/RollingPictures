@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc.util
 
 object JsonConstants {
 

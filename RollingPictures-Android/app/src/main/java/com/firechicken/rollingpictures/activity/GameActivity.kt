@@ -15,7 +15,11 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import com.firechicken.rollingpictures_android.databinding.ActivityGameBinding
+import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
+import com.firechicken.rollingpictures.webrtc.CustomHttpClient
+import com.firechicken.rollingpictures.webrtc.CustomWebSocket
+import com.firechicken.rollingpictures.webrtc.openvidu.LocalParticipant
+import com.firechicken.rollingpictures.webrtc.openvidu.Session
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.RequestBody
@@ -36,7 +40,7 @@ class GameActivity : AppCompatActivity() {
     private var OPENVIDU_SECRET: String? = null
     private var session: Session? = null
     private var httpClient: CustomHttpClient? = null
-    private var voice: Boolean = false
+    private var isVoice: Boolean = false
     private lateinit var activityGameActivity:ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,15 +74,15 @@ class GameActivity : AppCompatActivity() {
 
     fun buttonPressed(view: View?) {
         // 스피커 통신 토글
-        if(voice){
+        if(isVoice){
             activityGameActivity.headSetImageButton.setImageResource(R.drawable.ic_baseline_headset_off_24)
             leaveSession()
-            voice = false
+            isVoice = false
             return
         }
         // 권한이 있다면 통신 시작함
         if (arePermissionGranted()) {
-            voice = true
+            isVoice = true
             activityGameActivity.headSetImageButton.setImageResource(R.drawable.ic_baseline_headset_24)
             OPENVIDU_URL = "https://192.168.0.9:4443"
             OPENVIDU_SECRET = "MY_SECRET"

@@ -1,7 +1,5 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc.openvidu
 
-import android.content.Context
-import android.os.Build
 import org.webrtc.*
 import java.util.ArrayList
 

@@ -1,9 +1,12 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.webrtc.openvidu
 
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
+import com.firechicken.rollingpictures.activity.*
+import com.firechicken.rollingpictures.webrtc.observer.CustomPeerConnectionObserver
+import com.firechicken.rollingpictures.webrtc.observer.CustomSdpObserver
+import com.firechicken.rollingpictures.webrtc.CustomWebSocket
 import org.webrtc.*
 import org.webrtc.PeerConnection.*
 import org.webrtc.PeerConnectionFactory.InitializationOptions

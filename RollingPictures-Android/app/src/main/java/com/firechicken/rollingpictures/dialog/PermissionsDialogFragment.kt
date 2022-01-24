@@ -1,4 +1,4 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.dialog
 
 import android.app.Activity
 import android.app.Dialog
@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.activity.GameActivity
+import com.firechicken.rollingpictures.activity.MainActivity
 
 class PermissionsDialogFragment(private val activity: Activity) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
