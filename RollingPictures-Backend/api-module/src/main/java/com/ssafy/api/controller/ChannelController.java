@@ -65,11 +65,12 @@ public class ChannelController {
                 .build();
 
         user.setChannel(channel);
-        User resultUser = signService.saveUser(user);
+        signService.saveUser(user);
+        Long chkId = channelService.saveChannel(channel);
 
         return responseService.getSingleResult(ChannelResDTO
                 .builder()
-                .id(resultUser.getChannel().getId())
+                .id(chkId)
                 .code(code)
                 .build()
         );
