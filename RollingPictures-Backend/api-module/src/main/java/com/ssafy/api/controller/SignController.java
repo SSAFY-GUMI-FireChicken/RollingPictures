@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.config.security.JwtTokenProvider;
+import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.LoginUserReqDTO;
 import com.ssafy.api.dto.req.SignUpReqDTO;
 import com.ssafy.api.dto.res.LoginUserResDTO;
@@ -9,9 +10,7 @@ import com.ssafy.api.service.SignService;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.SingleResult;
 import com.ssafy.core.code.JoinCode;
-import com.ssafy.core.code.MFCode;
 import com.ssafy.core.code.YNCode;
-import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.ApiMessageException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
