@@ -49,6 +49,26 @@ public class SignService {
         User signUpUser = userRepository.save(user);
         return signUpUser.getId();
     }
+    /**
+     * uid, type으로 회원정보 조회
+     * @param uid
+     * @param type
+     * @return
+     */
+
+    public User findUserByUidType(String uid, JoinCode type){
+        return userRepository.findUserLogin(uid, type);
+    }
+
+    /**
+     * 회원 엔티티 저장
+     * @param user
+     */
+
+    @Transactional(readOnly = false)
+    public void saveUser(User user){
+        userRepository.save(user);
+    }
 
 }
 

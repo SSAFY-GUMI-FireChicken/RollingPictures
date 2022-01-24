@@ -1,10 +1,11 @@
-package com.firechicken.rollingpictures_android
+package com.firechicken.rollingpictures.activity
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.firechicken.rollingpictures.databinding.ActivityMainBinding
 import android.util.Base64
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
