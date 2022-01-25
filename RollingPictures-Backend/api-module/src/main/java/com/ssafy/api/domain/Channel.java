@@ -1,11 +1,14 @@
 package com.ssafy.api.domain;
 
+import com.ssafy.core.code.YNCode;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.FetchType.*;
 
 @Builder
 @Getter
@@ -21,8 +24,8 @@ import java.util.List;
         }
 )
 public class Channel extends BaseEntity {
-
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "channel_id")
     private Long id;
 
@@ -32,36 +35,16 @@ public class Channel extends BaseEntity {
     @Column(length = 2)
     private int curPeopleCnt;
 
-    @Column(length = 2)
-    private int roundCount;
+    @Enumerated(EnumType.STRING)
+    private YNCode isPlaying;
 
-    @Column
-    private boolean isPlaying;
-
-    @Column(length = 3)
-    private LocalDateTime roundStartTime;
-
-    @Column(name = "leader_id", nullable = false)
-    private Long leaderId;
-
-    @Column(name = "code", unique = true, length = 120)
+    @Column(unique = true, length = 120)
     private String code;
 
-    @OneToMany(mappedBy = "channel", cascade = {CascadeType.REMOVE})
-    private List<Section> sections = new ArrayList<>();
-
     @OneToMany(mappedBy = "channel")
-    List<User> users = new ArrayList<>();
+    private List<ChannelUser> channelUsers = new ArrayList<>();
 
-    public boolean addUser(User user) {
-        if(users == null)
-            users = new ArrayList<>();
+    @OneToOne(fetch = LAZY)
+    private GameChannel gameChannel;
 
-        return this.users.add(user);
-    }
-
-    public void addSection(Section section) {
-        this.sections.add(section);
-        section.changeChannel(this);
-    }
 }

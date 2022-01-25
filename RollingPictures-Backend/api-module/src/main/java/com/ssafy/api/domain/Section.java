@@ -15,29 +15,23 @@ import static javax.persistence.FetchType.*;
 @AllArgsConstructor
 @Entity
 public class Section extends BaseEntity {
-
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "section_id")
     private Long id;
 
-    private String startUsername;
+    private String code;
+
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
+    @JoinColumn(name = "game_channel_id")
+    private GameChannel gameChannel;
 
     @OneToMany(mappedBy = "section")
     private List<Round> rounds = new ArrayList<>();
-
-    public Section(long id, String startUsername) {
-        this.id = id;
-        this.startUsername = startUsername;
-    }
-
-    public void changeChannel(Channel channel) {
-        this.channel = channel;
-        this.channel.getSections().add(this);
-    }
 
     public void addRound(Round round) {
         rounds.add(round);

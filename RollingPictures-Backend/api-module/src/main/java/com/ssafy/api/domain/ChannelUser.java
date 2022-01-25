@@ -1,5 +1,6 @@
 package com.ssafy.api.domain;
 
+import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,36 +11,32 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.*;
 
-@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-public class Round {
+@Table(name = "channel_user")
+public class ChannelUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "round_id")
+    @Column(name = "channel_user_id", nullable = false)
     private Long id;
 
-    private String keyword;
-
-    private String imgSrc;
-
-    @Enumerated(EnumType.STRING)
-    private YNCode isKeyword;
-
-    private Integer roundNumber; // 현재 라운드
-
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "section_id")
-    private Section section;
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void changeSection(Section section) {
-        this.section = section;
-        section.addRound(this);
-    }
+    @Enumerated(EnumType.STRING)
+    private YNCode isLeader;
+
+    @Enumerated(EnumType.STRING)
+    private GamePlayState gamePlayState;
+
+    @Enumerated(EnumType.STRING)
+    private YNCode isMute;
 }
