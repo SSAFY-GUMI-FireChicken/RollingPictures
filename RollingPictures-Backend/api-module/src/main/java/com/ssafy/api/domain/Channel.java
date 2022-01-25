@@ -47,4 +47,9 @@ public class Channel extends BaseEntity {
     @OneToOne(fetch = LAZY)
     private GameChannel gameChannel;
 
+    public void addChannelUser(ChannelUser channelUser) {
+        channelUsers.add(channelUser);
+        channelUser.changeChannel(this);
+    }
+
 }

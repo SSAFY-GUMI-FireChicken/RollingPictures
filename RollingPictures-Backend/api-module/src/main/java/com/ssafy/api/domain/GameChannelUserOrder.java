@@ -29,4 +29,8 @@ public class GameChannelUserOrder {
     @JoinColumn(name = "game_channel_game_channel_id")
     private GameChannel gameChannel;
 
+    public void changeGameChannel(GameChannel gameChannel) {
+        this.gameChannel = gameChannel;
+        gameChannel.getGameChannelUserOrders().add(this);
+    }
 }

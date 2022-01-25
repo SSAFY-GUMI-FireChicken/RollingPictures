@@ -22,9 +22,7 @@ public class Section extends BaseEntity {
 
     private String code;
 
-    @OneToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Integer startOrder;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "game_channel_id")
@@ -33,8 +31,12 @@ public class Section extends BaseEntity {
     @OneToMany(mappedBy = "section")
     private List<Round> rounds = new ArrayList<>();
 
+    public void changeGameChannel(GameChannel gameChannel) {
+        this.gameChannel = gameChannel;
+        gameChannel.getSections().add(this);
+    }
+
     public void addRound(Round round) {
-        rounds.add(round);
         round.changeSection(this);
     }
 }

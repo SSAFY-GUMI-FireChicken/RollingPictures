@@ -39,4 +39,14 @@ public class ChannelUser {
 
     @Enumerated(EnumType.STRING)
     private YNCode isMute;
+
+    public void changeChannel(Channel channel) {
+        this.channel = channel;
+    }
+
+    public void changeMute(YNCode code) {
+        isMute = code;
+    }
+
+
 }

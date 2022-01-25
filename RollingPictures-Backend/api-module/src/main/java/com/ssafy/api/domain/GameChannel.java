@@ -37,4 +37,11 @@ public class GameChannel {
     @OneToMany(mappedBy = "gameChannel")
     private List<GameChannelUserOrder> gameChannelUserOrders = new ArrayList<>();
 
+    public void addSection(Section section) {
+        section.changeGameChannel(this);
+    }
+
+    public void addGameChannelUserOrder(GameChannelUserOrder order) {
+        order.changeGameChannel(this);
+    }
 }
