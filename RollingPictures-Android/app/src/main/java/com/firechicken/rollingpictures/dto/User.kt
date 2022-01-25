@@ -8,5 +8,6 @@ data class User(
     val token: String?
 ) {
     constructor() : this("", "", false, false, "")
+    constructor(nickName: String?) : this("", nickName, false, false, "")
 }
 
