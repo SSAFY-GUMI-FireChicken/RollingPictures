@@ -19,7 +19,7 @@ public class GameChannelUserOrder {
     @Column(name = "game_channel_user_order_id", nullable = false)
     private Long id;
 
-    private Integer order;
+    private Integer orderNum;
 
     @OneToOne
     @JoinColumn(name = "user_id")
