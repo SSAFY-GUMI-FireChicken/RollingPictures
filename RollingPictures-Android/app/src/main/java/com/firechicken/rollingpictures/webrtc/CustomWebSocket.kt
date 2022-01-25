@@ -72,8 +72,8 @@ class CustomWebSocket(
 
     /* websocket에서 온 text가 결과를 포함하는지 아닌지에 따라 분기
        결과의 유무로 분기함
-       handleServerResponse는 클라이언트에서 서버로
-       handleServerEvent는 서버에서 클라이언트로 보내는 것
+       handleServerResponse는 클라이언트에서 서버로 보낸 것의 응답
+       handleServerEvent는 서버에서 클라이언트로 보낸 요청 (보통 다른 참가자들의 이벤트)
     * */
     @Throws(Exception::class)
     override fun onTextMessage(websocket: WebSocket, text: String) {
@@ -86,26 +86,33 @@ class CustomWebSocket(
         }
     }
 
+    // 클라이언트에서 서버로 보낸 것의 응답
     @Throws(JSONException::class)
     private fun handleServerResponse(json: JSONObject) {
         val rpcId = json.getInt(JsonConstants.ID)
         val result = JSONObject(json.getString(JsonConstants.RESULT))
 
         if (result.has("value") && result.getString("value") == "pong") {
-            // 1. ping : 서버가 클라이언트의 연결을 인식, 수신이 되지 않을 경우 이뤄져야 하는 작업 명시
+            // 1. ping : 서버가 클라이언트의 연결을 인식하고 보낸 응답
             Log.i(TAG, "pong")
         } else if (rpcId == ID_JOINROOM.get()) {
-            // 2. join room : 초기화 된 방으로 클라이언트를 참가시킴
+            // 2. join room : 방에 들어갔을 때 (추가적으로 방안에 있던 사용자 추가 등)
             val localParticipant = session.getLocalParticipant()
+
+            // 현재 세션에서 참가자들의 송출 정보를 가져옴
             val localConnectionId = result.getString(JsonConstants.ID)
             mediaServer = result.getString(JsonConstants.MEDIA_SERVER)
             localParticipant!!.connectionId = (localConnectionId)
+
+            // 현재 세션에서 나에 대한 송출 정보 설정 (보내기 전용 모드:SEND_ONLY)
             val localPeerConnection = session.createLocalPeerConnection()
             localPeerConnection!!.addTrack(localParticipant.audioTrack)
             for (transceiver in localPeerConnection.transceivers) {
                 transceiver.direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
             }
             localParticipant.peerConnection = (localPeerConnection)
+
+            // 방에 들어갔기 때문에 내 오디오를 전송할 스트림을 publish
             val sdpConstraints = MediaConstraints()
             sdpConstraints.mandatory.add(
                 MediaConstraints.KeyValuePair(
@@ -113,28 +120,18 @@ class CustomWebSocket(
                     "true"
                 )
             )
-            // 방에 들어갔기 때문에 내 오디오를 전송할 스트림을 publish
             session.createOfferForPublishing(sdpConstraints)
-
             // 들어간 세션에 이미 나말고 다른 사람들이 들어가 있어서 구독이 필요할 때
             if (result.getJSONArray(JsonConstants.VALUE).length() > 0) {
-                // There were users already connected to the session
                 addRemoteParticipantsAlreadyInRoom(result)
             }
         } else if (rpcId == ID_LEAVEROOM.get()) {
-            // 3. leave room : 방을 떠남
-            Log.d("tete", "!ID_LEAVEROOM : $rpcId")
-            Log.d("tete", "!ID_LEAVEROOM : $ID_LEAVEROOM")
-            // Response to leaveRoom
+            // 3. leave room : 방을 떠남 (내가)
             if (websocket.isOpen) {
                 websocket.disconnect()
             }
         } else if (rpcId == ID_PUBLISHVIDEO.get()) {
-            // 4. publish video : 현재 사용자의 오디오 송출
-            Log.d("tetete", "!ID_PUBLISHVIDEO--json : $json")
-            Log.d("tetete", "!ID_PUBLISHVIDEO : $rpcId")
-            Log.d("tetete", "!ID_PUBLISHVIDEO : $ID_PUBLISHVIDEO")
-            // Response to publishVideo
+            // 4. publish video : 현재 사용자의 오디오 송출 했을 때
             val localParticipant = session.getLocalParticipant()
             val remoteSdpAnswer =
                 SessionDescription(SessionDescription.Type.ANSWER, result.getString("sdpAnswer"))
@@ -143,11 +140,7 @@ class CustomWebSocket(
                 remoteSdpAnswer
             )
         } else if (IDS_PREPARERECEIVEVIDEO.containsKey(rpcId)) {
-            // 5. prepareReceiveVideo : ????????????????????????????????
-            Log.d("tetete", "!IDS_PREPARERECEIVEVIDEO--json : $json")
-            Log.d("tetete", "!IDS_PREPARERECEIVEVIDEO : $rpcId")
-            Log.d("tetete", "!IDS_PREPARERECEIVEVIDEO : $IDS_PREPARERECEIVEVIDEO")
-            // Response to prepareReceiveVideoFrom
+            // 5. prepareReceiveVideo : ((앱에서는 안 씀))
             val participantAndStream = IDS_PREPARERECEIVEVIDEO.remove(rpcId)!!
             val remoteParticipant = session.getRemoteParticipant(participantAndStream.first)
             val streamId = participantAndStream.second
@@ -158,17 +151,12 @@ class CustomWebSocket(
                 override fun onSetSuccess() {
                     subscriptionInitiatedFromServer(remoteParticipant, streamId)
                 }
-
                 override fun onSetFailure(s: String) {
                     Log.i("setRemoteDescription ER", s)
                 }
             }, remoteSdpOffer)
         } else if (IDS_RECEIVEVIDEO.containsKey(rpcId)) {
-            // 6. receivedVideo : ????????????????????????????????
-            Log.d("tetete", "!IDS_RECEIVEVIDEO--json : $json")
-            Log.d("tetete", "!IDS_RECEIVEVIDEO : $rpcId")
-            Log.d("tetete", "!IDS_RECEIVEVIDEO : $IDS_RECEIVEVIDEO")
-            // Response to receiveVideoFrom
+            // 6. receivedVideo : 미디어 정보(음성 정보)를 받았을 때 (받아야하는 정보 삭제)
             val id = IDS_RECEIVEVIDEO.remove(rpcId)
             if ("kurento" == mediaServer) {
                 val sessionDescription = SessionDescription(
@@ -181,16 +169,14 @@ class CustomWebSocket(
                 )
             }
         } else if (IDS_ONICECANDIDATE.contains(rpcId)) {
-            // 7. onIceCandidate : ????????????????????????????????
-            Log.d("tete", "!IDS_ONICECANDIDATE : $rpcId")
-            Log.d("tete", "!IDS_ONICECANDIDATE : $IDS_ONICECANDIDATE")
-            // Response to onIceCandidate
+            // 7. onIceCandidate : 후보를 잘 찾아왔을 때 (후보자에서 삭제)
             IDS_ONICECANDIDATE.remove(rpcId)
         } else {
             Log.e(TAG, "Unrecognized server response: $result")
         }
     }
 
+    // 방에 들어감
     fun joinRoom() {
         val joinRoomParams: MutableMap<String, String> = HashMap()
         joinRoomParams[JsonConstants.METADATA] =
@@ -208,6 +194,7 @@ class CustomWebSocket(
         ID_LEAVEROOM.set(this.sendJson(JsonConstants.LEAVEROOM_METHOD))
     }
 
+    // 방에 나를 송출함
     fun publishVideo(sessionDescription: SessionDescription) {
         val publishVideoParams: MutableMap<String, String> = HashMap()
         publishVideoParams["audioActive"] = "true"
@@ -222,7 +209,7 @@ class CustomWebSocket(
         ID_PUBLISHVIDEO.set(this.sendJson(JsonConstants.PUBLISHVIDEO_METHOD, publishVideoParams))
     }
 
-    // ????????????????????????????????????????????????????????????????????????????????????
+    // ((앱에서는 안 씀))
     fun prepareReceiveVideoFrom(remoteParticipant: RemoteParticipant?, streamId: String) {
         val prepareReceiveVideoFromParams: MutableMap<String, String> = HashMap()
         prepareReceiveVideoFromParams["sender"] = streamId
@@ -234,6 +221,7 @@ class CustomWebSocket(
             Pair(remoteParticipant?.connectionId, streamId)
     }
 
+    // 방에 있는 참가자들을 송출 받음 (방에 들어가 있을 때, 상대방이 들어옴 / 들어갔는데 참가자들이 있음)
     fun receiveVideoFrom(
         sessionDescription: SessionDescription,
         remoteParticipant: RemoteParticipant?,
@@ -242,10 +230,8 @@ class CustomWebSocket(
         val receiveVideoFromParams: MutableMap<String, String> = HashMap()
         receiveVideoFromParams["sender"] = streamId
         if ("kurento" == mediaServer) {
-            Log.d("tete", "!44444")
             receiveVideoFromParams["sdpOffer"] = sessionDescription.description
         } else {
-            Log.d("tete", "!6666")
             receiveVideoFromParams["sdpAnswer"] = sessionDescription.description
         }
         IDS_RECEIVEVIDEO.put(this.sendJson(JsonConstants.RECEIVEVIDEO_METHOD, receiveVideoFromParams),
@@ -254,6 +240,7 @@ class CustomWebSocket(
 
     }
 
+    // 정보 받아와서 후보자로 등록
     fun onIceCandidate(iceCandidate: IceCandidate, endpointName: String?) {
         val onIceCandidateParams: MutableMap<String, String> = HashMap()
         if (endpointName != null) {
@@ -270,6 +257,7 @@ class CustomWebSocket(
         )
     }
 
+    // 서버에서 클라이언트로 보낸 요청  (보통 다른 참가자들의 이벤트)
     @Throws(JSONException::class)
     private fun handleServerEvent(json: JSONObject) {
         if (!json.has(JsonConstants.PARAMS)) {
@@ -333,7 +321,7 @@ class CustomWebSocket(
         }
     }
 
-    // ???
+    // 다른 참가자가 서버로 본인을 후보 등록했을 때
     @Throws(JSONException::class)
     private fun iceCandidateEvent(params: JSONObject) {
         val iceCandidate = IceCandidate(
@@ -361,7 +349,7 @@ class CustomWebSocket(
         }
     }
 
-    // ???
+    // 내가 방에 있는데, 새로운 참가자가 들어왔을 때
     @Throws(JSONException::class)
     private fun participantJoinedEvent(params: JSONObject) {
         newRemoteParticipantAux(params)
@@ -390,7 +378,7 @@ class CustomWebSocket(
         mainHandler.post(myRunnable)
     }
 
-    // ??????????
+    // 내가 방에 있는데, 새로운 참가자가 들어왔을 때 / 방에 들어왔는데, 이미 참가자들이 있을 때
     @Throws(JSONException::class)
     private fun newRemoteParticipantAux(participantJson: JSONObject): RemoteParticipant {
         val connectionId = participantJson.getString(JsonConstants.ID)
@@ -429,9 +417,7 @@ class CustomWebSocket(
         streamId: String
     ) {
         val sdpConstraints = MediaConstraints()
-        Log.d("tete", "!3333")
         sdpConstraints.mandatory.add(MediaConstraints.KeyValuePair("offerToReceiveAudio", "true"))
-        //////////////////////////////////////////////sdpConstraints.mandatory.add(MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"))
         remoteParticipant!!.peerConnection
             ?.createOffer(object : CustomSdpObserver("remote offer sdp") {
                 override fun onCreateSuccess(sessionDescription: SessionDescription) {
@@ -449,14 +435,13 @@ class CustomWebSocket(
             }, sdpConstraints)
     }
 
-    // ???????????
+    // ((앱에서는 안 씀))
     private fun subscriptionInitiatedFromServer(
         remoteParticipant: RemoteParticipant?,
         streamId: String
     ) {
         val sdpConstraints = MediaConstraints()
         sdpConstraints.mandatory.add(MediaConstraints.KeyValuePair("offerToReceiveAudio", "true"))
-        //////////////////////////////////////////////sdpConstraints.mandatory.add(MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"))
         session.createAnswerForSubscribing(remoteParticipant!!, streamId, sdpConstraints)
     }
 

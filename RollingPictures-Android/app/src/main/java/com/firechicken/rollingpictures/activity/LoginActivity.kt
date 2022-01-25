@@ -31,13 +31,13 @@ class LoginActivity : AppCompatActivity() {
         val activityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(activityLoginBinding.root)
 
-        if (user?.nickname != "") {
-            activityLoginBinding.roomCodeEditText.setText(user?.nickname)
+        if (user?.nickName != "") {
+            activityLoginBinding.roomCodeEditText.setText(user?.nickName)
         }
 
         activityLoginBinding.loginButton.setOnClickListener {
             user?.apply {
-                nickname = activityLoginBinding.roomCodeEditText.text.toString()
+                nickName = activityLoginBinding.roomCodeEditText.text.toString()
             }
             prefs.setUser(user)
             val intent = Intent(this@LoginActivity, MainActivity::class.java)

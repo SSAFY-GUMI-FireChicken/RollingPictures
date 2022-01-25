@@ -24,7 +24,7 @@ class PreferenceUtil(context: Context) {
     fun setUser(user:User?){
         val editor = prefs.edit()
         editor.putString("uid", user?.uid)
-        editor.putString("nickname", user?.nickname)
+        editor.putString("nickname", user?.nickName)
         editor.apply()
     }
 
