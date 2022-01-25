@@ -5,6 +5,13 @@
     <string name="insert_nick_name">닉네임 입력</string>
     <string name="insert_room_code">방 코드 입력</string>
     <string name="some_id">방 코드 입력</string>
+    <string name="creating_room">방 만들기</string>
+    <string name="room_title">방 제목</string>
+    <string name="room_isPublic">공개 여부</string>
+    <string name="room_public">공개</string>
+    <string name="room_private">비공개</string>
+    <string name="room_maximum">최대 인원</string>
+    <string name="ok">OK</string>
     <string name="waiting_room">대기실</string>
     <string name="player">Player</string>
     <string name="start_game">START GAME</string>

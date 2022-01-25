@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    tools:context=".activity.CreateRoomActivity">
+
+    <EditText
+        android:id="@+id/roomTitleEditText"
+        style="@style/Text.EditTextHintStyle"
+        android:layout_width="275dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="68dp"
+        android:background="@drawable/bg_input_dark"
+        android:padding="@dimen/padding_size_20"
+        android:text="그리기 초보만"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomTitleTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <TextView
+        android:id="@+id/creatingRoomTextView"
+        style="@style/Text.TitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/margin_size_48"
+        android:text="@string/creating_room"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/roomTitleTextView"
+        style="@style/Text.PlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="295dp"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/creatingRoomTextView"
+        android:text="@string/room_title" />
+
+    <TextView
+        android:id="@+id/maximumTextView"
+        style="@style/Text.PlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="277dp"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/publicButton"
+        android:text="@string/room_maximum" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/publicButton"
+        style="@style/Text.DialogTitleStyle"
+        android:layout_width="120dp"
+        android:layout_height="@dimen/box_width"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_tool_detail"
+        android:text="@string/room_public"
+        android:textColor="@color/green_deep_dark"
+        app:layout_constraintEnd_toStartOf="@+id/privateButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/publicTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <TextView
+        android:id="@+id/publicTextView"
+        style="@style/Text.PlayerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="277dp"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roomTitleEditText"
+        android:text="@string/room_isPublic" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/privateButton"
+        style="@style/Text.DialogTitleStyle"
+        android:layout_width="120dp"
+        android:layout_height="@dimen/box_width"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="77dp"
+        android:background="@drawable/bg_round"
+        android:text="@string/room_private"
+        android:textColor="@color/green_deep_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/publicButton"
+        app:layout_constraintTop_toBottomOf="@+id/publicTextView"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancelButton"
+        style="@style/Text.ExitStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginBottom="@dimen/margin_size_24"
+        android:background="@drawable/bg_button_exit"
+        android:text="@android:string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/okButton"
+        style="@style/Text.ButtonOkStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginBottom="@dimen/margin_size_8"
+        android:background="@drawable/bg_button_ok"
+        android:text="@android:string/ok"
+        app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
+
+    <ImageButton
+        android:id="@+id/btnSubCount"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/minus"
+        android:backgroundTint="@color/green_deep_dark"
+        app:layout_constraintEnd_toStartOf="@+id/countTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/maximumTextView" />
+
+    <ImageButton
+        android:id="@+id/btnAddCount"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="141dp"
+        android:background="@drawable/add"
+        android:backgroundTint="@color/green_deep_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/countTextView"
+        app:layout_constraintTop_toBottomOf="@+id/maximumTextView" />
+
+    <TextView
+        android:id="@+id/countTextView"
+        style="@style/Text.DialogTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="28dp"
+        android:text="3"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddCount"
+        app:layout_constraintStart_toEndOf="@+id/btnSubCount"
+        app:layout_constraintTop_toBottomOf="@+id/maximumTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
