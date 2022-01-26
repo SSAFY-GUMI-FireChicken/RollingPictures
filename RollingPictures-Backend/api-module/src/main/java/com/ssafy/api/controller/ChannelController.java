@@ -113,6 +113,8 @@ public class ChannelController {
                 .isMute(YNCode.N)
                 .build();
 
+        channelUserService.saveChannelUser(channelUser);
+
         ArrayList<UserInfoResDTO> resUserList = new ArrayList<UserInfoResDTO>();
         
         channel.setCurPeopleCnt(channel.getCurPeopleCnt() + 1);
