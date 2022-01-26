@@ -12,4 +12,6 @@ public class RoundResDTO {
     @ApiModelProperty(value = "테스트 아이디", required = true, example = "1")
     private long id;
 
+
+
 }
