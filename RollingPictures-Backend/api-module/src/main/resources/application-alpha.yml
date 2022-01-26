@@ -14,7 +14,7 @@ spring:
     # application-aws.yml 추가 include
     include:
       - core
-#      - aws
+      - aws
   messages:
     basename: i18n/exception
     encoding: UTF-8

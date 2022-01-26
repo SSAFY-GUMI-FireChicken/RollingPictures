@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RollingPicturesAndroid">
         <activity
+            android:name=".activity.CreateRoomActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.GameActivity"
             android:exported="true"
             android:label="@string/title_activity_game" >
