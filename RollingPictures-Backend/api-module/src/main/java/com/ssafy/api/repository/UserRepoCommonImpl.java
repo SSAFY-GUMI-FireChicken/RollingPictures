@@ -6,22 +6,18 @@ import com.ssafy.api.domain.QUser;
 import com.ssafy.api.domain.User;
 import com.ssafy.core.code.JoinCode;
 import com.ssafy.core.code.YNCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+@RequiredArgsConstructor
 @Repository
 @Transactional
 public class UserRepoCommonImpl implements UserRepoCommon {
     private final JPAQueryFactory queryFactory;
-    private EntityManager em;
-
-    public UserRepoCommonImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-        this.em = em;
-    }
-
+    private final EntityManager em;
 
     @Override
     public User findUserLogin(String uid, JoinCode type){
@@ -34,7 +30,6 @@ public class UserRepoCommonImpl implements UserRepoCommon {
         return result;
     }
 
-
     @Override
     public User findByUid(String uid, YNCode isBind){
         User result = queryFactory
@@ -46,13 +41,11 @@ public class UserRepoCommonImpl implements UserRepoCommon {
         return result;
     }
 
-
-
     // isBind 조건만 체크
     public BooleanExpression checkUserIsBind(YNCode isBind){
-        if(isBind == null)
+        if (isBind == null) {
             return null;
-
+        }
         return QUser.user.isBind.eq(isBind);
     }
 }

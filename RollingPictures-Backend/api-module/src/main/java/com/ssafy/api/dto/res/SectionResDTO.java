@@ -10,7 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SectionResDTO {
-
     private int num;
     private long userId;
     private String img;
