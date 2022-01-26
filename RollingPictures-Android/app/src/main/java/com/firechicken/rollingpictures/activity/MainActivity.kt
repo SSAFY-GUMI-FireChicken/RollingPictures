@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(activityMainBinding.root)
 
         activityMainBinding.createButton.setOnClickListener {
-            val intent = Intent(this@MainActivity, GameActivity::class.java)
+            val intent = Intent(this@MainActivity, CreateRoomActivity::class.java)
             startActivity(intent)
         }
 

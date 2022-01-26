@@ -11,13 +11,11 @@ import androidx.core.content.ContextCompat
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.activity.MainActivity
 
-class GameExitDialog(context: Context)
-{
+class GameExitDialog(context: Context) {
     private val dialog = Dialog(context)
 
 
-    fun showDialog()
-    {
+    fun showDialog() {
         dialog.apply {
             setContentView(R.layout.dialog_game_exit)
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

@@ -20,6 +20,10 @@
     <dimen name="box_width">50dp</dimen>
     <dimen name="palette_color_size">36dp</dimen>
     <dimen name="seek_bar_height">50dp</dimen>
+    <dimen name="room_edit_width">275dp</dimen>
+    <dimen name="public_button_width">120dp</dimen>
+    <dimen name="small_button_size">30dp</dimen>
+    <dimen name="recycler_height">250dp</dimen>
 
 
     <!-- padding size -->
@@ -39,9 +43,14 @@
     <dimen name="margin_size_18">18dp</dimen>
     <dimen name="margin_size_20">20dp</dimen>
     <dimen name="margin_size_24">24dp</dimen>
+    <dimen name="margin_size_28">28dp</dimen>
     <dimen name="margin_size_30">30dp</dimen>
     <dimen name="margin_size_32">32dp</dimen>
     <dimen name="margin_size_48">48dp</dimen>
     <dimen name="margin_size_50">50dp</dimen>
+    <dimen name="margin_size_60">60dp</dimen>
+    <dimen name="margin_size_68">68dp</dimen>
+    <dimen name="margin_size_140">140dp</dimen>
+
 
 </resources>
