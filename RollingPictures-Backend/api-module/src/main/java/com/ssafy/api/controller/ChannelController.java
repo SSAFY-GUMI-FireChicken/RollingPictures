@@ -11,7 +11,6 @@ import com.ssafy.api.service.SignService;
 import com.ssafy.api.service.common.CommonResult;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.SingleResult;
-import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
 import com.ssafy.api.domain.Channel;
 import com.ssafy.api.domain.User;
@@ -20,14 +19,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 @Api(tags = {"04. 방"})
@@ -47,7 +44,6 @@ public class ChannelController {
     @ApiOperation(value = "방 생성", notes = "방 생성")
     @PostMapping
     public @ResponseBody SingleResult<ChannelResDTO> makeChannel(@Valid MakeChannelReqDTO req) throws Exception {
-        String code = "";
         Channel channelChk = null;
 
         User user = signService.findByUid(req.getUid(), YNCode.Y);
@@ -55,34 +51,14 @@ public class ChannelController {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");
         }
 
-        do {
-            code = RandomStringUtils.randomAlphanumeric(6);
-            channelChk = channelService.findByCode(code);
-        } while (channelChk != null);
-
-        Channel channel = Channel.builder()
-                .maxPeopleCnt(6)
-                .curPeopleCnt(1)
-                .isPlaying(YNCode.N)
-                .code(code)
-                .build();
-
-        ChannelUser channelUser = ChannelUser.builder()
-                .channel(channel)
-                .user(user)
-                .isLeader(YNCode.Y)
-                .gamePlayState(GamePlayState.NONE)
-                .isMute(YNCode.N)
-                .build();
-
-        channel.addChannelUser(channelUser);
-        channelChk = channelService.saveChannel(channel);
-        channelUserService.saveChannelUser(channelUser);
+        channelChk = channelService.createChannel();
+        ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channelChk, user, YNCode.Y);
 
         return responseService.getSingleResult(ChannelResDTO
                 .builder()
                 .id(channelChk.getId())
-                .code(code)
+                .code(channelChk.getCode())
+                .users(resUserList)
                 .build()
         );
     }
@@ -106,35 +82,15 @@ public class ChannelController {
             throw new ApiMessageException("이미 방에 입장한 상태입니다.");
         }
 
-        channelUser = ChannelUser.builder()
-                .user(user)
-                .isLeader(YNCode.N)
-                .gamePlayState(GamePlayState.NONE)
-                .isMute(YNCode.N)
-                .build();
+        ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channel, user, YNCode.N);
 
-        channelUserService.saveChannelUser(channelUser);
-
-        ArrayList<UserInfoResDTO> resUserList = new ArrayList<UserInfoResDTO>();
-        
-        channel.setCurPeopleCnt(channel.getCurPeopleCnt() + 1);
-        channel.addChannelUser(channelUser);
-
-        for (ChannelUser cUser : channel.getChannelUsers()) {
-            resUserList.add(UserInfoResDTO
-                    .builder()
-                    .id(cUser.getUser().getId())
-                    .nickname(cUser.getUser().getNickname())
-                    .isLeader(cUser.getIsLeader())
-                    .build()
-            );
-        }
-
-        return responseService.getSingleResult(ChannelResDTO.builder()
+        return responseService.getSingleResult(ChannelResDTO
+                .builder()
                 .id(channel.getId())
                 .code(channel.getCode())
                 .users(resUserList)
-                .build());
+                .build()
+        );
     }
 
     @Transactional
@@ -151,19 +107,7 @@ public class ChannelController {
             throw new ApiMessageException("방에 입장한 상태가 아닙니다.");
         }
 
-        if (channelUser.getChannel().getCurPeopleCnt() == 1) {
-            channelService.deleteChannel(channelUser.getChannel());
-            channelUserService.deleteChannelUser(channelUser);
-        } else {
-            channelUser.getChannel().getChannelUsers().remove(channelUser);
-
-            if (channelUser.getIsLeader() == YNCode.Y) {
-                channelUser.getChannel().getChannelUsers().get(0).setIsLeader(YNCode.Y);
-            }
-
-            channelUser.getChannel().setCurPeopleCnt(channelUser.getChannel().getCurPeopleCnt() - 1);
-            channelUserService.deleteChannelUser(channelUser);
-        }
+        channelUserService.deleteChannelUser(channelUser);
 
         return responseService.getSuccessResult();
     }
