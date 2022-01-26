@@ -2,16 +2,14 @@ package com.ssafy.api.domain;
 
 import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

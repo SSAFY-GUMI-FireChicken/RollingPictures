@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.domain.Channel;
-import com.ssafy.api.repository.ChannelRepositoty;
+import com.ssafy.api.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ChannelService {
-    private final ChannelRepositoty channelRepositoty;
+    private final ChannelRepository channelRepository;
 
     /**
      * code로 방 조회
@@ -18,7 +18,7 @@ public class ChannelService {
      * @return channel
      */
     public Channel findByCode(String code) {
-        return channelRepositoty.findTopByCode(code);
+        return channelRepository.findTopByCode(code);
     }
 
     /**
@@ -27,9 +27,8 @@ public class ChannelService {
      * @return id
      */
     @Transactional(readOnly = false)
-    public Long saveChannel(Channel channel) {
-        Channel resultChannel = channelRepositoty.save(channel);
-        return resultChannel.getId();
+    public Channel saveChannel(Channel channel) {
+        return channelRepository.save(channel);
     }
 
     /**
@@ -38,6 +37,6 @@ public class ChannelService {
      */
     @Transactional(readOnly = false)
     public void deleteChannel(Channel channel) {
-        channelRepositoty.delete(channel);
+        channelRepository.delete(channel);
     }
 }

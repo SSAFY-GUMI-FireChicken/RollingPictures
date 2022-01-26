@@ -16,10 +16,6 @@ public class InOutChannelReqDTO {
     private String uid;
 
     @NotNull
-    @ApiModelProperty(value = "채널 코드", required = true, example = "X9vqV0")
+    @ApiModelProperty(value = "채널 코드", required = false, example = "X9vqV0")
     private String code;
-
-    @NotNull
-    @ApiModelProperty(value = "입/퇴장 구분(true=입장, false=퇴장)", required = true, example = "true")
-    private boolean isEntrance;
 }
