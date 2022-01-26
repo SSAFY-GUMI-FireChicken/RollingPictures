@@ -14,7 +14,13 @@ import static javax.persistence.FetchType.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "channel_user")
+@Table(name = "channel_user",
+    uniqueConstraints = {
+            @UniqueConstraint(
+                    columnNames={"user_id"}
+            )
+    }
+)
 public class ChannelUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

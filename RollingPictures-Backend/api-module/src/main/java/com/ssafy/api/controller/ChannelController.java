@@ -27,9 +27,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
-@Api(tags = {"03. 방"})
+@Api(tags = {"04. 방"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -100,7 +101,12 @@ public class ChannelController {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");
         }
 
-        ChannelUser channelUser = ChannelUser.builder()
+        ChannelUser channelUser = channelUserService.findByUser(user);
+        if (channelUser != null) {
+            throw new ApiMessageException("이미 방에 입장한 상태입니다.");
+        }
+
+        channelUser = ChannelUser.builder()
                 .user(user)
                 .isLeader(YNCode.N)
                 .gamePlayState(GamePlayState.NONE)
@@ -108,9 +114,7 @@ public class ChannelController {
                 .build();
 
         ArrayList<UserInfoResDTO> resUserList = new ArrayList<UserInfoResDTO>();
-
-        channelUserService.saveChannelUser(channelUser);
-
+        
         channel.setCurPeopleCnt(channel.getCurPeopleCnt() + 1);
         channel.addChannelUser(channelUser);
 
