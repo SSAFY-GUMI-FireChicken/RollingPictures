@@ -13,6 +13,7 @@ public class TestRepoImpl extends QuerydslRepositorySupport implements TestRepo 
     private QTest test = QTest.test;
 
     public TestRepoImpl(){
+
         super(Test.class);
     }
 
