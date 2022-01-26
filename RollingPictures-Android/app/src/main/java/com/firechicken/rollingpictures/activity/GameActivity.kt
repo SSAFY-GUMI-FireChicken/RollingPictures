@@ -1,6 +1,7 @@
 package com.firechicken.rollingpictures.activity
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,6 +32,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import com.firechicken.rollingpictures.webrtc.util.EarPhoneIntentListener
 
 class GameActivity : AppCompatActivity() {
 
@@ -55,6 +57,8 @@ class GameActivity : AppCompatActivity() {
         val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
         val timeProgressBar = findViewById<ProgressBar>(R.id.timeProgressBar)
         timeProgressBar.startAnimation(progressGrow)
+
+        EarPhoneIntentListener.getInstance(applicationContext)?.init()
 
 //        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameWritingFragment())
 //        transaction.commit()
@@ -81,7 +85,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun buttonPressed(view: View?) {
-        // 스피커 통신 토글
+
+        // 음성 통신 토글 및 오디오 매니저 노말 모드로 초기화
         if(isVoice){
             activityGameActivity.headSetImageButton.setImageResource(R.drawable.ic_baseline_headset_off_24)
             leaveSession()
@@ -90,7 +95,7 @@ class GameActivity : AppCompatActivity() {
         }
         /* 권한이 있다면 통신 시작함
             OPENVIDU_URL : AWS url
-            OPENVIDU_SECRET : AWS로 들어가기 위한 PW?
+            OPENVIDU_SECRET : OpenVidu로 들어가기 위한 PW
             sessionId : 방
             participantName : 사용자 입장 이름
          */
