@@ -29,7 +29,7 @@ class CreateRoomActivity : AppCompatActivity() {
             btnSubCount.setOnClickListener {
                 val maximumCnt = countTextView.text.toString().toInt()
                 if (maximumCnt == 2) {
-                    Toast.makeText(this@CreateRoomActivity, "정원은 2명 이상이어야 합니다.", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@CreateRoomActivity, R.string.minimum_count, Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     countTextView.setText(Integer.toString((maximumCnt - 1)))
@@ -39,7 +39,7 @@ class CreateRoomActivity : AppCompatActivity() {
             btnAddCount.setOnClickListener {
                 val maximumCnt = countTextView.text.toString().toInt()
                 if (maximumCnt == 6) {
-                    Toast.makeText(this@CreateRoomActivity, "정원은 최대 6명입니다.", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@CreateRoomActivity, R.string.maximum_count, Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     countTextView.setText(Integer.toString((maximumCnt + 1)))

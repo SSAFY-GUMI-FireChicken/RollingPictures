@@ -76,9 +76,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPlayer"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="14dp"
+        android:layout_height="@dimen/recycler_height"
+        android:layout_marginTop="@dimen/margin_size_16"
         android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +86,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/exitRoom"
         style="@style/Text.ExitStyle"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/fragment_height"
         android:layout_height="@dimen/box_height"
         android:layout_marginBottom="@dimen/margin_size_24"
         android:background="@drawable/bg_button_exit"

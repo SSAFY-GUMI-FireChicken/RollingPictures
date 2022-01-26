@@ -48,4 +48,9 @@ Copyright 2018 Divyanshu Bhargava \n\n
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at\n\n
 \thttp://www.apache.org/licenses/LICENSE-2.0\n\n
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</string>
+    <string name="minimum_count">정원은 2명 이상이어야 합니다.</string>
+    <string name="maximum_count">정원은 최대 6명입니다.</string>
+    <string name="room_default_title">그리기 초보만</string>
+    <string name="room_default_cnt">3</string>
+
 </resources>
