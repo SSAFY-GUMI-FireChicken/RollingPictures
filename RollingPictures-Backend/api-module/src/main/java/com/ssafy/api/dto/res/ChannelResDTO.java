@@ -19,7 +19,4 @@ public class ChannelResDTO {
 
     @ApiModelProperty(value = "현재 유저 목록")
     private List<UserInfoResDTO> users;
-
-    @ApiModelProperty(value = "방장 아이디", example = "1")
-    private Long leaderId;
 }
