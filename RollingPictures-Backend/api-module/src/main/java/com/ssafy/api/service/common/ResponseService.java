@@ -64,7 +64,10 @@ public class ResponseService {
         ListResult<T> result = new ListResult<>();
         result.setData(list);
         result.setMsg(msg);
-        setSuccessResult(result);
+
+        // 승호: 밑에 코드 임시 주석처리
+//        setSuccessResult(result);
+
         return result;
     }
     // 성공 결과만 처리하는 메소드
