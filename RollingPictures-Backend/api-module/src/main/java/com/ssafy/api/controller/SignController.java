@@ -46,7 +46,7 @@ public class SignController {
 
     // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입")
-    @PostMapping(value = "/nickname", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@Valid SignUpReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User uidChk = signService.findByUid(req.getUid(), YNCode.Y);
@@ -79,7 +79,7 @@ public class SignController {
 
     // 회원정보수정
     @ApiOperation(value = "회원정보수정", notes = "회원정보수정")
-    @PutMapping(value = "/nickname", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/userinfoupdate", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@Valid UserInfoUpdateReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User user = signService.findByUid(req.getUid(), YNCode.Y);
