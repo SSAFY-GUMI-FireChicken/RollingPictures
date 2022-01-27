@@ -9,10 +9,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
+import android.media.AudioManager.ADJUST_RAISE
 import android.util.Log
+import com.firechicken.rollingpictures.webrtc.openvidu.Session
 import java.lang.IllegalArgumentException
 
-class EarPhoneIntentListener private constructor(private val context: Context) {
+class EarPhoneIntentListener private constructor(private val context: Context, val session: Session) {
     var mBluetoothAdapter: BluetoothAdapter? = null
     var mBluetoothHeadset: BluetoothHeadset? = null
     var mAudioManager: AudioManager? = null
@@ -67,6 +69,9 @@ class EarPhoneIntentListener private constructor(private val context: Context) {
             context.unregisterReceiver(receiver)
             disableSpeaker()
             mBluetoothHeadset = proxy as BluetoothHeadset
+
+
+
             context.registerReceiver(
                 mHeadsetBroadcastReceiver,
                 IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED)
@@ -102,6 +107,7 @@ class EarPhoneIntentListener private constructor(private val context: Context) {
         if (!audioManager.isSpeakerphoneOn) {
             audioManager.isSpeakerphoneOn = true
             audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+            audioManager.adjustVolume(ADJUST_RAISE, AudioManager.FLAG_SHOW_UI)
         }
     }
 
@@ -111,6 +117,8 @@ class EarPhoneIntentListener private constructor(private val context: Context) {
         if (audioManager.isSpeakerphoneOn) {
             audioManager.isSpeakerphoneOn = false
             audioManager.mode = AudioManager.MODE_NORMAL
+            session.getLocalParticipant()?.audioTrack?.setVolume(0.0)
+
         }
     }
 
@@ -134,9 +142,9 @@ class EarPhoneIntentListener private constructor(private val context: Context) {
     companion object {
         private const val TAG = "BluetoothIntent"
         private var earPhoneIntentListener: EarPhoneIntentListener? = null
-        fun getInstance(context: Context): EarPhoneIntentListener? {
+        fun getInstance(context: Context, session: Session): EarPhoneIntentListener? {
             if (earPhoneIntentListener == null) {
-                earPhoneIntentListener = EarPhoneIntentListener(context)
+                earPhoneIntentListener = EarPhoneIntentListener(context, session)
             }
             return earPhoneIntentListener
         }
