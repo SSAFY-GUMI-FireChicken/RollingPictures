@@ -8,7 +8,6 @@ import com.ssafy.core.code.JoinCode;
 import com.ssafy.core.code.YNCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
