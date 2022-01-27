@@ -1,27 +1,22 @@
 package com.firechicken.rollingpictures.adapter
 
 import android.content.Context
-import android.opengl.Visibility
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.R
-import com.firechicken.rollingpictures.dto.User
 
 class PlayerRecyclerViewAdapter(
     private val context: Context,
-    private val playerList: MutableList<User>
+    private val playerList: MutableList<String>
 ) : RecyclerView.Adapter<PlayerRecyclerViewAdapter.UserInfoHolder>() {
 
     inner class UserInfoHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        fun bindInfo(player: User) {
-            view.findViewById<TextView>(R.id.playerButton).text = player.nickName
+        fun bindInfo(player: String) {
+            view.findViewById<TextView>(R.id.playerButton).text = player
         }
     }
 
