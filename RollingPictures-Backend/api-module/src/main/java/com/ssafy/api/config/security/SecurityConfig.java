@@ -27,14 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception
-    {
+    public void configure(WebSecurity web) throws Exception {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
         web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**",
                 "/swagger-ui.html", "/webjars/**", "/swagger/**");
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -61,7 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -69,5 +66,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("guest").password(passwordEncoder().encode("guest")).roles("GUEST");
     }
-
 }

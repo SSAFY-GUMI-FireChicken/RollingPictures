@@ -44,7 +44,6 @@ public class SwaggerConfig {
 
     }
 
-
     private ApiInfo apiInfo(String title, String version) {
         return new ApiInfo(
                 title,
