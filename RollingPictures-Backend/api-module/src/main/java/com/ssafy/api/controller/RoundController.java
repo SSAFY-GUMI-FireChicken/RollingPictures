@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 
 @Api(tags = {"03. 라운드"})
@@ -36,19 +37,23 @@ public class RoundController {
     }
 
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
-    @PostMapping(value="/register",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    SingleResult<RoundResDTO> Test (@Valid RoundReqDTO req) throws IOException {
-        System.out.println(req.getFile());
-        String img = s3Uploader.upload(req.getFile(), "static");
+    SingleResult<RoundResDTO> Test (
+            @Valid RoundReqDTO req,
+            @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws IOException {
+        String img = req.getKeyword();
+        if ( multipartFile != null ) {
+            img = s3Uploader.upload(multipartFile, "static");
+        }
+
         Round round = Round.builder()
                 .roundNumber(req.getRoundNumber())
-                .imgSrc((img))
+                .imgSrc(img)
+                .isKeyword(req.getIsKeyword())
                 .build();
-
         long roundId = roundService.post(round);
         return responseService.getSingleResult(RoundResDTO.builder().id(roundId).build());
-
     }
 
 

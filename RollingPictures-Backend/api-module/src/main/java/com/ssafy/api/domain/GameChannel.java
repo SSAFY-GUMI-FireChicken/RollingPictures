@@ -44,4 +44,12 @@ public class GameChannel {
     public void addGameChannelUserOrder(GameChannelUserOrder order) {
         order.changeGameChannel(this);
     }
+
+    @Override
+    public String toString() {
+        return "GameChannel{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

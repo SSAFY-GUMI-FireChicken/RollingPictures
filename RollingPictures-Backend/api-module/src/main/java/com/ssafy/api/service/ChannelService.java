@@ -1,8 +1,10 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.domain.Channel;
-import com.ssafy.api.repository.ChannelRepositoty;
+import com.ssafy.api.repository.ChannelRepository;
+import com.ssafy.core.code.YNCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ChannelService {
-    private final ChannelRepositoty channelRepositoty;
+    private final ChannelRepository channelRepository;
 
     /**
      * code로 방 조회
@@ -18,18 +20,31 @@ public class ChannelService {
      * @return channel
      */
     public Channel findByCode(String code) {
-        return channelRepositoty.findTopByCode(code);
+        return channelRepository.findTopByCode(code);
     }
 
     /**
-     * 방 생성 후 id 리턴
-     * @param channel
-     * @return id
+     * 방 생성 후 channel 리턴
+     * @return channel
      */
     @Transactional(readOnly = false)
-    public Long saveChannel(Channel channel) {
-        Channel resultChannel = channelRepositoty.save(channel);
-        return resultChannel.getId();
+    public Channel createChannel() {
+        Channel channelChk = null;
+        String code = "";
+
+        do {
+            code = RandomStringUtils.randomAlphanumeric(6);
+            channelChk = findByCode(code);
+        } while (channelChk != null);
+
+        Channel channel = Channel.builder()
+                .maxPeopleCnt(6)
+                .curPeopleCnt(0)
+                .isPlaying(YNCode.N)
+                .code(code)
+                .build();
+
+        return channelRepository.save(channel);
     }
 
     /**
@@ -38,6 +53,6 @@ public class ChannelService {
      */
     @Transactional(readOnly = false)
     public void deleteChannel(Channel channel) {
-        channelRepositoty.delete(channel);
+        channelRepository.delete(channel);
     }
 }

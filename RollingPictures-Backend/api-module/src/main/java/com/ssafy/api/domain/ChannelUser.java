@@ -2,21 +2,25 @@ package com.ssafy.api.domain;
 
 import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "channel_user")
+@Table(name = "channel_user",
+    uniqueConstraints = {
+            @UniqueConstraint(
+                    columnNames={"user_id"}
+            )
+    }
+)
 public class ChannelUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

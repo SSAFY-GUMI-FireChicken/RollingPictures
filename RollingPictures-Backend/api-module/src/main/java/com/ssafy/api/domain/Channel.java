@@ -48,6 +48,9 @@ public class Channel extends BaseEntity {
     private GameChannel gameChannel;
 
     public void addChannelUser(ChannelUser channelUser) {
+        if(channelUsers == null ){
+            channelUsers = new ArrayList<>();
+        }
         channelUsers.add(channelUser);
         channelUser.changeChannel(this);
     }
