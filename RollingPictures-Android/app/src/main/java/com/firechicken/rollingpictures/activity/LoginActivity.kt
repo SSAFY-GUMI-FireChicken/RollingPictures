@@ -54,7 +54,6 @@ class LoginActivity : AppCompatActivity() {
 
                 }else{
                     //로그인
-//                    login("", )
 
                 }
                 prefs.setNickName(nickname)
@@ -102,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(password: String, token: String, type: String, uid:String) {
-        val user = LoginUserReqDTO(password, token, type, uid)
+        val user = LoginUserReqDTO(password, type, uid)
         Log.d(TAG, "login: ")
         UserService().login(user, object : RetrofitCallback<LoginUserResDTO> {
             override fun onSuccess(code: Int, responseData: LoginUserResDTO) {
