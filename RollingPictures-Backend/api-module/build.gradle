@@ -1,0 +1,90 @@
+plugins {
+    id "org.asciidoctor.convert" version "1.5.3"
+//    id "java"
+
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "io.franzbecker.gradle-lombok" version "3.0.0"
+}
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+group 'com.ssafy.api'
+version '0.0.1'
+sourceCompatibility = 1.8
+
+// My
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient' // webtestclient용
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('com.h2database:h2')
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation 'mysql:mysql-connector-java'
+
+    //JUnit4 추가
+    testImplementation("org.junit.vintage:junit-vintage-engine") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+
+    }
+
+    implementation 'org.apache.commons:commons-lang3:3.9'
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+asciidoctor {
+    attributes 'snippets': snippetsDir // adoc 파일 생성시 올바르게 include하기 위함
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("/src/docs/asciidoc/html5") {
+        into 'static/docs'
+    }
+}
+
+task copyDocument(type: Copy) { // 생성된 docs 파일을 build시 static 아래에 docs로 복사!
+    dependsOn bootJar
+
+    from file("build/asciidoc/html5/")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument // build시 copy 실행D
+}
+
+// My: Querydsl 추가
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+

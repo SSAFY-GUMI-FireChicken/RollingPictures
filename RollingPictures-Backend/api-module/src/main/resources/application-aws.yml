@@ -1,0 +1,14 @@
+cloud:
+  aws:
+    urlPrefix: https://rollingfictures.s3.ap-northeast-2.amazonaws.com/
+    path: image
+    s3:
+      bucket: rollingfictures
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: AKIA4X5SSSG7A44IYGM7
+      secretKey: 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
+      instanceProfile: true

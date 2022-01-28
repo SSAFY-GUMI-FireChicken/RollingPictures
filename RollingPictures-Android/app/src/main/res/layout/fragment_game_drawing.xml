@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:id="@+id/slashRoundTextView"
+            style="@style/Text.RoundText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/margin_size_16"
+            android:background="@drawable/bg_round"
+            android:gravity="center"
+            android:text="@string/slash_round"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/slash_round" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/writingTextView"
+            style="@style/Text.EditTextHintStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/box_height"
+            android:layout_marginTop="@dimen/margin_size_24"
+            android:background="@drawable/bg_input"
+            android:padding="@dimen/padding_size_20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/slashRoundTextView"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/drawToolsConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_size_16"
+            android:background="@color/white"
+            android:elevation="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/drawView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/writingTextView"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/clearImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/image_button_padding_size"
+                android:src="@drawable/ic_baseline_delete_24"
+                android:clickable="true"
+                android:background="@drawable/rp_draw_tool"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/circleView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/draw_tool" />
+
+            <com.firechicken.rollingpictures.draw.CircleView
+                android:id="@+id/circleView"
+                android:layout_width="@dimen/palette_color_size"
+                android:layout_height="@dimen/palette_color_size"
+                android:clickable="true"
+                android:layout_margin="@dimen/image_button_padding_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/brushImageButton"
+                app:layout_constraintHorizontal_bias="0.34"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/brushImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="@drawable/rp_draw_tool"
+                android:padding="@dimen/image_button_padding_size"
+                android:src="@drawable/ic_baseline_brush_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/eraserImageButton"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/circleView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/draw_tool" />
+
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/eraserImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="@drawable/rp_draw_tool"
+                android:padding="@dimen/image_button_padding_size"
+                android:src="@drawable/ic_eraser_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/brushImageButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/draw_tool" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/undoImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="@drawable/rp_draw_tool"
+                android:padding="@dimen/image_button_padding_size"
+                android:src="@drawable/ic_undo_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/redoImageButton"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/eraserImageButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/draw_tool" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/redoImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="@drawable/rp_draw_tool"
+                android:padding="@dimen/image_button_padding_size"
+                android:src="@drawable/ic_redo_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/undoImageButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/draw_tool" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.firechicken.rollingpictures.draw.DrawView
+            android:id="@+id/drawView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/margin_size_16"
+            android:background="@color/white"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toTopOf="@+id/completeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawToolsConstraintLayout" />
+
+        <include
+            android:id="@+id/brushSetting"
+            layout="@layout/view_brush_setting"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_size_4"
+            android:layout_marginStart="@dimen/margin_size_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/drawView" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/completeButton"
+            style="@style/Text.ButtonOkStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/box_height"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:background="@drawable/bg_button_ok"
+            android:text="@string/complete_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

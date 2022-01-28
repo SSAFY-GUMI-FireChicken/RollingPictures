@@ -1,0 +1,5 @@
+rootProject.name = 'ssafy'
+
+include 'core-module'
+include 'api-module'
+
