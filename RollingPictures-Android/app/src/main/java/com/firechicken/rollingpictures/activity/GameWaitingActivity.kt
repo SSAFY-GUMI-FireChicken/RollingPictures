@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.databinding.ActivityGameWaitingBinding
-import com.firechicken.rollingpictures.dto.User
 
 class GameWaitingActivity : AppCompatActivity() {
 
@@ -16,8 +15,8 @@ class GameWaitingActivity : AppCompatActivity() {
     lateinit var playerRecyclerViewAdapter: PlayerRecyclerViewAdapter
 
     //임의의 플레이어 데이터 삽입
-    val userList: MutableList<User> =
-        mutableListOf(User("푸읍"), User("푸읏"), User("풉킥"), User("아름"), User("이승호"), User("풉"))
+    val userList: MutableList<String> =
+        mutableListOf("푸읍", "푸읏", "풉킥", "아름", "이승호", "풉")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

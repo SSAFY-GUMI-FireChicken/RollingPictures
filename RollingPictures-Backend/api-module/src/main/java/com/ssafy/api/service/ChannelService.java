@@ -2,7 +2,9 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.domain.Channel;
 import com.ssafy.api.repository.ChannelRepository;
+import com.ssafy.core.code.YNCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +24,26 @@ public class ChannelService {
     }
 
     /**
-     * 방 생성 후 id 리턴
-     * @param channel
-     * @return id
+     * 방 생성 후 channel 리턴
+     * @return channel
      */
     @Transactional(readOnly = false)
-    public Channel saveChannel(Channel channel) {
+    public Channel createChannel() {
+        Channel channelChk = null;
+        String code = "";
+
+        do {
+            code = RandomStringUtils.randomAlphanumeric(6);
+            channelChk = findByCode(code);
+        } while (channelChk != null);
+
+        Channel channel = Channel.builder()
+                .maxPeopleCnt(6)
+                .curPeopleCnt(0)
+                .isPlaying(YNCode.N)
+                .code(code)
+                .build();
+
         return channelRepository.save(channel);
     }
 

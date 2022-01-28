@@ -4,6 +4,7 @@ import com.ssafy.api.config.security.JwtTokenProvider;
 import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.LoginUserReqDTO;
 import com.ssafy.api.dto.req.SignUpReqDTO;
+import com.ssafy.api.dto.req.UserInfoUpdateReqDTO;
 import com.ssafy.api.dto.res.LoginUserResDTO;
 import com.ssafy.api.dto.res.UserIdResDTO;
 import com.ssafy.api.service.SignService;
@@ -75,9 +76,25 @@ public class SignController {
         return responseService.getSingleResult(UserIdResDTO.builder().id(userId).build());
     }
 
-    @ApiOperation(value = "로그인", notes = "로그인")
-    @GetMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception {
+    // 회원정보수정
+    @ApiOperation(value = "회원정보수정", notes = "회원정보수정")
+    @PutMapping(value = "/userinfoupdate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@Valid UserInfoUpdateReqDTO req) throws Exception{
+        // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
+        User user = signService.findByUid(req.getUid(), YNCode.Y);
+        // DB에 저장할 User Entity 세팅
+        user.setNickname(req.getNickname());
+
+        // 회원정보 수정(user 에 바뀐 닉네임으로 수정)
+        long userId = signService.userSignUp(user);
+
+        return responseService.getSingleResult(UserIdResDTO.builder().id(userId).build());
+    }
+
+    // 로그인
+    @ApiOperation(value="로그인",notes="로그인")
+    @GetMapping(value="/login",produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception{
         // UID 값과 회원가입 타입으로 해당되는 정보 조회
         User user = signService.findUserByUidType(req.getUid(), JoinCode.valueOf(req.getType()));
 

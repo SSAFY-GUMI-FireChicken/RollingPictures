@@ -46,7 +46,7 @@ public class RoundController {
         if ( multipartFile != null ) {
             img = s3Uploader.upload(multipartFile, "static");
         }
-        
+
         Round round = Round.builder()
                 .roundNumber(req.getRoundNumber())
                 .imgSrc(img)

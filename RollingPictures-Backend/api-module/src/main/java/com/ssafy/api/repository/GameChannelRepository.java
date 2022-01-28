@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GameChannelRepository extends JpaRepository<GameChannel, Long> {
+    @EntityGraph(attributePaths = {"gameChannelUserOrders", "sections"})
+    GameChannel findGameChannelById(Long id);
 }

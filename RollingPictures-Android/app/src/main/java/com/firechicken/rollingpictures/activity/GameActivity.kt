@@ -58,7 +58,7 @@ class GameActivity : AppCompatActivity() {
         val timeProgressBar = findViewById<ProgressBar>(R.id.timeProgressBar)
         timeProgressBar.startAnimation(progressGrow)
 
-        EarPhoneIntentListener.getInstance(applicationContext)?.init()
+//        EarPhoneIntentListener.getInstance(applicationContext)?.init()
 
 //        val transaction = supportFragmentManager.beginTransaction().add(R.id.frameLayout, GameWritingFragment())
 //        transaction.commit()
@@ -196,6 +196,8 @@ class GameActivity : AppCompatActivity() {
     private fun getTokenSuccess(token: String?, sessionId: String) {
         // Initialize our session
         session = Session(sessionId, token!!, this)
+
+        EarPhoneIntentListener.getInstance(applicationContext, session!!)?.init()
 
         val participantName = "seokgyu"
 
