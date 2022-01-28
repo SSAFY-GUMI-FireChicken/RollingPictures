@@ -18,6 +18,9 @@ spring:
   messages:
     basename: i18n/exception
     encoding: UTF-8
+  jackson:
+    default-property-inclusion: non_null
+
   # JWT 토큰에 사용할 secret 키값 (임의의 랜덤 키값)
   jwt:
     secret: DvqcGn8mnFjqSL4a
@@ -87,8 +90,6 @@ app:
 swagger:
 #  host: jayutest.best:40005
   host: localhost:8185
-
-
 
 
 
