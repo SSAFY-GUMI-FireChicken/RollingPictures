@@ -35,7 +35,6 @@ public class SignController {
     private final ResponseService responseService;
     private final JwtTokenProvider jwtTokenProvider;
 
-
     /**
      * 로그인 : get /login
      * 회원가입 일반 : post /signup
@@ -43,15 +42,14 @@ public class SignController {
      * 소셜 가입 여부 체크 : get /exists/social
      */
 
-
-    // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@Valid SignUpReqDTO req) throws Exception{
+    public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@Valid SignUpReqDTO req) throws Exception {
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User uidChk = signService.findByUid(req.getUid(), YNCode.Y);
-        if(uidChk != null)
+        if (uidChk != null) {
             throw new ApiMessageException("중복된 uid값의 회원이 존재합니다.");
+        }
 
         // DB에 저장할 User Entity 세팅
         User user = User.builder()
@@ -70,10 +68,11 @@ public class SignController {
 
         // 회원가입 (User Entity 저장)
         long userId = signService.userSignUp(user);
-        // 저장된 User Entity의 PK가 없을 경우 (저장 실패)
-        if(userId <= 0)
-            throw new ApiMessageException("회원가입에 실패했습니다. 다시 시도해 주세요.");
 
+        // 저장된 User Entity의 PK가 없을 경우 (저장 실패)
+        if (userId <= 0) {
+            throw new ApiMessageException("회원가입에 실패했습니다. 다시 시도해 주세요.");
+        }
         return responseService.getSingleResult(UserIdResDTO.builder().id(userId).build());
     }
 
