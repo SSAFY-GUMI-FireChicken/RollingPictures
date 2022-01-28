@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Api(tags = {"01. 테스트"})
+@Api(tags = {"00. 테스트"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor

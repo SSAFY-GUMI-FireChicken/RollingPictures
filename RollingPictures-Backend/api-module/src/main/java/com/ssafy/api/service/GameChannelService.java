@@ -21,4 +21,8 @@ public class GameChannelService {
                 .orElseGet(() -> GameChannel.builder().id(0L).code("").build());
         return findGameChannel.getId() != 0;
     }
+
+    public void createGameChannel() {
+
+    }
 }

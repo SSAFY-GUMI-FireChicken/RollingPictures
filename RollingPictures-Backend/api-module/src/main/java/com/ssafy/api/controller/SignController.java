@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collections;
 
-@Api(tags = {"02. 가입"})
+@Api(tags = {"01. 유저"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
