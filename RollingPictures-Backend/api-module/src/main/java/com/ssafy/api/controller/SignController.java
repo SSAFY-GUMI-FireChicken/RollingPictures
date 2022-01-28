@@ -28,7 +28,7 @@ import java.util.Collections;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/sign")
+@RequestMapping(value = "/api/nickname")
 public class SignController {
     private final SignService signService;
     private final PasswordEncoder passwordEncoder;
@@ -46,7 +46,7 @@ public class SignController {
 
     // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입")
-    @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@Valid SignUpReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User uidChk = signService.findByUid(req.getUid(), YNCode.Y);
@@ -79,7 +79,7 @@ public class SignController {
 
     // 회원정보수정
     @ApiOperation(value = "회원정보수정", notes = "회원정보수정")
-    @PutMapping(value = "/userinfoupdate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping( produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@Valid UserInfoUpdateReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User user = signService.findByUid(req.getUid(), YNCode.Y);
@@ -94,7 +94,7 @@ public class SignController {
 
     // 로그인
     @ApiOperation(value="로그인",notes="로그인")
-    @GetMapping(value="/login",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception{
         // UID 값과 회원가입 타입으로 해당되는 정보 조회
         User user = signService.findUserByUidType(req.getUid(), JoinCode.valueOf(req.getType()));

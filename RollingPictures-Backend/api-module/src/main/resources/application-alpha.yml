@@ -42,7 +42,7 @@ spring:
     url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=UTC&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: ssafy
+    password: ssafy0107
   flyway:
     enabled: false
   config:
