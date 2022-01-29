@@ -43,7 +43,7 @@ public class ChannelController {
     @Transactional
     @ApiOperation(value = "방 생성", notes = "방 생성")
     @PostMapping
-    public @ResponseBody SingleResult<ChannelResDTO> makeChannel(@Valid MakeChannelReqDTO req) throws Exception {
+    public @ResponseBody SingleResult<ChannelResDTO> makeChannel(@RequestBody @Valid MakeChannelReqDTO req) throws Exception {
         Channel channelChk = null;
 
         User user = signService.findByUid(req.getUid(), YNCode.Y);
@@ -66,7 +66,7 @@ public class ChannelController {
     @Transactional
     @ApiOperation(value = "방 입장", notes = "방 입장")
     @PostMapping(value = "/user")
-    public SingleResult<ChannelResDTO> inChannel(@Valid InOutChannelReqDTO req) throws Exception {
+    public SingleResult<ChannelResDTO> inChannel(@RequestBody @Valid InOutChannelReqDTO req) throws Exception {
         Channel channel = channelService.findByCode(req.getCode());
         if (channel == null) {
             throw new ApiMessageException("방 정보가 없습니다.");
@@ -96,7 +96,7 @@ public class ChannelController {
     @Transactional
     @ApiOperation(value = "방 퇴장", notes = "방 퇴장")
     @DeleteMapping(value = "/user")
-    public CommonResult outChannel(@Valid InOutChannelReqDTO req) throws Exception {
+    public CommonResult outChannel(@RequestBody @Valid InOutChannelReqDTO req) throws Exception {
         User user = signService.findByUid(req.getUid(), YNCode.Y);
         if (user == null) {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");

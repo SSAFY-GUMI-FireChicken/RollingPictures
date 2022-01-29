@@ -7,28 +7,31 @@ class PreferenceUtil(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("preference", Context.MODE_PRIVATE)
 
-    fun getUid(): String?{
+    fun getUid(): String? {
         return prefs.getString("uid", "")
     }
-    fun setUid(uid:String) {
+
+    fun setUid(uid: String) {
         val editor = prefs.edit()
         editor.putString("uid", uid)
         editor.apply()
     }
 
-    fun getNickName(): String?{
+    fun getNickName(): String? {
         return prefs.getString("nickname", "")
     }
-    fun setNickName(nickname:String) {
+
+    fun setNickName(nickname: String) {
         val editor = prefs.edit()
         editor.putString("nickname", nickname)
         editor.apply()
     }
 
-    fun getId(): Long?{
+    fun getId(): Long? {
         return prefs.getLong("id", -1)
     }
-    fun setId(id:Long) {
+
+    fun setId(id: Long) {
         val editor = prefs.edit()
         editor.putLong("id", id)
         editor.apply()

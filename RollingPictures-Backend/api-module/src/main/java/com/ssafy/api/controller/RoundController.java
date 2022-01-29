@@ -39,7 +39,7 @@ public class RoundController {
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
     @PostMapping(value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> Test(
-            @Valid RoundReqDTO req,
+            @RequestBody @Valid RoundReqDTO req,
             @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws IOException {
         String img = req.getKeyword();
         if (multipartFile != null) {
