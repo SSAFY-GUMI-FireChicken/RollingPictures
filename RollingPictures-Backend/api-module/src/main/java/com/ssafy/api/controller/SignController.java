@@ -62,8 +62,6 @@ public class SignController {
                 // 가입 후 프로필 등록으로 받을 데이터는 우선 기본값으로 세팅
                 .img("")
                 // 기타 필요한 값 세팅
-                .mute(YNCode.N)
-                .state(YNCode.N)
                 .isBind(YNCode.Y)
                 .roles(Collections.singletonList("ROLE_USER")) // 인증된 회원인지 확인하기 위한 JWT 토큰에 사용될 데이터
                 .build();
@@ -112,11 +110,14 @@ public class SignController {
                 .id(user.getId())
                 .build();
 
-        // jwt token 세팅
-        dto.setToken(jwtTokenProvider.createToken(String.valueOf(user.getId()), Collections.singletonList("ROLE_USER")));
+        // jwt token 생성
+        String token = jwtTokenProvider.createToken(String.valueOf(user.getId()), Collections.singletonList("ROLE_USER"));
+
+        // 응답에 jwt token 세팅
+        dto.setToken(token);
 
         // 회원의 토큰값, 디바이스 정보 업데이트
-        user.updateToken(req.getToken());
+        user.updateToken(token);
         signService.saveUser(user);
 
         return responseService.getSingleResult(dto);

@@ -61,16 +61,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 255)
     private String img;
 
-    // 음소거 설정 (Y:on, N:off)
-    @Convert(converter = YNCodeConverter.class)
-    @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'N'")
-    private YNCode mute;
-
-    // 게임 진행 상태 (Y:진행, N:대기)
-    @Convert(converter = YNCodeConverter.class)
-    @Column(nullable = false, length = 1, columnDefinition = "varchar(1) default 'N'")
-    private YNCode state;
-
     // 장비 푸시용 토큰
     @Column(length = 255)
     private String token;
@@ -148,14 +138,6 @@ public class User extends BaseEntity implements UserDetails {
 
     public void updateIsBind(YNCode isBind){
         this.isBind = isBind;
-    }
-
-    public void updatePush(YNCode mute){
-        this.mute = mute;
-    }
-
-    public void updateState(YNCode push){
-        this.state = state;
     }
 
 
