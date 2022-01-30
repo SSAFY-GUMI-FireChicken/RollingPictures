@@ -21,8 +21,6 @@ public class LoginUserReqDTO {
         @ApiModelProperty(value = "비밀번호", required = true, example = "123")
         private String password;
 
-        @ApiModelProperty(value="토큰값",required = false,example="")
-        private String token;
 
         @NotNull
         @Pattern(regexp = "^(none|sns)$")

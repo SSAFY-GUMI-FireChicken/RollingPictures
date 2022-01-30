@@ -43,23 +43,22 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, "닉네임을 입력하세요.", Toast.LENGTH_SHORT).show()
             }else{
                 //회원가입 (미가입상태로 uid가 shared preferences에 없을 때)
-                if (prefs.getUid() == "") {
+//                if (prefs.getUid() == "") {
                     val uid = Settings.Secure.getString(
                         applicationContext.contentResolver,
                         Settings.Secure.ANDROID_ID
                     )
-                    prefs.setUid(uid)
-                    Log.d(TAG, "onCreate: sign전")
-                    signUp(uid, "none", "", nickname)
+//                    prefs.setUid(uid)
+                Log.d(TAG, "onCreate: ${uid}")
+                    signUp(nickname, "1", "none", uid)
 
-                }else{
-                    //로그인
+//                }
+                //로그인
+//                prefs.setNickName(nickname)
+//                login("1", "none", prefs.getUid())
 
-                }
-                prefs.setNickName(nickname)
 
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
+
             }
 
         }
@@ -70,8 +69,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun signUp(uid: String, type: String, password: String, nickname:String) {
-        val user = SignUpReqDTO(nickname, password, type, uid)
+    private fun signUp(nickname:String, password:String, type:String, uid: String) {
+        val user = SignUpReqDTO(uid, type, password, nickname)
         Log.d(TAG, "signUp: ", )
         UserService().signUp(user, object : RetrofitCallback<UserIdResDTO> {
             override fun onSuccess(code: Int, responseData: UserIdResDTO) {
@@ -80,8 +79,6 @@ class LoginActivity : AppCompatActivity() {
                     prefs.setId(userIdResDTO.id)
                     Log.d(TAG, "onSuccess: ${userIdResDTO.id}")
                     Toast.makeText(this@LoginActivity, "회원 가입 성공!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
                 } else {
                     Log.d(TAG, "onSuccess: null")
                     Toast.makeText(this@LoginActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -100,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun login(password: String, token: String, type: String, uid:String) {
+    private fun login(password: String, type: String, uid:String?) {
         val user = LoginUserReqDTO(password, type, uid)
         Log.d(TAG, "login: ")
         UserService().login(user, object : RetrofitCallback<LoginUserResDTO> {

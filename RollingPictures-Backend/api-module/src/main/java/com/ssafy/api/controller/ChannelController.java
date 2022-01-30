@@ -27,7 +27,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
-@Api(tags = {"04. 방"})
+@Api(tags = {"02. 방"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor

@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collections;
 
-@Api(tags = {"02. 가입"})
+@Api(tags = {"01. 유저"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/sign")
+@RequestMapping(value = "/api/nickname")
 public class SignController {
     private final SignService signService;
     private final PasswordEncoder passwordEncoder;
@@ -46,7 +46,7 @@ public class SignController {
 
     // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입")
-    @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@Valid SignUpReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User uidChk = signService.findByUid(req.getUid(), YNCode.Y);
@@ -62,8 +62,6 @@ public class SignController {
                 // 가입 후 프로필 등록으로 받을 데이터는 우선 기본값으로 세팅
                 .img("")
                 // 기타 필요한 값 세팅
-                .mute(YNCode.N)
-                .state(YNCode.N)
                 .isBind(YNCode.Y)
                 .roles(Collections.singletonList("ROLE_USER")) // 인증된 회원인지 확인하기 위한 JWT 토큰에 사용될 데이터
                 .build();
@@ -79,7 +77,7 @@ public class SignController {
 
     // 회원정보수정
     @ApiOperation(value = "회원정보수정", notes = "회원정보수정")
-    @PutMapping(value = "/userinfoupdate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping( produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@Valid UserInfoUpdateReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User user = signService.findByUid(req.getUid(), YNCode.Y);
@@ -94,7 +92,7 @@ public class SignController {
 
     // 로그인
     @ApiOperation(value="로그인",notes="로그인")
-    @GetMapping(value="/login",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception{
         // UID 값과 회원가입 타입으로 해당되는 정보 조회
         User user = signService.findUserByUidType(req.getUid(), JoinCode.valueOf(req.getType()));
@@ -112,11 +110,14 @@ public class SignController {
                 .id(user.getId())
                 .build();
 
-        // jwt token 세팅
-        dto.setToken(jwtTokenProvider.createToken(String.valueOf(user.getId()), Collections.singletonList("ROLE_USER")));
+        // jwt token 생성
+        String token = jwtTokenProvider.createToken(String.valueOf(user.getId()), Collections.singletonList("ROLE_USER"));
+
+        // 응답에 jwt token 세팅
+        dto.setToken(token);
 
         // 회원의 토큰값, 디바이스 정보 업데이트
-        user.updateToken(req.getToken());
+        user.updateToken(token);
         signService.saveUser(user);
 
         return responseService.getSingleResult(dto);
