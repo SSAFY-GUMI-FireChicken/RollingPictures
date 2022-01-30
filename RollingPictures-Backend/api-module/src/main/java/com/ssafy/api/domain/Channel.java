@@ -43,7 +43,7 @@ public class Channel extends BaseEntity {
     @OneToMany(mappedBy = "channel")
     private List<ChannelUser> channelUsers = new ArrayList<>();
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(mappedBy = "channel", fetch = LAZY, cascade = CascadeType.REMOVE)
     private GameChannel gameChannel;
 
     public void addChannelUser(ChannelUser channelUser) {
