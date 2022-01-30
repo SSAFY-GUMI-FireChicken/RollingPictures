@@ -3,7 +3,6 @@ package com.ssafy.api.service;
 import com.ssafy.api.domain.Channel;
 import com.ssafy.api.domain.ChannelUser;
 import com.ssafy.api.domain.User;
-import com.ssafy.api.dto.req.InOutChannelReqDTO;
 import com.ssafy.api.dto.res.UserInfoResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.core.code.GamePlayState;
@@ -36,7 +35,7 @@ public class ChannelUserService {
                 .isMute(YNCode.N)
                 .build();
 
-        channel.setCurPeopleCnt(channel.getCurPeopleCnt() + 1);
+        channel.changeCurPeopleCnt(1);
         channel.addChannelUser(channelUser);
 
         channelUserRepository.save(channelUser);
@@ -70,16 +69,15 @@ public class ChannelUserService {
     public void deleteChannelUser(ChannelUser channelUser) {
         if (channelUser.getChannel().getCurPeopleCnt() == 1) {
             channelService.deleteChannel(channelUser.getChannel());
-            channelUserRepository.delete(channelUser);
         } else {
             channelUser.getChannel().getChannelUsers().remove(channelUser);
 
             if (channelUser.getIsLeader() == YNCode.Y) {
-                channelUser.getChannel().getChannelUsers().get(0).setIsLeader(YNCode.Y);
+                channelUser.getChannel().getChannelUsers().get(0).changeIsLeader(YNCode.Y);
             }
 
-            channelUser.getChannel().setCurPeopleCnt(channelUser.getChannel().getCurPeopleCnt() - 1);
-            channelUserRepository.delete(channelUser);
+            channelUser.getChannel().changeCurPeopleCnt(-1);
         }
+        channelUserRepository.delete(channelUser);
     }
 }

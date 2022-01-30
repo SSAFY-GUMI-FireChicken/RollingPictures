@@ -9,7 +9,6 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -52,5 +51,7 @@ public class ChannelUser {
         isMute = code;
     }
 
-
+    public void changeIsLeader(YNCode code) {
+        isLeader = code;
+    }
 }

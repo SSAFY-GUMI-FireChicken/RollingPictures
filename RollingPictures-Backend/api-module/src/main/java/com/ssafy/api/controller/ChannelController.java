@@ -70,6 +70,8 @@ public class ChannelController {
         Channel channel = channelService.findByCode(req.getCode());
         if (channel == null) {
             throw new ApiMessageException("방 정보가 없습니다.");
+        } else if (channel.getIsPlaying() == YNCode.Y) {
+            throw new ApiMessageException("게임 중인 방은 입장할 수 없습니다.");
         }
 
         User user = signService.findByUid(req.getUid(), YNCode.Y);
@@ -105,6 +107,8 @@ public class ChannelController {
         ChannelUser channelUser = channelUserService.findByUser(user);
         if (channelUser == null) {
             throw new ApiMessageException("방에 입장한 상태가 아닙니다.");
+        } else if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
+            throw new ApiMessageException("게임 중인 방은 퇴장할 수 없습니다.");
         }
 
         channelUserService.deleteChannelUser(channelUser);
