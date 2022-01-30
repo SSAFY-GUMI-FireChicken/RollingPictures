@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class ChannelUserService {
     private final ChannelUserRepository channelUserRepository;
     private final ChannelService channelService;
+    private final SocketService socketService;
 
     /**
      * channelUser 생성 후 리턴
@@ -39,6 +40,14 @@ public class ChannelUserService {
         channel.addChannelUser(channelUser);
 
         channelUserRepository.save(channelUser);
+
+        socketService.sendInChannelUser(channel.getCode(), UserInfoResDTO
+                .builder()
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .isLeader(channelUser.getIsLeader())
+                .build()
+        );
 
         ArrayList<UserInfoResDTO> resUserList = new ArrayList<>();
 
@@ -76,8 +85,17 @@ public class ChannelUserService {
                 channelUser.getChannel().getChannelUsers().get(0).changeIsLeader(YNCode.Y);
             }
 
+            socketService.sendOutChannelUser(channelUser.getChannel().getCode(), UserInfoResDTO
+                    .builder()
+                    .id(channelUser.getUser().getId())
+                    .nickname(channelUser.getUser().getNickname())
+                    .isLeader(channelUser.getIsLeader())
+                    .build()
+            );
+
             channelUser.getChannel().changeCurPeopleCnt(-1);
         }
+
         channelUserRepository.delete(channelUser);
     }
 }
