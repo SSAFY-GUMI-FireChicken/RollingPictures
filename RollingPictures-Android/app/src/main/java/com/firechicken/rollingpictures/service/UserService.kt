@@ -4,6 +4,7 @@ import android.util.Log
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
 import com.firechicken.rollingpictures.dto.SignUpReqDTO
 import com.firechicken.rollingpictures.dto.UserIdResDTO
+import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import com.firechicken.rollingpictures.util.RetrofitUtil
 import retrofit2.Call
@@ -70,5 +71,27 @@ class UserService {
         })
     }
 
+    fun userInfoUpdate(user: UserInfoUpdateReqDTO, callback: RetrofitCallback<UserIdResDTO>) {
+        RetrofitUtil.userService.userInfoUpdate(user).enqueue(object : Callback<UserIdResDTO> {
+            override fun onResponse(call: Call<UserIdResDTO>, response: Response<UserIdResDTO>) {
+                val res = response.body()
+                Log.d(TAG, "onResponse: ${res}")
+                if (response.code() == 200) {
+                    Log.d(TAG, "onResponse: 성공")
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    Log.d(TAG, "onResponse: 다른코드")
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<UserIdResDTO>, t: Throwable) {
+                Log.d(TAG, "onFailure: ")
+                callback.onError(t)
+            }
+        })
+    }
 
 }

@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.userIdResDTO
 import com.firechicken.rollingpictures.databinding.ActivityLoginBinding
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
 import com.firechicken.rollingpictures.dto.SignUpReqDTO
@@ -75,10 +74,7 @@ class LoginActivity : AppCompatActivity() {
         Log.d(TAG, "signUp: ${user}")
         UserService().signUp(user, object : RetrofitCallback<UserIdResDTO> {
             override fun onSuccess(code: Int, responseData: UserIdResDTO) {
-                if (responseData != null) {
-                    userIdResDTO = responseData
-                    prefs.setId(userIdResDTO.id)
-                    Log.d(TAG, "onSuccess: ${userIdResDTO.id}")
+                if (responseData.id >= 0L) {
                     Toast.makeText(this@LoginActivity, "회원 가입 성공!", Toast.LENGTH_SHORT).show()
                 } else {
                     Log.d(TAG, "onSuccess: null")
@@ -108,8 +104,9 @@ class LoginActivity : AppCompatActivity() {
         Log.d(TAG, "login: ")
         UserService().login(password, type, uid, object : RetrofitCallback<LoginUserResDTO> {
             override fun onSuccess(code: Int, responseData: LoginUserResDTO) {
-                if (responseData != null) {
+                if (responseData.id >= 0L) {
                     loginUserResDTO = responseData
+                    prefs.setId(loginUserResDTO.id)
                     Toast.makeText(this@LoginActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
