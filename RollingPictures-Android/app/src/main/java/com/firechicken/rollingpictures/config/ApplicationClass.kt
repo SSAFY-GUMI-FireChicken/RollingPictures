@@ -12,11 +12,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 private const val TAG = "ApplicationClass_싸피"
 class ApplicationClass : Application() {
     companion object{
-        const val SERVER_URL = "http://192.168.35.194:8185/"
+        const val SERVER_URL = "http://192.168.35.42:8185/"
         lateinit var retrofit: Retrofit
         lateinit var prefs: PreferenceUtil
         lateinit var loginUserResDTO: LoginUserResDTO
-        lateinit var userIdResDTO: UserIdResDTO
     }
 
 

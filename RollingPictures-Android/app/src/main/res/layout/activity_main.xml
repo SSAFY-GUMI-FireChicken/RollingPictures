@@ -8,6 +8,8 @@
     android:padding="@dimen/padding_size_20"
     tools:context=".activity.MainActivity">
 
+
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/fragment_height"
@@ -20,6 +22,40 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.697"
         app:layout_constraintWidth_percent="0.7" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_size_20"
+        android:layout_marginTop="@dimen/margin_size_12"
+        android:layout_marginEnd="@dimen/margin_size_20"
+        android:layout_marginBottom="@dimen/margin_size_12"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/entranceButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <EditText
+            android:id="@+id/nickNameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/margin_size_4"
+            android:drawableEnd="@drawable/ic_baseline_edit_24"
+            android:focusableInTouchMode="false" />
+
+        <TextView
+            android:id="@+id/welcomeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/fab_margin"
+            android:layout_marginStart="5dp"
+            android:text="@string/welcome_message" />
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/roomCodeEditText"

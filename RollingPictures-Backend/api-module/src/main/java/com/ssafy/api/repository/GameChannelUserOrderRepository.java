@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GameChannelUserOrderRepository extends JpaRepository<GameChannelUserOrder, Long> {
-//    @EntityGraph(attributePaths = {"user"})
-//    Optional<List<GameChannelUserOrder>> findAllUser(Long gameChannelId);
+public interface GameChannelUserOrderRepository
+        extends JpaRepository<GameChannelUserOrder, Long>, GameChannelUserOrderRepositoryCustom {
 }
