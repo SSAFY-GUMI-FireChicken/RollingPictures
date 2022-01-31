@@ -2,7 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.dto.req.SectionCreateReqDTO;
 import com.ssafy.api.dto.res.SectionCreateResDTO;
-import com.ssafy.api.dto.res.SectionResDTO;
+import com.ssafy.api.dto.res.SectionRetrieveResDTO;
 import com.ssafy.api.service.GameChannelService;
 import com.ssafy.api.service.SectionService;
 import com.ssafy.api.service.common.ListResult;
@@ -29,7 +29,6 @@ import java.util.List;
 public class SectionController {
     private final ResponseService responseService;
     private final SectionService sectionService;
-    private final GameChannelService gameChannelService;
 
     @ApiOperation(value = "섹션 생성", notes = "해당 게임방의 섹션을 생성합니다.")
     @PostMapping
@@ -47,13 +46,14 @@ public class SectionController {
 
     @ApiOperation(value = "섹션 조회", notes = "특정 시작 유저에 대한 섹션 조회")
     @GetMapping
-    public ListResult<SectionResDTO> section(Long gameChannelId, Long userId) throws Exception {
-        if (!gameChannelService.isExistId(gameChannelId)) {
-            log.info("해당 게임방이 존재하지 않음");
-            return responseService.getListResult(new ArrayList<>(), "요청하신 채널 또는 아이디가 잘못되었습니다.");
+    public ListResult<SectionRetrieveResDTO> section(Long gameChannelId, Long userId) {
+        try {
+            List<SectionRetrieveResDTO> section = sectionService.getSection(gameChannelId, userId);
+            return responseService.getListResult(section);
+        } catch (ApiMessageException e) {
+            return responseService.getListResult(new ArrayList<>());
+        } catch (Exception e) {
+            return responseService.getListResult(new ArrayList<>());
         }
-        List<SectionResDTO> section = sectionService.getSection(gameChannelId, userId);
-        log.info("aaa");
-        return responseService.getListResult(section);
     }
 }
