@@ -45,7 +45,7 @@ public class TestController {
 
     @ApiOperation(value = "메시지 작성", notes = "메시지 작성")
     @PostMapping(value="/notice",produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody SingleResult<TestResDTO> Test (@Valid TestReqDTO req) {
+    public @ResponseBody SingleResult<TestResDTO> Test (@RequestBody @Valid TestReqDTO req) {
         Test test = Test.builder()
                 .title(req.getTitle())
                 .content((req.getContent()))

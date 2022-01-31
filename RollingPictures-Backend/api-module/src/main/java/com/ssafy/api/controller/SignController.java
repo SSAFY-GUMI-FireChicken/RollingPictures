@@ -47,11 +47,12 @@ public class SignController {
     // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@Valid SignUpReqDTO req) throws Exception{
+    public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@RequestBody @Valid SignUpReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User uidChk = signService.findByUid(req.getUid(), YNCode.Y);
         if(uidChk != null)
             throw new ApiMessageException("중복된 uid값의 회원이 존재합니다.");
+
 
         // DB에 저장할 User Entity 세팅
         User user = User.builder()
@@ -78,7 +79,7 @@ public class SignController {
     // 회원정보수정
     @ApiOperation(value = "회원정보수정", notes = "회원정보수정")
     @PutMapping( produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@Valid UserInfoUpdateReqDTO req) throws Exception{
+    public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@RequestBody @Valid UserInfoUpdateReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
         User user = signService.findByUid(req.getUid(), YNCode.Y);
         // DB에 저장할 User Entity 세팅
