@@ -1,9 +1,9 @@
 package com.firechicken.rollingpictures.api
 
-import com.firechicken.rollingpictures.dto.LoginUserReqDTO
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
 import com.firechicken.rollingpictures.dto.SignUpReqDTO
 import com.firechicken.rollingpictures.dto.UserIdResDTO
+import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -14,6 +14,14 @@ interface UserApi {
 
     // 로그인.
     @GET("api/nickname")
-    fun login(@Body body: LoginUserReqDTO): Call<LoginUserResDTO>
+    fun login(
+        @Query("password") password: String,
+        @Query("type") type: String,
+        @Query("uid") uid: String?,
+    ): Call<LoginUserResDTO>
+
+    //회원정보 수정
+    @PUT("api/nickname")
+    fun userInfoUpdate(@Body body: UserInfoUpdateReqDTO): Call<UserIdResDTO>
 
 }

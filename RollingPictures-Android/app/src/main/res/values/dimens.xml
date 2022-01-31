@@ -24,6 +24,9 @@
     <dimen name="public_button_width">120dp</dimen>
     <dimen name="small_button_size">30dp</dimen>
     <dimen name="recycler_height">250dp</dimen>
+    <dimen name="layout_size_1">1dp</dimen>
+    <dimen name="layout_size_15">15dp</dimen>
+
 
 
     <!-- padding size -->

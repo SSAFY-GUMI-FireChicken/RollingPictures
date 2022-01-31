@@ -1,5 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_round_exit_dialog"
@@ -7,48 +9,54 @@
     android:padding="@dimen/padding_size_20"
     android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/exitTitleTextView"
-        style="@style/Text.DialogTitleStyle"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/margin_size_32"
-        android:text="@string/exit_dialog_title"
-        android:layout_gravity="center"/>
+        android:layout_marginTop="@dimen/margin_size_24"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/exitSubtitleTextView"
-        style="@style/Text.DialogSubTitleStyle"
-        android:layout_width="match_parent"
+        android:id="@+id/CharNumTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_size_20"
-        android:layout_marginHorizontal="@dimen/fab_margin"
-        android:text="@string/exit_dialog_subtitle" />
+        android:layout_gravity="end"
+        android:paddingEnd="@dimen/margin_size_20"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_size_8"
+        android:layout_marginBottom="@dimen/margin_size_24"
         android:gravity="center"
-        android:layout_marginTop="@dimen/margin_size_50"
-        android:layout_marginBottom="@dimen/margin_size_20"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CharNumTextView">
 
         <TextView
-            android:id="@+id/dialog_exit_button"
+            android:id="@+id/dialog_ok_button"
             style="@style/Text.DialogButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="@string/exit_button" />
+            android:text="@string/ok_kor" />
 
         <View
-            android:background="@color/cyan_deep_dark"
             android:layout_width="@dimen/layout_size_1"
             android:layout_height="@dimen/layout_size_15"
             android:layout_marginStart="@dimen/margin_size_30"
-            android:layout_marginEnd="@dimen/margin_size_30" />
+            android:layout_marginEnd="@dimen/margin_size_30"
+            android:background="@color/cyan_deep_dark" />
 
         <TextView
             android:id="@+id/dialog_cancel_button"
@@ -59,7 +67,5 @@
             android:layout_alignParentTop="true"
             android:text="@string/cancel_kor"
             android:textColor="@color/red_medium" />
-
     </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

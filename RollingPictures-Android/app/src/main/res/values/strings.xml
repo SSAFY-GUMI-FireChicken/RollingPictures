@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">RollingPictures-Android</string>
+    <string name="welcome_message"> 님, 환영합니다!</string>
     <string name="game_start">GAME START</string>
     <string name="create_room">CREATE ROOM</string>
+    <string name="ok_kor">확인</string>
+    <string name="cancel_kor">취소</string>
+    <string name="exit_dialog_title">게임방을 나가시겠습니까?</string>
+    <string name="exit_dialog_subtitle">입장 페이지로 이동하며,\n코드를 통해 다시 들어올 수 있습니다.</string>
+    <string name="exit_button">나가기</string>
     <string name="insert_nick_name">닉네임 입력</string>
     <string name="insert_room_code">방 코드 입력</string>
     <string name="some_id">방 코드 입력</string>
