@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface GameChannelRepository extends JpaRepository<GameChannel, Long> {
     @EntityGraph(attributePaths = {"gameChannelUserOrders", "sections"})
-    GameChannel findGameChannelById(Long id);
+    Optional<GameChannel> findGameChannelById(Long id);
 
     Optional<GameChannel> findByChannel(Channel channel);
 }
