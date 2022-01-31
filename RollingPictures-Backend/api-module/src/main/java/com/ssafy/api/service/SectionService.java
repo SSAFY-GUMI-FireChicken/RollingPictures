@@ -3,21 +3,19 @@ package com.ssafy.api.service;
 import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.SectionCreateReqDTO;
 import com.ssafy.api.dto.res.SectionCreateResDTO;
-import com.ssafy.api.dto.res.SectionResDTO;
+import com.ssafy.api.dto.res.SectionRetrieveResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.api.repository.GameChannelRepository;
 import com.ssafy.api.repository.GameChannelUserOrderRepository;
 import com.ssafy.api.repository.SectionRepository;
 import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -27,37 +25,27 @@ public class SectionService {
     private final SectionRepository sectionRepository;
     private final GameChannelRepository gameChannelRepository;
     private final ChannelUserRepository channelUserRepository;
+    private final GameChannelUserOrderRepository gameChannelUserOrderRepository;
 
-    public List<SectionResDTO> getSection(Long gameChannelId, Long userId) {
-        // 1. 게임방ID와 유저ID를 이용해 해당 유저의 시작 번호를 구합니다.
-        GameChannel findGameChannel = gameChannelRepository.findGameChannelById(gameChannelId)
+    public List<SectionRetrieveResDTO> getSection(Long gameChannelId, Long userId) throws Exception {
+        GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
                 .orElseThrow(() -> new ApiMessageException("잘못된 게임방 정보입니다."));
 
-        int startOrder = 0;
-        for (GameChannelUserOrder gameChannelUserOrder : findGameChannel.getGameChannelUserOrders()) {
-            Long curUserId = gameChannelUserOrder.getUser().getId();
-            if (curUserId == userId) {
-                startOrder = gameChannelUserOrder.getOrderNum();
-                break;
-            }
-        }
+        Integer orderNum = gameChannelUserOrderRepository.findOrderNum(gameChannelId, userId)
+                .orElseThrow(() -> new ApiMessageException("잘못된 정보입니다."));
 
-        // 2. 해당 게임방의 여러 섹션 중 위에서 구한 '시작 번호'가 같은 섹션을 찾아 값을 세팅합니다.
-        List<SectionResDTO> list = new ArrayList<>();
-        for (Section section : findGameChannel.getSections()) {
-            if (section.getStartOrder() == startOrder) {
-                for (Round round : section.getRounds()) {
-                    list.add(SectionResDTO.builder()
-                            .num(round.getRoundNumber())
-                            .keyword(round.getKeyword())
-                            .img(round.getImgSrc())
-                            .userId(round.getUser().getId())
-                            .build());
-                }
-            }
-        }
+        Section section = sectionRepository.findSection(gameChannelId, orderNum)
+                .orElseThrow(() -> new ApiMessageException("잘못된 정보입니다."));
 
-        return new ArrayList<>();
+        List<SectionRetrieveResDTO> result = new ArrayList<>();
+        for (Round round : section.getRounds()) {
+            result.add(SectionRetrieveResDTO.builder()
+                    .sectionId(section.getId())
+                    .userId(round.getUser().getId())
+                    .roundNum(round.getRoundNumber())
+                    .build());
+        }
+        return result;
     }
 
     @Transactional

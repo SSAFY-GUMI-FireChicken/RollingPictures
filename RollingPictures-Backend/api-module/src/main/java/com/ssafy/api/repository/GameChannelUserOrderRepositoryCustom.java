@@ -1,9 +1,10 @@
-//package com.ssafy.api.repository;
-//
-//import com.ssafy.api.domain.GameChannelUserOrder;
-//import org.springframework.stereotype.Repository;
-//
-//@Repository
-//public interface GameChannelUserOrderRepositoryCustom {
-//    GameChannelUserOrder findByUserid(Long userId);
-//}
+package com.ssafy.api.repository;
+
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface GameChannelUserOrderRepositoryCustom {
+    Optional<Integer> findOrderNum(Long gameChannelId, Long userId);
+}

@@ -2,16 +2,14 @@ package com.ssafy.api.dto.res;
 
 import lombok.*;
 
-import java.util.List;
-
 @Builder
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SectionResDTO {
-    private int num;
-    private long userId;
+public class SectionRetrieveResDTO {
+    private Long sectionId;
+    private Long userId;
     private String img;
     private String keyword;
+    private Integer roundNum;
 }

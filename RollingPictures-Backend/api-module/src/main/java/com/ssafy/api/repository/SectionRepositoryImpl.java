@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.api.domain.QSection.*;
 
@@ -24,11 +25,23 @@ public class SectionRepositoryImpl implements SectionRepositoryCustom {
     public List<Section> findSectionByGameChannelId(Long gameChannelId) {
         return queryFactory
                 .selectFrom(section)
-                .where(gameChannelIdEq(gameChannelId))
+                .where(gameChannelEq(gameChannelId))
                 .fetch();
     }
 
-    private BooleanExpression gameChannelIdEq(Long gameChannelId) {
+    @Override
+    public Optional<Section> findSection(Long gameChannelId, Integer startOrder) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(section)
+                .where(gameChannelEq(gameChannelId), startOrderEq(startOrder))
+                .fetchOne());
+    }
+
+    private BooleanExpression gameChannelEq(Long gameChannelId) {
         return gameChannelId != null ? section.gameChannel.id.eq(gameChannelId) : null;
+    }
+
+    private BooleanExpression startOrderEq(Integer startOrder) {
+        return startOrder != null ? section.startOrder.eq(startOrder) : null;
     }
 }
