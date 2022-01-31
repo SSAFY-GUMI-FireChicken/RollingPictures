@@ -16,7 +16,6 @@ class ApplicationClass : Application() {
         lateinit var retrofit: Retrofit
         lateinit var prefs: PreferenceUtil
         lateinit var loginUserResDTO: LoginUserResDTO
-        lateinit var userIdResDTO: UserIdResDTO
     }
 
 

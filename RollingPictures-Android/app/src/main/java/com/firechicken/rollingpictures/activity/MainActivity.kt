@@ -9,7 +9,10 @@ import com.firechicken.rollingpictures.databinding.ActivityMainBinding
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
+import com.firechicken.rollingpictures.dialog.UserEditDialog
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,15 +24,33 @@ class MainActivity : AppCompatActivity() {
         val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        activityMainBinding.createButton.setOnClickListener {
-            val intent = Intent(this@MainActivity, CreateRoomActivity::class.java)
-            startActivity(intent)
+        activityMainBinding.apply {
+
+            nickNameEditText.apply {
+                setText(prefs.getNickName())
+                setOnClickListener {
+                    val dialog = UserEditDialog(this@MainActivity)
+                    dialog.showDialog()
+                    dialog.setOnClickListener(object : UserEditDialog.OnDialogClickListener {
+                        override fun onDialogOkClick(name: String) {
+                            setText(name)
+                        }
+                    })
+                }
+            }
+
+            createButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, CreateRoomActivity::class.java)
+                startActivity(intent)
+            }
+
+            entranceButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
+                startActivity(intent)
+            }
+
         }
 
-        activityMainBinding.entranceButton.setOnClickListener {
-            val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
-            startActivity(intent)
-        }
         if (!arePermissionGranted()) {
             val permissionsFragment: DialogFragment = PermissionsDialogFragment(this@MainActivity)
             permissionsFragment.show(supportFragmentManager, "Permissions Fragment")

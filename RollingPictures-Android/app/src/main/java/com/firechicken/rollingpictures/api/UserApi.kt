@@ -3,6 +3,7 @@ package com.firechicken.rollingpictures.api
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
 import com.firechicken.rollingpictures.dto.SignUpReqDTO
 import com.firechicken.rollingpictures.dto.UserIdResDTO
+import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,5 +19,9 @@ interface UserApi {
         @Query("type") type: String,
         @Query("uid") uid: String?,
     ): Call<LoginUserResDTO>
+
+    //회원정보 수정
+    @PUT("api/nickname")
+    fun userInfoUpdate(@Body body: UserInfoUpdateReqDTO): Call<UserIdResDTO>
 
 }
