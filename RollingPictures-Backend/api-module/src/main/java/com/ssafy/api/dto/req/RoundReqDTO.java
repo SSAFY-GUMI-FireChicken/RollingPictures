@@ -18,7 +18,7 @@ public class RoundReqDTO {
     @ApiModelProperty(value = "키워드", required = false, example = "하얗고 순백한 석규")
     private String keyword;
 
-    @ApiModelProperty(value = "키워드여부", required = true, example = "Y")
-    private YNCode isKeyword;
+    @ApiModelProperty(value = "uid", required = true, example = "ssaid")
+    private String uid;
 
 }
