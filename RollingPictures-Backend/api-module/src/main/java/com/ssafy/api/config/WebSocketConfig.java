@@ -1,5 +1,4 @@
-package com.ssafy.socket.config;
-
+package com.ssafy.api.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -18,6 +17,6 @@ class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/example-endpoint").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/rolling-pictures").setAllowedOrigins("*").withSockJS();
     }
 }
