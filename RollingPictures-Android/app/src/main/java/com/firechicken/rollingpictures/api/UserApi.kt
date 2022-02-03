@@ -1,9 +1,6 @@
 package com.firechicken.rollingpictures.api
 
-import com.firechicken.rollingpictures.dto.LoginUserResDTO
-import com.firechicken.rollingpictures.dto.SignUpReqDTO
-import com.firechicken.rollingpictures.dto.UserIdResDTO
-import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
+import com.firechicken.rollingpictures.dto.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -23,5 +20,6 @@ interface UserApi {
     //회원정보 수정
     @PUT("api/nickname")
     fun userInfoUpdate(@Body body: UserInfoUpdateReqDTO): Call<UserIdResDTO>
+
 
 }

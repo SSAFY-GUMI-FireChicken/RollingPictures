@@ -2,7 +2,9 @@ package com.firechicken.rollingpictures.config
 
 import android.app.Application
 import android.util.Log
+import com.firechicken.rollingpictures.dto.ChannelResDTO
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
+import com.firechicken.rollingpictures.dto.MakeChannelReqDTO
 import com.firechicken.rollingpictures.dto.UserIdResDTO
 import com.firechicken.rollingpictures.util.PreferenceUtil
 
@@ -12,10 +14,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 private const val TAG = "ApplicationClass_싸피"
 class ApplicationClass : Application() {
     companion object{
-        const val SERVER_URL = "http://192.168.35.42:8185/"
+        const val SERVER_URL = "http://192.168.35.143:8185/"
         lateinit var retrofit: Retrofit
         lateinit var prefs: PreferenceUtil
         lateinit var loginUserResDTO: LoginUserResDTO
+        lateinit var channelResDTO: ChannelResDTO
     }
 
 
