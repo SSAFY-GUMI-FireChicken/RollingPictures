@@ -1,12 +1,15 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.domain.Round;
+import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.RoundReqDTO;
 import com.ssafy.api.dto.res.RoundResDTO;
 import com.ssafy.api.service.RoundService;
+import com.ssafy.api.service.SignService;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.S3Uploader;
 import com.ssafy.api.service.common.SingleResult;
+import com.ssafy.core.code.YNCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,27 +32,30 @@ public class RoundController {
     private final S3Uploader s3Uploader;
     private final RoundService roundService;
     private final ResponseService responseService;
+    private final SignService signService;
 
-    @PostMapping("/images")
-    public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
-        System.out.println(multipartFile);
-        return s3Uploader.upload(multipartFile, "static");
-    }
+//    @PostMapping("/images")
+//    public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
+//        System.out.println(multipartFile);
+//        return s3Uploader.upload(multipartFile, "static");
+//    }
 
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
     @PostMapping(value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> Test(
-            @RequestBody @Valid RoundReqDTO req,
-            @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws IOException {
+            @Valid RoundReqDTO req,
+            @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
+
+        User user = signService.findByUid(req.getUid(), YNCode.Y);
         String img = req.getKeyword();
+
         if (multipartFile != null) {
-            img = s3Uploader.upload(multipartFile, "static");
+            img = s3Uploader.upload(multipartFile, "Code/"+user.getId()+"/"+req.getRoundNumber()+"Round"+user.getId()+".JPG" );
         }
 
         Round round = Round.builder()
                 .roundNumber(req.getRoundNumber())
                 .imgSrc(img)
-                .isKeyword(req.getIsKeyword())
                 .build();
         long roundId = roundService.post(round);
         return responseService.getSingleResult(RoundResDTO.builder().id(roundId).build());
