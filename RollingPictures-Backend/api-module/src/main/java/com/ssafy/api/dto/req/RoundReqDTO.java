@@ -4,6 +4,8 @@ import com.ssafy.core.code.YNCode;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 
 @Builder
 @Getter
@@ -18,7 +20,15 @@ public class RoundReqDTO {
     @ApiModelProperty(value = "키워드", required = false, example = "하얗고 순백한 석규")
     private String keyword;
 
-    @ApiModelProperty(value = "uid", required = true, example = "ssaid")
+    @ApiModelProperty(value = "입력 기기", required = true, example = "ssaid")
     private String uid;
+
+    @NotNull
+    @ApiModelProperty(value = "접근할 Section Host ID", required = true)
+    private Long HostId;
+
+    @NotNull
+    @ApiModelProperty(value = "게임방 ID", required = true)
+    private Long gameChannelId;
 
 }
