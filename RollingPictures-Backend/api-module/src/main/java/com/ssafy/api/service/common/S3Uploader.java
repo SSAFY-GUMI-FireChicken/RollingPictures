@@ -1,6 +1,5 @@
 package com.ssafy.api.service.common;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -37,7 +36,7 @@ public class S3Uploader {
 
     // S3로 파일 업로드하기
     private String upload(File uploadFile, String dirName) {
-        //UUID.randomUUID() + uploadFile.getName() 기존경로
+        // "/" + UUID.randomUUID() + uploadFile.getName()
         String fileName = dirName;   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);

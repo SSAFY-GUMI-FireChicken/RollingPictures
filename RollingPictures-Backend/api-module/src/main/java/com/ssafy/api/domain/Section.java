@@ -24,6 +24,9 @@ public class Section extends BaseEntity {
 
     private Integer startOrder;
 
+    @OneToOne
+    private User user;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "game_channel_id")
     private GameChannel gameChannel;

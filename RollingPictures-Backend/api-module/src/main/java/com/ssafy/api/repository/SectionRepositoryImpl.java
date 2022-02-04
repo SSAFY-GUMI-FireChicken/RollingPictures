@@ -2,7 +2,6 @@ package com.ssafy.api.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.api.domain.QSection;
 import com.ssafy.api.domain.Section;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,6 +20,7 @@ public class SectionRepositoryImpl implements SectionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
+
     @Override
     public List<Section> findSectionByGameChannelId(Long gameChannelId) {
         return queryFactory
@@ -35,6 +35,19 @@ public class SectionRepositoryImpl implements SectionRepositoryCustom {
                 .selectFrom(section)
                 .where(gameChannelEq(gameChannelId), startOrderEq(startOrder))
                 .fetchOne());
+    }
+
+    @Override
+    public Optional<Section> findSection(Long gameChannelId,Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(section)
+                .where(gameChannelEq(gameChannelId),userIdEq(userId))
+                .fetchOne());
+    }
+
+    private BooleanExpression userIdEq(Long userId) {
+
+        return userId != null ? section.user.id.eq(userId) : null;
     }
 
     private BooleanExpression gameChannelEq(Long gameChannelId) {
