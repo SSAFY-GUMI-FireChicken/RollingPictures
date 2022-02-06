@@ -106,6 +106,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onSuccess(code: Int, responseData: LoginUserResDTO) {
                 if (responseData.id >= 0L) {
                     loginUserResDTO = responseData
+                    Log.d(TAG, "onSuccess: ${responseData}")
                     prefs.setId(loginUserResDTO.id)
                     Toast.makeText(this@LoginActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)

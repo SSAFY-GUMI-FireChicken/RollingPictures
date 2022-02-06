@@ -30,7 +30,7 @@ class UserService {
                     val res = response.body()
                     if (response.code() == 200) {
                         if (res != null) {
-                            Log.d(TAG, "onResponse: ")
+                            Log.d(TAG, "onResponse: ${res}")
                             callback.onSuccess(response.code(), res)
                         }
                     } else {

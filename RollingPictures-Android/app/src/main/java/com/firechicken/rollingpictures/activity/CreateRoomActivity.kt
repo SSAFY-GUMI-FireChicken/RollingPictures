@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.config.ApplicationClass
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.databinding.ActivityCreateRoomBinding
 import com.firechicken.rollingpictures.dto.ChannelResDTO
@@ -75,6 +76,7 @@ class CreateRoomActivity : AppCompatActivity() {
             override fun onSuccess(code: Int, responseData: ChannelResDTO) {
                 if (responseData.id >= 0L) {
                     ApplicationClass.channelResDTO = responseData
+                    Log.d(TAG, "onSuccess: ${responseData}")
                     val intent = Intent(this@CreateRoomActivity, GameWaitingActivity::class.java)
                     startActivity(intent)
                 } else {
