@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class SectionCreateReqDTO {
     @NotNull
-    @ApiModelProperty(value = "게임방 ID", required = true)
+    @ApiModelProperty(value = "게임방 ID", required = true, example = "0")
     private Long gameChannelId;
 
     @NotNull
-    @ApiModelProperty(value = "방장 ID", required = true)
+    @ApiModelProperty(value = "방장 ID", required = true, example = "0")
     private Long userId;
 }
