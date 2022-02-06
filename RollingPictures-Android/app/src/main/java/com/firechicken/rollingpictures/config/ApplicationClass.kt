@@ -15,9 +15,8 @@ class ApplicationClass : Application() {
         const val websocketURL = "ws://192.168.0.9:8185/rolling-pictures/websocket"
         lateinit var retrofit: Retrofit
         lateinit var prefs: PreferenceUtil
-        lateinit var loginUserResDTO: LoginUserResDTO
-        lateinit var channelResDTO: ChannelResDTO
-        var makechannel: Boolean=false
+        lateinit var loginUserResDTO: SingleResult<LoginUserResDTO>
+        lateinit var channelResDTO: SingleResult<ChannelResDTO>
 
         //방의 플레이어 목록
         val playerList: MutableList<UserInfoResDTO> =

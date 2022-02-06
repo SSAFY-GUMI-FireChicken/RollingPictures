@@ -66,12 +66,19 @@ class GameWaitingActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        activityGameWaitingBinding.roomCodeTextView.setText(channelResDTO.data.code)
+
         recyclerView = activityGameWaitingBinding.recyclerViewPlayer
         playerRecyclerViewAdapter = PlayerRecyclerViewAdapter(this, playerList)
         recyclerView.apply {
             adapter = playerRecyclerViewAdapter
             layoutManager = GridLayoutManager(context, 2)
         }
+
+        for(users in channelResDTO.data.users){
+            addPlayer(users)
+        }
+
         activityGameWaitingBinding.playerCountTextView.setText("${playerRecyclerViewAdapter.itemCount}/10")
 
         //websocket URL 지정
@@ -93,7 +100,7 @@ class GameWaitingActivity : AppCompatActivity() {
     fun connectStomp() {
         val headers: MutableList<StompHeader> = ArrayList()
         Log.d(TAG, "connectStomp: ${channelResDTO}")
-        headers.add(StompHeader(USERID, "1"))
+        headers.add(StompHeader(USERID, "${channelResDTO.data.users[0].id}"))
         headers.add(StompHeader(PASSCODE, "guest"))
         mStompClient!!.withClientHeartbeat(1000).withServerHeartbeat(1000)
         resetSubscriptions()
@@ -120,9 +127,7 @@ class GameWaitingActivity : AppCompatActivity() {
                 }
             }
         compositeDisposable!!.add(dispLifecycle)
-        Log.d(TAG, "connectStomp2: ")
         // Receive greetings
-        Log.d(TAG, "connectStomp: ${channelResDTO.code}")
 
 
         val dispTopic: Disposable = mStompClient!!.topic("/channel/in/HlW9zg") //인식할 Stomp URI
@@ -130,7 +135,7 @@ class GameWaitingActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
                 Log.d(TAG, "Received " + topicMessage.getPayload())
-                //channel/in/heDt3V 신호가 들어왔을 때 실행할 함수
+                //channel/in 신호가 들어왔을 때 실행할 함수
                 addPlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -139,7 +144,7 @@ class GameWaitingActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
                 Log.d(TAG, "Received " + topicMessage.getPayload())
-                //channel/out/heDt3V 신호가 들어왔을 때 실행할 함수
+                //channel/out 신호가 들어왔을 때 실행할 함수
                 removePlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 

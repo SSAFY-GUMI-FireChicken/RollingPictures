@@ -17,6 +17,7 @@ import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 import com.firechicken.rollingpictures.dialog.UserEditDialog
 import com.firechicken.rollingpictures.dto.ChannelResDTO
 import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
+import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 
@@ -90,9 +91,9 @@ class MainActivity : AppCompatActivity() {
     private fun inChannel(roomcode: String, uid: String) {
         val req = InOutChannelReqDTO(roomcode, uid)
         Log.d(TAG, "inChannel: ")
-        ChannelService().inChannel(req, object : RetrofitCallback<ChannelResDTO> {
-            override fun onSuccess(code: Int, responseData: ChannelResDTO) {
-                if (responseData.id >= 0L) {
+        ChannelService().inChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
+                if (responseData.data.id > 0) {
                     ApplicationClass.channelResDTO = responseData
                     val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
                     intent.putExtra("code", roomcode)
