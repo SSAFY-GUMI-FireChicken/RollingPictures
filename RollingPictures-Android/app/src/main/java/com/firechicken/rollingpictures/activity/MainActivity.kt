@@ -31,9 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-
         activityMainBinding.apply {
-
             nickNameEditText.apply {
                 setText(prefs.getNickName())
                 setOnClickListener {
@@ -89,14 +87,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun inChannel(code: String, uid: String) {
-        val req = InOutChannelReqDTO(code, uid)
+    private fun inChannel(roomcode: String, uid: String) {
+        val req = InOutChannelReqDTO(roomcode, uid)
         Log.d(TAG, "inChannel: ")
         ChannelService().inChannel(req, object : RetrofitCallback<ChannelResDTO> {
             override fun onSuccess(code: Int, responseData: ChannelResDTO) {
                 if (responseData.id >= 0L) {
                     ApplicationClass.channelResDTO = responseData
                     val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
+                    intent.putExtra("code", roomcode)
                     startActivity(intent)
                 } else {
                     Log.d(TAG, "onSuccess: null")
@@ -121,5 +120,4 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
 }

@@ -9,14 +9,18 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter
+import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.websocketURL
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.databinding.ActivityGameWaitingBinding
+import com.firechicken.rollingpictures.dto.ChannelResDTO
 import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
 import com.firechicken.rollingpictures.dto.UserInfoResDTO
+import com.firechicken.rollingpictures.service.ChannelService
+import com.firechicken.rollingpictures.util.RetrofitCallback
 
 import com.firechicken.rollingpictures.util.RetrofitUtil.Companion.channelService
 import com.google.gson.GsonBuilder
@@ -53,7 +57,7 @@ class GameWaitingActivity : AppCompatActivity() {
         setContentView(activityGameWaitingBinding.root)
 
         activityGameWaitingBinding.exitRoom.setOnClickListener {
-            val dialog = GameExitDialog(this)
+            val dialog = GameExitDialog(this, intent.getStringExtra("code").toString())
             dialog.showDialog()
         }
 
@@ -121,7 +125,7 @@ class GameWaitingActivity : AppCompatActivity() {
         Log.d(TAG, "connectStomp: ${channelResDTO.code}")
 
 
-        val dispTopic: Disposable = mStompClient!!.topic("/channel/in/heDt3V") //인식할 Stomp URI
+        val dispTopic: Disposable = mStompClient!!.topic("/channel/in/HlW9zg") //인식할 Stomp URI
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -130,7 +134,7 @@ class GameWaitingActivity : AppCompatActivity() {
                 addPlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
-        val dispTopic2: Disposable = mStompClient!!.topic("/channel/out/heDt3V")
+        val dispTopic2: Disposable = mStompClient!!.topic("/channel/out/HlW9zg")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -189,4 +193,6 @@ class GameWaitingActivity : AppCompatActivity() {
         if (compositeDisposable != null) compositeDisposable!!.dispose()
         super.onDestroy()
     }
+
+
 }

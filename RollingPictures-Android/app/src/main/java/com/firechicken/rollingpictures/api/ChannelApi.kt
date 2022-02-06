@@ -13,4 +13,10 @@ interface ChannelApi {
     //방 입장
     @POST("api/channel/user")
     fun inChannel(@Body body: InOutChannelReqDTO): Call<ChannelResDTO>
+
+    //방 퇴장
+//    @DELETE("api/channel/user")
+    @HTTP(method = "DELETE", path = "api/channel/user", hasBody = true)
+    fun outChannel(@Body body: InOutChannelReqDTO): Call<CommonResultResDTO>
+//    fun outChannel(@Body body: InOutChannelReqDTO): Call<ChannelResDTO>
 }

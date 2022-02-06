@@ -39,9 +39,33 @@ class ChannelService {
         RetrofitUtil.channelService.inChannel(req).enqueue(object : Callback<ChannelResDTO> {
             override fun onResponse(call: Call<ChannelResDTO>, response: Response<ChannelResDTO>) {
                 val res = response.body()
-                Log.d(TAG, "onResponse: ${res}")
+                Log.d(TAG, "onResponse1: ${res}")
                 if (response.code() == 200) {
-                    Log.d(TAG, "onResponse: 성공")
+                    Log.d(TAG, "onResponse1: 성공")
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    Log.d(TAG, "onResponse1: 다른코드")
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<ChannelResDTO>, t: Throwable) {
+                Log.d(TAG, "onFailure1: ")
+                callback.onError(t)
+            }
+        })
+    }
+
+    fun outChannel(req: InOutChannelReqDTO, callback: RetrofitCallback<CommonResultResDTO>) {
+        RetrofitUtil.channelService.outChannel(req).enqueue(object : Callback<CommonResultResDTO> {
+            override fun onResponse(call: Call<CommonResultResDTO>, response: Response<CommonResultResDTO>) {
+                val res = response.body()
+                Log.d(TAG, "onRes111: ${res}")
+                Log.d(TAG, "onResponse111: ${response}")
+                if (response.code() == 200) {
+                    Log.d(TAG, "onResponse111: 성공")
                     if (res != null) {
                         callback.onSuccess(response.code(), res)
                     }
@@ -51,7 +75,7 @@ class ChannelService {
                 }
             }
 
-            override fun onFailure(call: Call<ChannelResDTO>, t: Throwable) {
+            override fun onFailure(call: Call<CommonResultResDTO>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }
