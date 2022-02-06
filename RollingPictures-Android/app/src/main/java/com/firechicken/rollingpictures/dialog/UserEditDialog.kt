@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
+import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.dto.UserIdResDTO
 import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
 import com.firechicken.rollingpictures.service.UserService
@@ -79,9 +80,10 @@ class UserEditDialog(context: Context) : Dialog(context) {
     private fun userInfoUpdate(nickname: String?, uid: String?) {
         val user = UserInfoUpdateReqDTO(nickname, uid)
         Log.d(TAG, "userInfoUpdate: ${user}")
-        UserService().userInfoUpdate(user, object : RetrofitCallback<UserIdResDTO> {
-            override fun onSuccess(code: Int, responseData: UserIdResDTO) {
-                if (responseData.id >= 0L) {
+        UserService().userInfoUpdate(user, object : RetrofitCallback<SingleResult<UserIdResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<UserIdResDTO>) {
+                if (responseData.data.id > 0L) {
+                    Log.d(TAG, "onSuccess: ${responseData}")
                     prefs.setNickName(nickname!!)
                     Toast.makeText(dialog.context, "닉네임이 변경되었습니다.", Toast.LENGTH_SHORT).show()
                 } else {

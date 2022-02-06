@@ -10,10 +10,7 @@ import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.databinding.ActivityCreateRoomBinding
-import com.firechicken.rollingpictures.dto.ChannelResDTO
-import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
-import com.firechicken.rollingpictures.dto.LoginUserResDTO
-import com.firechicken.rollingpictures.dto.MakeChannelReqDTO
+import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
@@ -72,10 +69,10 @@ class CreateRoomActivity : AppCompatActivity() {
     private fun makeChannel(uid: String) {
         val req = MakeChannelReqDTO(uid)
         Log.d(TAG, "makeChannel: ")
-        ChannelService().makeChannel(req, object : RetrofitCallback<ChannelResDTO> {
-            override fun onSuccess(code: Int, responseData: ChannelResDTO) {
-                if (responseData.id >= 0L) {
-                    ApplicationClass.channelResDTO = responseData
+        ChannelService().makeChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
+                if (responseData.data.id > 0) {
+                    channelResDTO = responseData
                     Log.d(TAG, "onSuccess: ${responseData}")
                     val intent = Intent(this@CreateRoomActivity, GameWaitingActivity::class.java)
                     startActivity(intent)

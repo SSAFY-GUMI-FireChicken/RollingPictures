@@ -11,6 +11,7 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.databinding.ActivityLoginBinding
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
 import com.firechicken.rollingpictures.dto.SignUpReqDTO
+import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.dto.UserIdResDTO
 import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.PreferenceUtil
@@ -55,9 +56,11 @@ class LoginActivity : AppCompatActivity() {
                     prefs.setUid(uid)
                     prefs.setNickName(nickname)
                     signUp(nickname, "1", "none", uid)
+                }else{
+                    //로그인
+                    login("1", "none", prefs.getUid())
                 }
-                //로그인
-                login("1", "none", prefs.getUid())
+
             }
 
 
@@ -70,12 +73,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signUp(nickname: String, password: String, type: String, uid: String) {
-        val user = SignUpReqDTO(uid, type, password, nickname)
+        val user = SignUpReqDTO(nickname, password, type, uid)
         Log.d(TAG, "signUp: ${user}")
-        UserService().signUp(user, object : RetrofitCallback<UserIdResDTO> {
-            override fun onSuccess(code: Int, responseData: UserIdResDTO) {
-                if (responseData.id >= 0L) {
+        UserService().signUp(user, object : RetrofitCallback<SingleResult<UserIdResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<UserIdResDTO>) {
+                if (responseData.data.id > 0L) {
+                    Log.d(TAG, "onSuccess: ${responseData}")
                     Toast.makeText(this@LoginActivity, "회원 가입 성공!", Toast.LENGTH_SHORT).show()
+                    //바로 로그인
+                    login("1", "none", prefs.getUid())
                 } else {
                     Log.d(TAG, "onSuccess: null")
                     Toast.makeText(
@@ -102,12 +108,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun login(password: String, type: String, uid: String?) {
         Log.d(TAG, "login: ")
-        UserService().login(password, type, uid, object : RetrofitCallback<LoginUserResDTO> {
-            override fun onSuccess(code: Int, responseData: LoginUserResDTO) {
-                if (responseData.id >= 0L) {
+        UserService().login(password, type, uid, object : RetrofitCallback<SingleResult<LoginUserResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<LoginUserResDTO>) {
+                if (responseData.data.id > 0L) {
                     loginUserResDTO = responseData
                     Log.d(TAG, "onSuccess: ${responseData}")
-                    prefs.setId(loginUserResDTO.id)
+                    prefs.setId(loginUserResDTO.data.id)
                     Toast.makeText(this@LoginActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)

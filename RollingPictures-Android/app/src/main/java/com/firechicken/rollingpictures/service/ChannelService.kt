@@ -12,11 +12,10 @@ private const val TAG = "UserService_싸피"
 
 class ChannelService {
 
-    fun makeChannel(req: MakeChannelReqDTO, callback: RetrofitCallback<ChannelResDTO>) {
-        RetrofitUtil.channelService.makeChannel(req).enqueue(object : Callback<ChannelResDTO> {
-            override fun onResponse(call: Call<ChannelResDTO>, response: Response<ChannelResDTO>) {
+    fun makeChannel(req: MakeChannelReqDTO, callback: RetrofitCallback<SingleResult<ChannelResDTO>>) {
+        RetrofitUtil.channelService.makeChannel(req).enqueue(object : Callback<SingleResult<ChannelResDTO>> {
+            override fun onResponse(call: Call<SingleResult<ChannelResDTO>>, response: Response<SingleResult<ChannelResDTO>>) {
                 val res = response.body()
-                Log.d(TAG, "onResponse: ${res}")
                 if (response.code() == 200) {
                     Log.d(TAG, "onResponse: 성공")
                     if (res != null) {
@@ -28,18 +27,17 @@ class ChannelService {
                 }
             }
 
-            override fun onFailure(call: Call<ChannelResDTO>, t: Throwable) {
+            override fun onFailure(call: Call<SingleResult<ChannelResDTO>>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }
         })
     }
 
-    fun inChannel(req: InOutChannelReqDTO, callback: RetrofitCallback<ChannelResDTO>) {
-        RetrofitUtil.channelService.inChannel(req).enqueue(object : Callback<ChannelResDTO> {
-            override fun onResponse(call: Call<ChannelResDTO>, response: Response<ChannelResDTO>) {
+    fun inChannel(req: InOutChannelReqDTO, callback: RetrofitCallback<SingleResult<ChannelResDTO>>) {
+        RetrofitUtil.channelService.inChannel(req).enqueue(object : Callback<SingleResult<ChannelResDTO>> {
+            override fun onResponse(call: Call<SingleResult<ChannelResDTO>>, response: Response<SingleResult<ChannelResDTO>>) {
                 val res = response.body()
-                Log.d(TAG, "onResponse: ${res}")
                 if (response.code() == 200) {
                     Log.d(TAG, "onResponse: 성공")
                     if (res != null) {
@@ -51,7 +49,7 @@ class ChannelService {
                 }
             }
 
-            override fun onFailure(call: Call<ChannelResDTO>, t: Throwable) {
+            override fun onFailure(call: Call<SingleResult<ChannelResDTO>>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }
