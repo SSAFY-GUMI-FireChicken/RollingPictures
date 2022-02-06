@@ -17,6 +17,6 @@ interface ChannelApi {
     //방 퇴장
 //    @DELETE("api/channel/user")
     @HTTP(method = "DELETE", path = "api/channel/user", hasBody = true)
-    fun outChannel(@Body body: InOutChannelReqDTO): Call<CommonResultResDTO>
+    fun outChannel(@Body body: InOutChannelReqDTO): Call<SingleResult<Any>>
 //    fun outChannel(@Body body: InOutChannelReqDTO): Call<ChannelResDTO>
 }

@@ -56,9 +56,9 @@ class ChannelService {
         })
     }
 
-    fun outChannel(req: InOutChannelReqDTO, callback: RetrofitCallback<CommonResultResDTO>) {
-        RetrofitUtil.channelService.outChannel(req).enqueue(object : Callback<CommonResultResDTO> {
-            override fun onResponse(call: Call<CommonResultResDTO>, response: Response<CommonResultResDTO>) {
+    fun outChannel(req: InOutChannelReqDTO, callback: RetrofitCallback<SingleResult<Any>>) {
+        RetrofitUtil.channelService.outChannel(req).enqueue(object : Callback<SingleResult<Any>> {
+            override fun onResponse(call: Call<SingleResult<Any>>, response: Response<SingleResult<Any>>) {
                 val res = response.body()
                 Log.d(TAG, "onRes111: ${res}")
                 Log.d(TAG, "onResponse111: ${response}")
@@ -73,7 +73,7 @@ class ChannelService {
                 }
             }
 
-            override fun onFailure(call: Call<CommonResultResDTO>, t: Throwable) {
+            override fun onFailure(call: Call<SingleResult<Any>>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }

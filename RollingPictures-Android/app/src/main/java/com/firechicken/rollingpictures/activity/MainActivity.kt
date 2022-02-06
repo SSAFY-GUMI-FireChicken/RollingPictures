@@ -93,16 +93,25 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "inChannel: ")
         ChannelService().inChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
-                if (responseData.data.id > 0) {
-                    ApplicationClass.channelResDTO = responseData
-                    val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
-                    intent.putExtra("code", roomcode)
-                    startActivity(intent)
-                } else {
-                    Log.d(TAG, "onSuccess: null")
+                Log.d(TAG, "responseData.data.id: ${responseData.data}")
+                if(responseData.data != null){
+                    if (responseData.data.id > 0) {
+                        ApplicationClass.channelResDTO = responseData
+                        val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
+                        intent.putExtra("code", roomcode)
+                        startActivity(intent)
+                    } else {
+                        Log.d(TAG, "onSuccess: null")
+                        Toast.makeText(
+                            this@MainActivity,
+                            "문제가 발생하였습니다. 다시 시도해주세요.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }else{
                     Toast.makeText(
                         this@MainActivity,
-                        "문제가 발생하였습니다. 다시 시도해주세요.",
+                        "존재하지 않는 방 코드입니다. 다시 입력해주세요.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

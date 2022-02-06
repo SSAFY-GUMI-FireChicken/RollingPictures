@@ -18,6 +18,7 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.dto.ChannelResDTO
 import com.firechicken.rollingpictures.dto.CommonResultResDTO
 import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
+import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 
@@ -57,10 +58,10 @@ class GameExitDialog(context: Context, var code: String) {
     private fun outChannel(code: String, uid: String) {
         val req = InOutChannelReqDTO(code, uid)
         Log.d(TAG, "outChannel: ")
-        ChannelService().outChannel(req, object : RetrofitCallback<CommonResultResDTO> {
-            override fun onSuccess(code: Int, responseData: CommonResultResDTO) {
+        ChannelService().outChannel(req, object : RetrofitCallback<SingleResult<Any>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<Any>) {
                 if (responseData.output == 1) {
-                    ApplicationClass.channelResDTO = ChannelResDTO("",0, mutableListOf())
+                    ApplicationClass.channelResDTO = SingleResult (ChannelResDTO("",0, mutableListOf()),"",0)
                     val intent = Intent(dialog.context, MainActivity::class.java)
                     ContextCompat.startActivity(dialog.context, intent, null)
                     dialog.dismiss()
