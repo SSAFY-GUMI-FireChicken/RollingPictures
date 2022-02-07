@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.domain.ChannelUser;
 import com.ssafy.api.dto.req.InOutChannelReqDTO;
 import com.ssafy.api.dto.req.MakeChannelReqDTO;
+import com.ssafy.api.dto.res.ChannelListResDTO;
 import com.ssafy.api.dto.res.ChannelResDTO;
 import com.ssafy.api.dto.res.UserInfoResDTO;
 import com.ssafy.api.service.ChannelService;
@@ -51,13 +52,22 @@ public class ChannelController {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");
         }
 
-        channelChk = channelService.createChannel();
+        ChannelUser channelUser = channelUserService.findByUser(user);
+        if (channelUser != null) {
+            throw new ApiMessageException("이미 방에 입장한 상태입니다.");
+        }
+
+        channelChk = channelService.createChannel(req);
         ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channelChk, user, YNCode.Y);
 
         return responseService.getSingleResult(ChannelResDTO
                 .builder()
                 .id(channelChk.getId())
                 .code(channelChk.getCode())
+                .isPublic(channelChk.getIsPublic())
+                .curPeopleCnt(channelChk.getCurPeopleCnt())
+                .maxPeopleCnt(channelChk.getMaxPeopleCnt())
+                .title(channelChk.getTitle())
                 .users(resUserList)
                 .build()
         );
@@ -72,6 +82,8 @@ public class ChannelController {
             throw new ApiMessageException("방 정보가 없습니다.");
         } else if (channel.getIsPlaying() == YNCode.Y) {
             throw new ApiMessageException("게임 중인 방은 입장할 수 없습니다.");
+        } else if (channel.getCurPeopleCnt() == channel.getMaxPeopleCnt()) {
+            throw new ApiMessageException("정원 초과로 입장할 수 없습니다.");
         }
 
         User user = signService.findUserById(req.getId());
@@ -90,6 +102,10 @@ public class ChannelController {
                 .builder()
                 .id(channel.getId())
                 .code(channel.getCode())
+                .isPublic(channel.getIsPublic())
+                .curPeopleCnt(channel.getCurPeopleCnt())
+                .maxPeopleCnt(channel.getMaxPeopleCnt())
+                .title(channel.getTitle())
                 .users(resUserList)
                 .build()
         );
@@ -114,5 +130,13 @@ public class ChannelController {
         channelUserService.deleteChannelUser(channelUser);
 
         return responseService.getSuccessResult();
+    }
+
+    @Transactional
+    @ApiOperation(value = "공개방 목록 조회", notes = "공개방 목록 조회")
+    @GetMapping
+    public SingleResult<ChannelListResDTO> getChannelList(@RequestParam(value="page", defaultValue = "0") int page,
+                                                          @RequestParam(value="batch" , defaultValue = "10") int batch) {
+        return responseService.getSingleResult(channelService.getChannelList(page, batch));
     }
 }
