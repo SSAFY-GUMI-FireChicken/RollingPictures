@@ -94,7 +94,7 @@ public class SignController {
     // 로그인
     @ApiOperation(value="로그인",notes="로그인")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception{
+    public @ResponseBody SingleResult<LoginUserResDTO> login(@RequestBody @Valid LoginUserReqDTO req) throws Exception{
         // UID 값과 회원가입 타입으로 해당되는 정보 조회
         User user = signService.findUserByUidType(req.getUid(), JoinCode.valueOf(req.getType()));
 

@@ -1,12 +1,19 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.domain.Channel;
+import com.ssafy.api.dto.req.MakeChannelReqDTO;
+import com.ssafy.api.dto.res.ChannelListResDTO;
+import com.ssafy.api.dto.res.ChannelResDTO;
 import com.ssafy.api.repository.ChannelRepository;
 import com.ssafy.core.code.YNCode;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +35,7 @@ public class ChannelService {
      * @return channel
      */
     @Transactional(readOnly = false)
-    public Channel createChannel() {
+    public Channel createChannel(MakeChannelReqDTO req) {
         Channel channelChk = null;
         String code = "";
 
@@ -38,10 +45,12 @@ public class ChannelService {
         } while (channelChk != null);
 
         Channel channel = Channel.builder()
-                .maxPeopleCnt(6)
+                .maxPeopleCnt(req.getMaxPeopleCnt())
                 .curPeopleCnt(0)
                 .isPlaying(YNCode.N)
                 .code(code)
+                .isPublic(req.getIsPublic())
+                .title(req.getTitle())
                 .build();
 
         return channelRepository.save(channel);
@@ -54,5 +63,38 @@ public class ChannelService {
     @Transactional(readOnly = false)
     public void deleteChannel(Channel channel) {
         channelRepository.delete(channel);
+    }
+
+    /**
+     * 방 목록 조회
+     * @return List
+     */
+    @Transactional(readOnly = false)
+    public ChannelListResDTO getChannelList(int page, int batch) {
+        ChannelListResDTO result = ChannelListResDTO.builder().build();
+
+        List<Channel> channels = channelRepository.findByIsPublicAndIsPlaying(
+                YNCode.Y,
+                YNCode.N,
+                PageRequest.of(page, batch)
+        );
+
+        List<ChannelResDTO> list = new ArrayList<>();
+
+        channels.forEach(x -> list.add(ChannelResDTO
+                .builder()
+                .id(x.getId())
+                .code(x.getCode())
+                .title(x.getTitle())
+                .maxPeopleCnt(x.getMaxPeopleCnt())
+                .curPeopleCnt(x.getCurPeopleCnt())
+                .isPublic(x.getIsPublic())
+                .build()
+        ));
+
+        result.setTotalCnt(channelRepository.countByIsPublicAndIsPlaying(YNCode.Y, YNCode.N));
+        result.setChannels(list);
+
+        return result;
     }
 }

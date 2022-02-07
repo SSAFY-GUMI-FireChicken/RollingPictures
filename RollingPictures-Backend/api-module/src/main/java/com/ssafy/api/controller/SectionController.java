@@ -43,7 +43,7 @@ public class SectionController {
 
     @ApiOperation(value = "섹션 생성", notes = "해당 게임방의 섹션을 생성합니다.")
     @PostMapping
-    public ListResult<SectionCreateResDTO> create(@Valid SectionCreateReqDTO dto) {
+    public ListResult<SectionCreateResDTO> create(@RequestBody @Valid SectionCreateReqDTO dto) {
         List<SectionCreateResDTO> result;
         try {
             result = sectionService.createSection(dto);
@@ -57,7 +57,7 @@ public class SectionController {
 
     @ApiOperation(value = "섹션 조회", notes = "특정 시작 유저에 대한 섹션 조회")
     @GetMapping
-    public ListResult<SectionRetrieveResDTO> section(Long gameChannelId, Long userId) {
+    public ListResult<SectionRetrieveResDTO> section(@RequestBody Long gameChannelId, Long userId) {
         try {
             List<SectionRetrieveResDTO> section = sectionService.getSection(gameChannelId, userId);
             return responseService.getListResult(section);
@@ -71,7 +71,7 @@ public class SectionController {
     @ApiOperation(value = "섹션 삭제", notes = "섹션 삭제")
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String Test(
-            @Valid SectionDeleteReqDTO req) throws Exception {
+            @RequestBody @Valid SectionDeleteReqDTO req) throws Exception {
 
         String result = s3Uploader.delete(req.getCode());
         return result;

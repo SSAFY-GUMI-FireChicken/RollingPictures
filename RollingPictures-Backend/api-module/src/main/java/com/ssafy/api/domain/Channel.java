@@ -28,6 +28,9 @@ public class Channel extends BaseEntity {
     @Column(name = "channel_id")
     private Long id;
 
+    @Column(length = 30)
+    private String title;
+
     @Column(length = 2)
     private int maxPeopleCnt;
 
@@ -39,6 +42,9 @@ public class Channel extends BaseEntity {
 
     @Column(unique = true, length = 120)
     private String code;
+
+    @Enumerated(EnumType.STRING)
+    private YNCode isPublic;
 
     @OneToMany(mappedBy = "channel")
     private List<ChannelUser> channelUsers = new ArrayList<>();

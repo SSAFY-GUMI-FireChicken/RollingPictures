@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class InOutChannelReqDTO {
     @NotNull
-    @ApiModelProperty(value = "유저 uid(SSAID)", required = true, example = "")
-    private String uid;
+    @ApiModelProperty(value = "유저 id", required = true, example = "1")
+    private Long id;
 
     @NotNull
     @ApiModelProperty(value = "채널 코드", required = false, example = "X9vqV0")
