@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChannelUserRepository extends JpaRepository<ChannelUser, Long>, ChannelUserRepositoryCustom {
     ChannelUser findByUser(User user);
+    ChannelUser findByUser_Id(Long userId);
+    ChannelUser findBySessionId(String sessionId);
 }
