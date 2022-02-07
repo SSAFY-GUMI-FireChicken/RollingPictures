@@ -1,21 +1,31 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.domain.Round;
+import com.ssafy.api.domain.User;
+import com.ssafy.api.dto.req.RoundReqDTO;
 import com.ssafy.api.dto.req.SectionCreateReqDTO;
+import com.ssafy.api.dto.req.SectionDeleteReqDTO;
+import com.ssafy.api.dto.res.RoundResDTO;
 import com.ssafy.api.dto.res.SectionCreateResDTO;
+import com.ssafy.api.dto.res.SectionDeleteResDTO;
 import com.ssafy.api.dto.res.SectionRetrieveResDTO;
 import com.ssafy.api.service.GameChannelService;
+import com.ssafy.api.service.RoundService;
 import com.ssafy.api.service.SectionService;
+import com.ssafy.api.service.SignService;
 import com.ssafy.api.service.common.ListResult;
 import com.ssafy.api.service.common.ResponseService;
+import com.ssafy.api.service.common.S3Uploader;
+import com.ssafy.api.service.common.SingleResult;
+import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -29,6 +39,7 @@ import java.util.List;
 public class SectionController {
     private final ResponseService responseService;
     private final SectionService sectionService;
+    private final S3Uploader s3Uploader;
 
     @ApiOperation(value = "섹션 생성", notes = "해당 게임방의 섹션을 생성합니다.")
     @PostMapping
@@ -56,4 +67,15 @@ public class SectionController {
             return responseService.getListResult(new ArrayList<>());
         }
     }
+
+    @ApiOperation(value = "섹션 삭제", notes = "섹션 삭제")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public String Test(
+            @Valid SectionDeleteReqDTO req) throws Exception {
+
+        String result = s3Uploader.delete(req.getCode());
+        return result;
+    }
+
+
 }

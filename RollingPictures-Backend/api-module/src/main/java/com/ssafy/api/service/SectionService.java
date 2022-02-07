@@ -26,6 +26,7 @@ public class SectionService {
     private final GameChannelRepository gameChannelRepository;
     private final ChannelUserRepository channelUserRepository;
     private final GameChannelUserOrderRepository gameChannelUserOrderRepository;
+    private final ChannelService channelService;
 
     public List<SectionRetrieveResDTO> getSection(Long gameChannelId, Long userId) throws Exception {
         GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
@@ -64,11 +65,12 @@ public class SectionService {
         if (sections.size() > 0) {
             throw new ApiMessageException("이미 해당 게임방에 섹션이 생성되었습니다.");
         }
+        Channel channel = channelService.findByCode(findGameChannel.getCode());
 
-        for (GameChannelUserOrder gameChannelUserOrder : findGameChannel.getGameChannelUserOrders()) {
+        for (ChannelUser user : channel.getChannelUsers()) {
             Section section = Section.builder()
                     .gameChannel(findGameChannel)
-                    .startOrder(gameChannelUserOrder.getOrderNum())
+                    .user(user.getUser())
                     .code(findGameChannel.getCode())
                     .build();
             Section save = sectionRepository.save(section);

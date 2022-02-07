@@ -11,4 +11,6 @@ public interface SectionRepositoryCustom {
     List<Section> findSectionByGameChannelId(Long gameChannelId);
 
     Optional<Section> findSection(Long gameChannelId, Integer startOrder);
+
+    Optional<Section> findSection(Long gameChannelId, Long userId);
 }

@@ -1,7 +1,9 @@
 package com.ssafy.api.service.common;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +36,8 @@ public class S3Uploader {
 
     // S3로 파일 업로드하기
     private String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+        // "/" + UUID.randomUUID() + uploadFile.getName()
+        String fileName = dirName;   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);
         return uploadImageUrl;
@@ -67,4 +70,19 @@ public class S3Uploader {
 
         return Optional.empty();
     }
+
+    public String delete(String key) {
+        try {
+            //Delete 객체 생성
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, key);
+            //Delete
+            amazonS3Client.deleteObject(deleteObjectRequest);
+//            System.out.println(String.format("[%s] deletion complete", key));
+
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
+        return "삭제완료";
+    }
+
 }

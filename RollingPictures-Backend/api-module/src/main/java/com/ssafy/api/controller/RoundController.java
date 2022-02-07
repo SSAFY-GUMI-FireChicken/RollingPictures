@@ -1,12 +1,19 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.domain.Round;
+import com.ssafy.api.domain.Section;
+import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.RoundReqDTO;
 import com.ssafy.api.dto.res.RoundResDTO;
+import com.ssafy.api.repository.SectionRepository;
 import com.ssafy.api.service.RoundService;
+import com.ssafy.api.service.SectionService;
+import com.ssafy.api.service.SignService;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.S3Uploader;
 import com.ssafy.api.service.common.SingleResult;
+import com.ssafy.core.code.YNCode;
+import com.ssafy.core.exception.ApiMessageException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,27 +36,36 @@ public class RoundController {
     private final S3Uploader s3Uploader;
     private final RoundService roundService;
     private final ResponseService responseService;
+    private final SignService signService;
+    private final SectionRepository sectionRepository;
 
-    @PostMapping("/images")
-    public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
-        System.out.println(multipartFile);
-        return s3Uploader.upload(multipartFile, "static");
-    }
+//    @PostMapping("/images")
+//    public String upload(@RequestParam("images") MultipartFile multipartFile) throws IOException {
+//        System.out.println(multipartFile);
+//        return s3Uploader.upload(multipartFile, "static");
+//    }
 
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
     @PostMapping(value="/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> Test(
-            @RequestBody @Valid RoundReqDTO req,
-            @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws IOException {
+            @Valid RoundReqDTO req,
+            @RequestParam(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
+
+        User currentUser = signService.findByUid(req.getUid(), YNCode.Y);
+        User hostUser = signService.findUserById(req.getHostId());
         String img = req.getKeyword();
-        if (multipartFile != null) {
-            img = s3Uploader.upload(multipartFile, "static");
+        Section section = sectionRepository.findSection(req.getGameChannelId(),req.getHostId())
+                .orElseThrow(() -> new ApiMessageException("찾을 수 없는 섹션입니다."));
+        if ( multipartFile != null ) {
+            img = s3Uploader.upload(multipartFile, section.getCode()+"/"+hostUser.getId()+"/"+req.getRoundNumber()+"ROUND-"+currentUser.getId()+".JPG");
         }
+
 
         Round round = Round.builder()
                 .roundNumber(req.getRoundNumber())
                 .imgSrc(img)
-                .isKeyword(req.getIsKeyword())
+                .section(section)
+                .user(currentUser)
                 .build();
         long roundId = roundService.post(round);
         return responseService.getSingleResult(RoundResDTO.builder().id(roundId).build());
