@@ -27,6 +27,7 @@ public class SectionService {
     private final ChannelUserRepository channelUserRepository;
     private final GameChannelUserOrderRepository gameChannelUserOrderRepository;
     private final ChannelService channelService;
+    private final SocketService socketService;
 
     public List<SectionRetrieveResDTO> getSection(Long gameChannelId, Long userId) throws Exception {
         GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
@@ -78,6 +79,8 @@ public class SectionService {
                     .id(save.getId())
                     .build());
         }
+
+        socketService.sendStartGame(channel.getCode(), dto.getGameChannelId());
         return result;
     }
 }
