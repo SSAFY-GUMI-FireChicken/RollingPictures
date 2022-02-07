@@ -17,6 +17,8 @@ class ApplicationClass : Application() {
         lateinit var prefs: PreferenceUtil
         lateinit var loginUserResDTO: SingleResult<LoginUserResDTO>
         lateinit var channelResDTO: SingleResult<ChannelResDTO>
+        lateinit var gameChannelResDTO: SingleResult<GameChannelResDTO>
+        lateinit var sectionResDTO: ListResult<SectionResDTO>
 
         //방의 플레이어 목록
         val playerList: MutableList<UserInfoResDTO> =

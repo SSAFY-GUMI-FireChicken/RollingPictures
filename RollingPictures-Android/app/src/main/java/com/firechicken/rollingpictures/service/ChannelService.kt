@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val TAG = "UserService_싸피"
+private const val TAG = "ChannelService_싸피"
 
 class ChannelService {
 

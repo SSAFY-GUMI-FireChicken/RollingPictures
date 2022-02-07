@@ -43,7 +43,7 @@ public class SectionController {
 
     @ApiOperation(value = "섹션 생성", notes = "해당 게임방의 섹션을 생성합니다.")
     @PostMapping
-    public ListResult<SectionCreateResDTO> create(@Valid SectionCreateReqDTO dto) {
+    public ListResult<SectionCreateResDTO> create(@RequestBody @Valid SectionCreateReqDTO dto) {
         List<SectionCreateResDTO> result;
         try {
             result = sectionService.createSection(dto);
