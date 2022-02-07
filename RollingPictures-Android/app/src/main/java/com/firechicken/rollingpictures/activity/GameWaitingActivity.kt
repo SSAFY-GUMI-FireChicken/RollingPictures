@@ -1,5 +1,7 @@
 package com.firechicken.rollingpictures.activity
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,11 +14,13 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channel
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.sectionResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.websocketURL
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.databinding.ActivityGameWaitingBinding
 import com.firechicken.rollingpictures.dto.*
+import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.service.GameChannelService
 import com.firechicken.rollingpictures.service.SectionService
 import com.firechicken.rollingpictures.util.RetrofitCallback
@@ -57,6 +61,12 @@ class GameWaitingActivity : AppCompatActivity() {
         activityGameWaitingBinding.exitRoom.setOnClickListener {
             val dialog = GameExitDialog(this, intent.getStringExtra("code").toString())
             dialog.showDialog()
+            dialog.setOnClickListener(object : GameExitDialog.OnDialogClickListener {
+                override fun onDialogOkClick() {
+                    dialog.dismiss()
+                    finish()
+                }
+            })
         }
 
         activityGameWaitingBinding.startGameButton.setOnClickListener {
@@ -77,6 +87,14 @@ class GameWaitingActivity : AppCompatActivity() {
         }
 
         activityGameWaitingBinding.playerCountTextView.setText("${playerRecyclerViewAdapter.itemCount}/10")
+
+        activityGameWaitingBinding.copyImageButton.setOnClickListener {
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("label", activityGameWaitingBinding.roomCodeTextView.text.toString())
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "클립보드에 복사되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+
 
         //websocket URL 지정
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, websocketURL)
@@ -186,15 +204,18 @@ class GameWaitingActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        disconnectStomp()
 
-        mStompClient!!.disconnect()
-
-        if (mRestPingDisposable != null) mRestPingDisposable.dispose()
-        if (compositeDisposable != null) compositeDisposable!!.dispose()
-        super.onDestroy()
+    override fun onBackPressed() {
+        val dialog = GameExitDialog(this, intent.getStringExtra("code").toString())
+        dialog.showDialog()
+        dialog.setOnClickListener(object : GameExitDialog.OnDialogClickListener {
+            override fun onDialogOkClick() {
+                dialog.dismiss()
+                finish()
+            }
+        })
     }
+
 
     private fun makeGameChannel() {
         val req = MakeGameChannelReqDTO(channelResDTO.data.id,loginUserResDTO.data.id)
@@ -262,4 +283,45 @@ class GameWaitingActivity : AppCompatActivity() {
             }
         })
     }
+
+    fun outChannel(code: String, uid: String) {
+        val req = InOutChannelReqDTO(code, uid)
+        ChannelService().outChannel(req, object : RetrofitCallback<SingleResult<Any>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<Any>) {
+                if (responseData.output == 1) {
+                    channelResDTO = SingleResult (ChannelResDTO("",0, mutableListOf()),"",0)
+                    playerList = mutableListOf()
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "문제가 발생하였습니다. 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun onError(t: Throwable) {
+                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+    override fun onStop() {
+        disconnectStomp()
+        if (mRestPingDisposable != null) mRestPingDisposable.dispose()
+        if (compositeDisposable != null) compositeDisposable!!.dispose()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        outChannel(channelResDTO.data.code, prefs.getUid()!!)
+        super.onDestroy()
+    }
+
 }
