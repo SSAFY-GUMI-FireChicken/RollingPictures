@@ -43,6 +43,9 @@ public class ChannelUser {
     @Enumerated(EnumType.STRING)
     private YNCode isMute;
 
+    @Column
+    private String sessionId;
+
     public void changeChannel(Channel channel) {
         this.channel = channel;
     }
@@ -53,5 +56,9 @@ public class ChannelUser {
 
     public void changeIsLeader(YNCode code) {
         isLeader = code;
+    }
+
+    public void changeSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

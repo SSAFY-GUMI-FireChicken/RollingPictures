@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class GameChannelService {
     private final GameChannelRepository gameChannelRepository;
     private final ChannelRepository channelRepository;
+    private final SocketService socketService;
 
     public boolean isExistId(Long gameChannelId) {
         GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
@@ -64,6 +65,7 @@ public class GameChannelService {
             gameChannel.addGameChannelUserOrder(gameChannelUserOrder);
         }
         GameChannel save = gameChannelRepository.save(gameChannel);
+
         return GameChannelCreateResDTO.builder()
                 .id(save.getId())
                 .build();

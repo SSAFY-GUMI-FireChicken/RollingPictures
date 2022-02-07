@@ -82,7 +82,16 @@ public class ChannelUserService {
             channelUser.getChannel().getChannelUsers().remove(channelUser);
 
             if (channelUser.getIsLeader() == YNCode.Y) {
-                channelUser.getChannel().getChannelUsers().get(0).changeIsLeader(YNCode.Y);
+                ChannelUser newLeader = channelUser.getChannel().getChannelUsers().get(0);
+                newLeader.changeIsLeader(YNCode.Y);
+
+                socketService.sendChangingLeader(channelUser.getChannel().getCode(), UserInfoResDTO
+                        .builder()
+                        .id(newLeader.getUser().getId())
+                        .nickname(newLeader.getUser().getNickname())
+                        .isLeader(newLeader.getIsLeader())
+                        .build()
+                );
             }
 
             socketService.sendOutChannelUser(channelUser.getChannel().getCode(), UserInfoResDTO
@@ -97,5 +106,39 @@ public class ChannelUserService {
         }
 
         channelUserRepository.delete(channelUser);
+    }
+
+    /**
+     * sessionId update
+     * @param userId, sessionId
+     * @return channelUser
+     */
+    @Transactional(readOnly = false)
+    public ChannelUser changeSessionId(Long userId, String sessionId) {
+       ChannelUser channelUser = channelUserRepository.findByUser_Id(userId);
+       channelUser.changeSessionId(sessionId);
+       return channelUserRepository.save(channelUser);
+    }
+
+    /**
+     * sessionId update
+     * @param sessionId
+     * @return channelUser
+     */
+    @Transactional(readOnly = false)
+    public void removeSessionId(String sessionId) {
+        ChannelUser channelUser = channelUserRepository.findBySessionId(sessionId);
+
+        if (channelUser == null) {
+            return;
+        }
+
+        channelUser.changeSessionId(null);
+
+        if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
+            channelUserRepository.save(channelUser);
+        } else {
+            deleteChannelUser(channelUser);
+        }
     }
 }
