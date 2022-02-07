@@ -47,7 +47,7 @@ public class RoundController {
             @Valid RoundReqDTO req,
             @RequestParam(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
 
-        User currentUser = signService.findByUid(req.getUid(), YNCode.Y);
+        User currentUser = signService.findUserById(req.getId());
         List<User> userOrders = sectionRepository.findOrder(req.getGameChannelId());
         int currentIndex = 0;
         for (int i = 0; i < userOrders.size(); i++) {
@@ -80,7 +80,7 @@ public class RoundController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> roundView(@Valid RoundReqDTO req) throws Exception {
 
-        User currentUser = signService.findByUid(req.getUid(), YNCode.Y);
+        User currentUser = signService.findUserById(req.getId());
         List<User> userOrders = sectionRepository.findOrder(req.getGameChannelId());
         int currentIndex = 0;
         for (int i = 0; i < userOrders.size(); i++) {
