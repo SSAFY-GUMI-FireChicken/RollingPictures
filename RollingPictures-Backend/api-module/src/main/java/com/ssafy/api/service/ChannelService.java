@@ -92,7 +92,7 @@ public class ChannelService {
                 .build()
         ));
 
-        result.setTotalPageNum(channelRepository.countByIsPublicAndIsPlaying(YNCode.Y, YNCode.N));
+        result.setTotalCnt(channelRepository.countByIsPublicAndIsPlaying(YNCode.Y, YNCode.N));
         result.setChannels(list);
 
         return result;
