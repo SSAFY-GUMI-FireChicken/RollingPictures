@@ -46,7 +46,7 @@ public class ChannelController {
     public @ResponseBody SingleResult<ChannelResDTO> makeChannel(@RequestBody @Valid MakeChannelReqDTO req) throws Exception {
         Channel channelChk = null;
 
-        User user = signService.findByUid(req.getUid(), YNCode.Y);
+        User user = signService.findUserById(req.getId());
         if (user == null) {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");
         }
@@ -74,7 +74,7 @@ public class ChannelController {
             throw new ApiMessageException("게임 중인 방은 입장할 수 없습니다.");
         }
 
-        User user = signService.findByUid(req.getUid(), YNCode.Y);
+        User user = signService.findUserById(req.getId());
         if (user == null) {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");
         }
@@ -99,7 +99,7 @@ public class ChannelController {
     @ApiOperation(value = "방 퇴장", notes = "방 퇴장")
     @DeleteMapping(value = "/user")
     public CommonResult outChannel(@RequestBody @Valid InOutChannelReqDTO req) throws Exception {
-        User user = signService.findByUid(req.getUid(), YNCode.Y);
+        User user = signService.findUserById(req.getId());
         if (user == null) {
             throw new ApiMessageException("회원 정보가 존재하지 않습니다.");
         }
