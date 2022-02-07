@@ -24,10 +24,6 @@ public class RoundReqDTO {
     private String uid;
 
     @NotNull
-    @ApiModelProperty(value = "접근할 Section Host ID", required = true)
-    private Long HostId;
-
-    @NotNull
     @ApiModelProperty(value = "게임방 ID", required = true)
     private Long gameChannelId;
 
