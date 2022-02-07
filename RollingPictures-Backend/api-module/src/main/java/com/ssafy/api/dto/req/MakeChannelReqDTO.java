@@ -21,7 +21,7 @@ public class MakeChannelReqDTO {
     private String title;
 
     @NotNull
-    @ApiModelProperty(value = "유저 id", required = true, example = "Y")
+    @ApiModelProperty(value = "공개 여부 (공개:Y)", required = true, example = "Y")
     private YNCode isPublic;
 
     @NotNull
