@@ -1,5 +1,6 @@
 package com.firechicken.rollingpictures.activity
 
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
@@ -98,6 +99,19 @@ class GameWaitingActivity : AppCompatActivity() {
             Toast.makeText(this, "클립보드에 복사되었습니다.", Toast.LENGTH_SHORT).show()
         }
 
+        activityGameWaitingBinding.shareImageButton.setOnClickListener {
+            try {
+                val sendText = "Rolling Pictures 초대 방 코드 : ${channelResDTO.data.code}"
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, sendText)
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, "방 코드 공유"))
+            } catch (ignored: ActivityNotFoundException) {
+                Log.d("test", "ignored : $ignored")
+            }
+
+        }
 
         //websocket URL 지정
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, websocketURL)
