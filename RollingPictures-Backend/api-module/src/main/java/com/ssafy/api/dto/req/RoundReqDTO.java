@@ -24,7 +24,7 @@ public class RoundReqDTO {
     private Long id;
 
     @NotNull
-    @ApiModelProperty(value = "게임방 ID", required = true)
+    @ApiModelProperty(value = "게임방 ID", required = true, example = "0")
     private Long gameChannelId;
 
 }

@@ -41,10 +41,10 @@ public class SectionRepositoryImpl implements SectionRepositoryCustom {
     }
 
     @Override
-    public Optional<Section> findSection(Long gameChannelId,Long userId) {
+    public Optional<Section> findSection(Long gameChannelId, Long userId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(section)
-                .where(gameChannelEq(gameChannelId),userIdEq(userId))
+                .where(gameChannelEq(gameChannelId), userIdEq(userId))
                 .fetchOne());
     }
 

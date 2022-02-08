@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class SectionDeleteReqDTO {
     @NotNull
-    @ApiModelProperty(value = "방코드", required = true)
+    @ApiModelProperty(value = "방코드", required = true, example = "")
     private String code;
 
 
