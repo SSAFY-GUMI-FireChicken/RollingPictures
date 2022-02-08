@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.dto.UserInfoResDTO
 
 class PlayerRecyclerViewAdapter(
     private val context: Context,
-    private val playerList: MutableList<String>
+    private val playerList: MutableList<UserInfoResDTO>
 ) : RecyclerView.Adapter<PlayerRecyclerViewAdapter.UserInfoHolder>() {
 
     inner class UserInfoHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -30,7 +31,7 @@ class PlayerRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: UserInfoHolder, position: Int) {
         holder.apply {
-            bindInfo(playerList[position])
+            bindInfo(playerList[position].nickname)
             val player = itemView.findViewById<AppCompatButton>(R.id.playerButton)
             player.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             //임의로 방장(푸읍) 선정하여 왕관 표시

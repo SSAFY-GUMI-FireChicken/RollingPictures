@@ -1,10 +1,7 @@
 package com.firechicken.rollingpictures.service
 
 import android.util.Log
-import com.firechicken.rollingpictures.dto.LoginUserResDTO
-import com.firechicken.rollingpictures.dto.SignUpReqDTO
-import com.firechicken.rollingpictures.dto.UserIdResDTO
-import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
+import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import com.firechicken.rollingpictures.util.RetrofitUtil
 import retrofit2.Call
@@ -18,38 +15,41 @@ class UserService {
     fun login(
         password: String,
         type: String,
-        uid: String?,
-        callback: RetrofitCallback<LoginUserResDTO>
+        uid: String,
+        callback: RetrofitCallback<SingleResult<LoginUserResDTO>>
     ) {
+        Log.d(TAG, "password: ${password}")
+        Log.d(TAG, "type: ${type}")
+        Log.d(TAG, "uid: ${uid}")
         RetrofitUtil.userService.login(password, type, uid)
-            .enqueue(object : Callback<LoginUserResDTO> {
+            .enqueue(object : Callback<SingleResult<LoginUserResDTO>> {
                 override fun onResponse(
-                    call: Call<LoginUserResDTO>,
-                    response: Response<LoginUserResDTO>
+                    call: Call<SingleResult<LoginUserResDTO>>,
+                    response: Response<SingleResult<LoginUserResDTO>>
                 ) {
                     val res = response.body()
                     if (response.code() == 200) {
                         if (res != null) {
-                            Log.d(TAG, "onResponse: ")
+                            Log.d(TAG, "onResponse1: ${res}")
                             callback.onSuccess(response.code(), res)
                         }
                     } else {
-                        Log.d(TAG, "onResponse: ")
+                        Log.d(TAG, "onResponse2: ")
 
                         callback.onFailure(response.code())
                     }
                 }
 
-                override fun onFailure(call: Call<LoginUserResDTO>, t: Throwable) {
-                    Log.d(TAG, "onResponse: ")
+                override fun onFailure(call: Call<SingleResult<LoginUserResDTO>>, t: Throwable) {
+                    Log.d(TAG, "onResponse3: ")
                     callback.onError(t)
                 }
             })
     }
 
-    fun signUp(user: SignUpReqDTO, callback: RetrofitCallback<UserIdResDTO>) {
-        RetrofitUtil.userService.signUp(user).enqueue(object : Callback<UserIdResDTO> {
-            override fun onResponse(call: Call<UserIdResDTO>, response: Response<UserIdResDTO>) {
+    fun signUp(user: SignUpReqDTO, callback: RetrofitCallback<SingleResult<UserIdResDTO>>) {
+        RetrofitUtil.userService.signUp(user).enqueue(object : Callback<SingleResult<UserIdResDTO>> {
+            override fun onResponse(call: Call<SingleResult<UserIdResDTO>>, response: Response<SingleResult<UserIdResDTO>>) {
                 val res = response.body()
                 Log.d(TAG, "onResponse: ${res}")
                 Log.d(TAG, "onResponse: prev")
@@ -64,16 +64,16 @@ class UserService {
                 }
             }
 
-            override fun onFailure(call: Call<UserIdResDTO>, t: Throwable) {
+            override fun onFailure(call: Call<SingleResult<UserIdResDTO>>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }
         })
     }
 
-    fun userInfoUpdate(user: UserInfoUpdateReqDTO, callback: RetrofitCallback<UserIdResDTO>) {
-        RetrofitUtil.userService.userInfoUpdate(user).enqueue(object : Callback<UserIdResDTO> {
-            override fun onResponse(call: Call<UserIdResDTO>, response: Response<UserIdResDTO>) {
+    fun userInfoUpdate(user: UserInfoUpdateReqDTO, callback: RetrofitCallback<SingleResult<UserIdResDTO>>) {
+        RetrofitUtil.userService.userInfoUpdate(user).enqueue(object : Callback<SingleResult<UserIdResDTO>> {
+            override fun onResponse(call: Call<SingleResult<UserIdResDTO>>, response: Response<SingleResult<UserIdResDTO>>) {
                 val res = response.body()
                 Log.d(TAG, "onResponse: ${res}")
                 if (response.code() == 200) {
@@ -87,7 +87,7 @@ class UserService {
                 }
             }
 
-            override fun onFailure(call: Call<UserIdResDTO>, t: Throwable) {
+            override fun onFailure(call: Call<SingleResult<UserIdResDTO>>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }
