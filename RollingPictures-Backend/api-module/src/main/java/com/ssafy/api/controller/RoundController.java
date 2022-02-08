@@ -108,7 +108,6 @@ public class RoundController {
                 }
             }
         }
-        System.out.println(section.getId());
         String imgSrc = "";
         if (count != -1){
             imgSrc = sectionRounds.get(count).getImgSrc();
