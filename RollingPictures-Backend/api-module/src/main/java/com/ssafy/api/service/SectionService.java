@@ -8,6 +8,7 @@ import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.api.repository.GameChannelRepository;
 import com.ssafy.api.repository.GameChannelUserOrderRepository;
 import com.ssafy.api.repository.SectionRepository;
+import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,6 +68,10 @@ public class SectionService {
         if (sections.size() > 0) {
             throw new ApiMessageException("이미 해당 게임방에 섹션이 생성되었습니다.");
         }
+
+        findGameChannel.getProgress().changeDonePeopleCnt(0);
+        findGameChannel.getProgress().changeStartDate();
+
         Channel channel = channelService.findByCode(findGameChannel.getCode());
         List<ChannelUser> userList = channel.getChannelUsers();
         Collections.shuffle(userList);

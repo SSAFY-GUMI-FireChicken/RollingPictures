@@ -64,4 +64,8 @@ public class Channel extends BaseEntity {
         curPeopleCnt += amount;
     }
 
+    public void changeIsPlaying(YNCode isPlaying) {
+        this.isPlaying = isPlaying;
+    }
+
 }

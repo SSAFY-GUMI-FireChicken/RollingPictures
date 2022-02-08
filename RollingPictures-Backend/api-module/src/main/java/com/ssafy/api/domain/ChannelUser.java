@@ -61,4 +61,8 @@ public class ChannelUser {
     public void changeSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
+
+    public void changeGamePlayState(GamePlayState gamePlayState) {
+        this.gamePlayState = gamePlayState;
+    }
 }
