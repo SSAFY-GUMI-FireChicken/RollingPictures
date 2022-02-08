@@ -20,12 +20,8 @@ public class RoundReqDTO {
     @ApiModelProperty(value = "키워드", required = false, example = "하얗고 순백한 석규")
     private String keyword;
 
-    @ApiModelProperty(value = "입력 기기", required = true, example = "ssaid")
-    private String uid;
-
-    @NotNull
-    @ApiModelProperty(value = "접근할 Section Host ID", required = true)
-    private Long HostId;
+    @ApiModelProperty(value = "기기 유저 ID", required = true, example = "1")
+    private Long id;
 
     @NotNull
     @ApiModelProperty(value = "게임방 ID", required = true)

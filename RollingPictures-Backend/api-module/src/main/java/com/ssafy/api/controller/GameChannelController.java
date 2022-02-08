@@ -28,7 +28,7 @@ public class GameChannelController {
 
     @ApiOperation(value = "게임방 생성", notes = "게임방 생성")
     @PostMapping
-    public SingleResult<GameChannelCreateResDTO> createGameChannel(@RequestBody @Valid GameChannelCreateReqDTO dto) {
+    public SingleResult<GameChannelCreateResDTO> createGameChannel(@RequestBody  @Valid GameChannelCreateReqDTO dto) {
         GameChannelCreateResDTO gameChannelCreateResDTO;
         try {
             gameChannelCreateResDTO = gameChannelService.createGameChannel(dto);

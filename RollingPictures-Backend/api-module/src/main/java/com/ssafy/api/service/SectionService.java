@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +28,7 @@ public class SectionService {
     private final ChannelUserRepository channelUserRepository;
     private final GameChannelUserOrderRepository gameChannelUserOrderRepository;
     private final ChannelService channelService;
+    private final SocketService socketService;
 
     public List<SectionRetrieveResDTO> getSection(Long gameChannelId, Long userId) throws Exception {
         GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
@@ -66,8 +68,9 @@ public class SectionService {
             throw new ApiMessageException("이미 해당 게임방에 섹션이 생성되었습니다.");
         }
         Channel channel = channelService.findByCode(findGameChannel.getCode());
-
-        for (ChannelUser user : channel.getChannelUsers()) {
+        List<ChannelUser> userList = channel.getChannelUsers();
+        Collections.shuffle(userList);
+        for (ChannelUser user : userList) {
             Section section = Section.builder()
                     .gameChannel(findGameChannel)
                     .user(user.getUser())
@@ -78,6 +81,8 @@ public class SectionService {
                     .id(save.getId())
                     .build());
         }
+
+        socketService.sendStartGame(channel.getCode(), dto.getGameChannelId());
         return result;
     }
 }
