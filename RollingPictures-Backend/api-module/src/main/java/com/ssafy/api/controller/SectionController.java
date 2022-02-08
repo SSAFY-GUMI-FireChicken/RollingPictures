@@ -57,7 +57,7 @@ public class SectionController {
 
     @ApiOperation(value = "섹션 조회", notes = "특정 시작 유저에 대한 섹션 조회")
     @GetMapping
-    public ListResult<SectionRetrieveResDTO> section(@RequestBody Long gameChannelId, Long userId) {
+    public ListResult<SectionRetrieveResDTO> section(Long gameChannelId, Long userId) {
         try {
             List<SectionRetrieveResDTO> section = sectionService.getSection(gameChannelId, userId);
             return responseService.getListResult(section);
