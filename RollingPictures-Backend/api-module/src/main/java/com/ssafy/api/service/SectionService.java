@@ -37,7 +37,7 @@ public class SectionService {
         Integer orderNum = gameChannelUserOrderRepository.findOrderNum(gameChannelId, userId)
                 .orElseThrow(() -> new ApiMessageException("잘못된 정보입니다."));
 
-        Section section = sectionRepository.findSection(gameChannelId, orderNum)
+        Section section = sectionRepository.findSection(gameChannelId, userId)
                 .orElseThrow(() -> new ApiMessageException("잘못된 정보입니다."));
 
         List<SectionRetrieveResDTO> result = new ArrayList<>();
