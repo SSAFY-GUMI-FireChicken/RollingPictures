@@ -13,7 +13,6 @@ import com.firechicken.rollingpictures.databinding.ActivityLoginBinding
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.service.UserService
-import com.firechicken.rollingpictures.util.PreferenceUtil
 import com.firechicken.rollingpictures.util.RetrofitCallback
 
 private const val TAG = "LoginActivity_싸피"
@@ -29,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(activityLoginBinding.root)
 
         if(prefs.getEnteredChannel()!="none"){
-            outChannel(prefs.getEnteredChannel(),prefs.getUid()!!)
+            outChannel(prefs.getEnteredChannel(),prefs.getId()!!)
         }
 
         if (prefs.getNickName() != "") {
@@ -142,12 +141,14 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    fun outChannel(code: String, uid: String) {
-        val req = InOutChannelReqDTO(code, uid)
+    fun outChannel(code: String, userId: Long) {
+        val req = InOutChannelReqDTO(code, userId)
         ChannelService().outChannel(req, object : RetrofitCallback<SingleResult<Any>> {
             override fun onSuccess(code: Int, responseData: SingleResult<Any>) {
                 if (responseData.output == 1) {
-                    ApplicationClass.channelResDTO = SingleResult (ChannelResDTO("",0, mutableListOf()),"",0)
+                    ApplicationClass.channelResDTO = SingleResult (
+                        ChannelResDTO(-1, "","", "", 0, 0, mutableListOf())
+                        ,"",0)
                     ApplicationClass.playerList = mutableListOf()
                 } else {
                     Toast.makeText(

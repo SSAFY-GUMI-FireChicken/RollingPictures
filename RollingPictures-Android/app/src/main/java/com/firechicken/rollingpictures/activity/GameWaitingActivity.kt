@@ -3,7 +3,6 @@ package com.firechicken.rollingpictures.activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,8 +26,6 @@ import com.firechicken.rollingpictures.service.SectionService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 
 import com.google.gson.GsonBuilder
-import io.reactivex.Completable
-import io.reactivex.CompletableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -37,7 +34,6 @@ import ua.naiksoftware.stomp.*
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompHeader
 import java.util.*
-import androidx.lifecycle.ViewModelProvider
 
 
 private const val TAG = "GameWaitingActivity_싸피"
@@ -69,7 +65,7 @@ class GameWaitingActivity : AppCompatActivity() {
             dialog.setOnClickListener(object : GameExitDialog.OnDialogClickListener {
                 override fun onDialogOkClick() {
                     dialog.dismiss()
-                    outChannel(channelResDTO.data.code, prefs.getUid()!!)
+                    outChannel(channelResDTO.data.code, prefs.getId()!!)
                     prefs.setEnteredChannel("none");
                     finish()
                 }
@@ -176,7 +172,9 @@ class GameWaitingActivity : AppCompatActivity() {
             .subscribe({ topicMessage ->
                 Log.d(TAG, "Received " + topicMessage.getPayload())
                 //channel/start 신호가 들어왔을 때 실행할 함수
-                removePlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
+                //removePlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
+                val intent = Intent(this@GameWaitingActivity, GameActivity::class.java)
+                startActivity(intent)
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
         compositeDisposable!!.add(dispTopic)
@@ -219,7 +217,7 @@ class GameWaitingActivity : AppCompatActivity() {
         dialog.setOnClickListener(object : GameExitDialog.OnDialogClickListener {
             override fun onDialogOkClick() {
                 dialog.dismiss()
-                outChannel(channelResDTO.data.code, prefs.getUid()!!)
+                outChannel(channelResDTO.data.code, prefs.getId()!!)
                 prefs.setEnteredChannel("none");
                 finish()
             }
@@ -296,29 +294,31 @@ class GameWaitingActivity : AppCompatActivity() {
         })
     }
 
-    fun outChannel(code: String, uid: String) {
-        val req = InOutChannelReqDTO(code, uid)
+    fun outChannel(code: String, userId: Long) {
+        val req = InOutChannelReqDTO(code, userId)
         ChannelService().outChannel(req, object : RetrofitCallback<SingleResult<Any>> {
             override fun onSuccess(code: Int, responseData: SingleResult<Any>) {
                 if (responseData.output == 1) {
-                    channelResDTO = SingleResult (ChannelResDTO("",0, mutableListOf()),"",0)
+                    channelResDTO = SingleResult (
+                        ChannelResDTO(-1,"","","N",0,0, mutableListOf())
+                        ,"",0)
                     playerList = mutableListOf()
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "문제가 발생하였습니다. 다시 시도해주세요.",
+                        "문제가 발생하였습니다. 다시 시도해주세요.111",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
             override fun onFailure(code: Int) {
-                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.22", Toast.LENGTH_SHORT)
                     .show()
             }
 
             override fun onError(t: Throwable) {
-                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.333", Toast.LENGTH_SHORT)
                     .show()
             }
         })
