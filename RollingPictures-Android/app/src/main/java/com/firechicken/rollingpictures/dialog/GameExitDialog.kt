@@ -2,27 +2,11 @@ package com.firechicken.rollingpictures.dialog
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
-import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.firechicken.rollingpictures.R
-import com.firechicken.rollingpictures.activity.GameWaitingActivity
-import com.firechicken.rollingpictures.activity.MainActivity
-import com.firechicken.rollingpictures.config.ApplicationClass
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
-import com.firechicken.rollingpictures.dto.ChannelResDTO
-import com.firechicken.rollingpictures.dto.CommonResultResDTO
-import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
-import com.firechicken.rollingpictures.dto.SingleResult
-import com.firechicken.rollingpictures.service.ChannelService
-import com.firechicken.rollingpictures.util.RetrofitCallback
+
 
 private const val TAG = "GameExitDialog_싸피"
 

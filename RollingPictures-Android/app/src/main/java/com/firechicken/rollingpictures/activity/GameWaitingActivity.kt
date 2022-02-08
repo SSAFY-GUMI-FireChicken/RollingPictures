@@ -3,6 +3,7 @@ package com.firechicken.rollingpictures.activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,8 @@ import ua.naiksoftware.stomp.*
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompHeader
 import java.util.*
+import androidx.lifecycle.ViewModelProvider
+
 
 private const val TAG = "GameWaitingActivity_싸피"
 
@@ -58,12 +61,16 @@ class GameWaitingActivity : AppCompatActivity() {
         val activityGameWaitingBinding = ActivityGameWaitingBinding.inflate(layoutInflater)
         setContentView(activityGameWaitingBinding.root)
 
+        prefs.setEnteredChannel(channelResDTO.data.code);
+
         activityGameWaitingBinding.exitRoom.setOnClickListener {
             val dialog = GameExitDialog(this, intent.getStringExtra("code").toString())
             dialog.showDialog()
             dialog.setOnClickListener(object : GameExitDialog.OnDialogClickListener {
                 override fun onDialogOkClick() {
                     dialog.dismiss()
+                    outChannel(channelResDTO.data.code, prefs.getUid()!!)
+                    prefs.setEnteredChannel("none");
                     finish()
                 }
             })
@@ -195,15 +202,6 @@ class GameWaitingActivity : AppCompatActivity() {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
-    protected fun applySchedulers(): CompletableTransformer? {
-        return CompletableTransformer { upstream: Completable ->
-            upstream
-                .unsubscribeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-        }
-    }
-
 
     override fun onBackPressed() {
         val dialog = GameExitDialog(this, intent.getStringExtra("code").toString())
@@ -211,6 +209,8 @@ class GameWaitingActivity : AppCompatActivity() {
         dialog.setOnClickListener(object : GameExitDialog.OnDialogClickListener {
             override fun onDialogOkClick() {
                 dialog.dismiss()
+                outChannel(channelResDTO.data.code, prefs.getUid()!!)
+                prefs.setEnteredChannel("none");
                 finish()
             }
         })
@@ -319,9 +319,6 @@ class GameWaitingActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    override fun onDestroy() {
-        outChannel(channelResDTO.data.code, prefs.getUid()!!)
-        super.onDestroy()
-    }
+
 
 }

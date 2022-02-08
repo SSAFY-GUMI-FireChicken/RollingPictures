@@ -6,13 +6,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.databinding.ActivityLoginBinding
-import com.firechicken.rollingpictures.dto.LoginUserResDTO
-import com.firechicken.rollingpictures.dto.SignUpReqDTO
-import com.firechicken.rollingpictures.dto.SingleResult
-import com.firechicken.rollingpictures.dto.UserIdResDTO
+import com.firechicken.rollingpictures.dto.*
+import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.PreferenceUtil
 import com.firechicken.rollingpictures.util.RetrofitCallback
@@ -24,12 +23,14 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
-
         super.onCreate(savedInstanceState)
 
         val activityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(activityLoginBinding.root)
+
+        if(prefs.getEnteredChannel()!="none"){
+            outChannel(prefs.getEnteredChannel(),prefs.getUid()!!)
+        }
 
         if (prefs.getNickName() != "") {
             activityLoginBinding.nickNameEditText.apply {
@@ -136,6 +137,34 @@ class LoginActivity : AppCompatActivity() {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
                 Toast.makeText(this@LoginActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+    fun outChannel(code: String, uid: String) {
+        val req = InOutChannelReqDTO(code, uid)
+        ChannelService().outChannel(req, object : RetrofitCallback<SingleResult<Any>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<Any>) {
+                if (responseData.output == 1) {
+                    ApplicationClass.channelResDTO = SingleResult (ChannelResDTO("",0, mutableListOf()),"",0)
+                    ApplicationClass.playerList = mutableListOf()
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "문제가 발생하였습니다. 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun onError(t: Throwable) {
+                Toast.makeText(applicationContext, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
                     .show()
             }
         })
