@@ -2,6 +2,7 @@ package com.firechicken.rollingpictures.activity
 
 import android.Manifest
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
             createButton.setOnClickListener {
                 val intent = Intent(this@MainActivity, CreateRoomActivity::class.java)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
                 startActivity(intent)
             }
 
@@ -130,4 +132,5 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 }

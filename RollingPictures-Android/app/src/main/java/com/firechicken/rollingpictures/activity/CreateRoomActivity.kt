@@ -1,6 +1,7 @@
 package com.firechicken.rollingpictures.activity
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast

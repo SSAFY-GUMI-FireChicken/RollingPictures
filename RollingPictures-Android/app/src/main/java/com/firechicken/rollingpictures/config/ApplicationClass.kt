@@ -11,8 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 private const val TAG = "ApplicationClass_싸피"
 class ApplicationClass : Application() {
     companion object{
-        const val SERVER_URL = "http://192.168.0.9:8185/"
-        const val websocketURL = "ws://192.168.0.9:8185/rolling-pictures/websocket"
+        const val SERVER_URL = "http://192.168.35.44:8185/"
+        const val websocketURL = "ws://192.168.35.44:8185/rolling-pictures/websocket"
         lateinit var retrofit: Retrofit
         lateinit var prefs: PreferenceUtil
         lateinit var loginUserResDTO: SingleResult<LoginUserResDTO>
@@ -21,8 +21,9 @@ class ApplicationClass : Application() {
         lateinit var sectionResDTO: ListResult<SectionResDTO>
 
         //방의 플레이어 목록
-        val playerList: MutableList<UserInfoResDTO> =
-            mutableListOf()
+        var playerList: MutableList<UserInfoResDTO> = mutableListOf()
+
+
     }
 
     override fun onCreate() {
