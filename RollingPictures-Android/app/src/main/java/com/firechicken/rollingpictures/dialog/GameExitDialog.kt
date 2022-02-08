@@ -6,17 +6,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
-import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.firechicken.rollingpictures.R
-import com.firechicken.rollingpictures.activity.GameWaitingActivity
 import com.firechicken.rollingpictures.activity.MainActivity
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.dto.ChannelResDTO
-import com.firechicken.rollingpictures.dto.CommonResultResDTO
 import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
 import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.service.ChannelService
@@ -42,8 +39,8 @@ class GameExitDialog(context: Context, var code: String) {
 
         exitButton.setOnClickListener {
             Log.d(TAG, "code: $code")
-            Log.d(TAG, "prefs.getUid(): ${prefs.getUid()}")
-            outChannel(code,  prefs.getUid()!!)
+            Log.d(TAG, "prefs.getId(): ${prefs.getId()}")
+            outChannel(code,  prefs.getId()!!)
 //            val intent = Intent(dialog.context, MainActivity::class.java)
 //            ContextCompat.startActivity(dialog.context, intent, null)
 //            dialog.dismiss()
@@ -55,13 +52,15 @@ class GameExitDialog(context: Context, var code: String) {
 
 
     }
-    private fun outChannel(code: String, uid: String) {
-        val req = InOutChannelReqDTO(code, uid)
+    private fun outChannel(code: String, userId: Long) {
+        val req = InOutChannelReqDTO(code, userId)
         Log.d(TAG, "outChannel: ")
         ChannelService().outChannel(req, object : RetrofitCallback<SingleResult<Any>> {
             override fun onSuccess(code: Int, responseData: SingleResult<Any>) {
                 if (responseData.output == 1) {
-                    ApplicationClass.channelResDTO = SingleResult (ChannelResDTO("",0, mutableListOf()),"",0)
+                    ApplicationClass.channelResDTO = SingleResult (
+                        ChannelResDTO(-1, "","", "", 0, 0, mutableListOf())
+                        ,"",0)
                     val intent = Intent(dialog.context, MainActivity::class.java)
                     ContextCompat.startActivity(dialog.context, intent, null)
                     dialog.dismiss()

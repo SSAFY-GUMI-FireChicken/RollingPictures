@@ -1,5 +1,8 @@
 package com.firechicken.rollingpictures.dto
 
 data class MakeChannelReqDTO(
-    var uid: String
+    var id: Long,
+    var title: String,
+    var isPublic: String,
+    var maxPeopleCnt: Int
 )

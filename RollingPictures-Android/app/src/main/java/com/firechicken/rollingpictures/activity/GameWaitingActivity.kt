@@ -145,8 +145,18 @@ class GameWaitingActivity : AppCompatActivity() {
                 removePlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
+        val dispTopic3: Disposable = mStompClient!!.topic("/channel/start/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "Received " + topicMessage.getPayload())
+                //channel/start 신호가 들어왔을 때 실행할 함수
+                removePlayer(mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java))
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
         compositeDisposable!!.add(dispTopic)
         compositeDisposable!!.add(dispTopic2)
+        compositeDisposable!!.add(dispTopic3)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
 
@@ -239,6 +249,8 @@ class GameWaitingActivity : AppCompatActivity() {
                 if (responseData.data.size > 0) {
                     sectionResDTO = responseData
                     Log.d(TAG, "onSuccess: ${responseData}")
+                    val intent = Intent(this@GameWaitingActivity, GameActivity::class.java)
+                    startActivity(intent)
                 } else {
                     Log.d(TAG, "onSuccess: null")
                     Toast.makeText(

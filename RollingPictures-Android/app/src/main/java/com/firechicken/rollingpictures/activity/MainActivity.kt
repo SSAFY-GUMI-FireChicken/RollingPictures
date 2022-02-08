@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                     if(toString()==""){
                         Toast.makeText(this@MainActivity, "방 코드를 입력하세요.", Toast.LENGTH_SHORT).show()
                     }else{
-                        inChannel(toString(), prefs.getUid()!!)
+                        inChannel(toString(), prefs.getId()!!)
                     }
                 }
             }
@@ -88,8 +88,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun inChannel(roomcode: String, uid: String) {
-        val req = InOutChannelReqDTO(roomcode, uid)
+    private fun inChannel(roomcode: String, userId: Long) {
+        val req = InOutChannelReqDTO(roomcode, userId)
         Log.d(TAG, "inChannel: ")
         ChannelService().inChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {

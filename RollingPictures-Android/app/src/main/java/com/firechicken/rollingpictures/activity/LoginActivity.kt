@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                     signUp(nickname, "1", "none", uid)
                 }else{
                     //로그인
-                    login("1", "none", prefs.getUid())
+                    prefs.getUid()?.let { it1 -> login("1", "none", it1) }
                 }
 
             }
@@ -81,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "onSuccess: ${responseData}")
                     Toast.makeText(this@LoginActivity, "회원 가입 성공!", Toast.LENGTH_SHORT).show()
                     //바로 로그인
-                    login("1", "none", prefs.getUid())
+                    prefs.getUid()?.let { login("1", "none", it) }
                 } else {
                     Log.d(TAG, "onSuccess: null")
                     Toast.makeText(
@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun login(password: String, type: String, uid: String?) {
+    private fun login(password: String, type: String, uid: String) {
         Log.d(TAG, "login: ")
         UserService().login(password, type, uid, object : RetrofitCallback<SingleResult<LoginUserResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<LoginUserResDTO>) {
@@ -121,7 +121,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "onSuccess: null")
                     Toast.makeText(
                         this@LoginActivity,
-                        "문제가 발생하였습니다. 다시 시도해주세요.",
+                        "문제가 발생하였습니다. 다시 시도해주세요.1",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -129,13 +129,13 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onFailure(code: Int) {
                 Log.d(TAG, "onFailure: ")
-                Toast.makeText(this@LoginActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                Toast.makeText(this@LoginActivity, "문제가 발생하였습니다. 다시 시도해주세요.2", Toast.LENGTH_SHORT)
                     .show()
             }
 
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
-                Toast.makeText(this@LoginActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                Toast.makeText(this@LoginActivity, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
                     .show()
             }
         })

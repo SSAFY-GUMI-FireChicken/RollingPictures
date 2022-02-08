@@ -15,9 +15,12 @@ class UserService {
     fun login(
         password: String,
         type: String,
-        uid: String?,
+        uid: String,
         callback: RetrofitCallback<SingleResult<LoginUserResDTO>>
     ) {
+        Log.d(TAG, "password: ${password}")
+        Log.d(TAG, "type: ${type}")
+        Log.d(TAG, "uid: ${uid}")
         RetrofitUtil.userService.login(password, type, uid)
             .enqueue(object : Callback<SingleResult<LoginUserResDTO>> {
                 override fun onResponse(
@@ -27,18 +30,18 @@ class UserService {
                     val res = response.body()
                     if (response.code() == 200) {
                         if (res != null) {
-                            Log.d(TAG, "onResponse: ${res}")
+                            Log.d(TAG, "onResponse1: ${res}")
                             callback.onSuccess(response.code(), res)
                         }
                     } else {
-                        Log.d(TAG, "onResponse: ")
+                        Log.d(TAG, "onResponse2: ")
 
                         callback.onFailure(response.code())
                     }
                 }
 
                 override fun onFailure(call: Call<SingleResult<LoginUserResDTO>>, t: Throwable) {
-                    Log.d(TAG, "onResponse: ")
+                    Log.d(TAG, "onResponse3: ")
                     callback.onError(t)
                 }
             })

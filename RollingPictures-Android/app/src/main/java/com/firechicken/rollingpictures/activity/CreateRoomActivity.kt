@@ -6,13 +6,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.firechicken.rollingpictures.R
-import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.databinding.ActivityCreateRoomBinding
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.service.ChannelService
-import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 
 private const val TAG = "CreateRoomActivity_싸피"
@@ -57,7 +55,7 @@ class CreateRoomActivity : AppCompatActivity() {
             }
 
             okButton.setOnClickListener {
-                makeChannel(prefs.getUid()!!)
+                makeChannel(prefs.getId()!!)
             }
 
             cancelButton.setOnClickListener {
@@ -66,8 +64,8 @@ class CreateRoomActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeChannel(uid: String) {
-        val req = MakeChannelReqDTO(uid)
+    private fun makeChannel(userId: Long) {
+        val req = MakeChannelReqDTO(userId, "Title", "N", 4)
         Log.d(TAG, "makeChannel: ")
         ChannelService().makeChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
