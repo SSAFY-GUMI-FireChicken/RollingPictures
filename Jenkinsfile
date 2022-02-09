@@ -27,8 +27,6 @@ pipeline {
         stage('Docker build') {
             steps {
                 echo 'Docker building...'
-                sh 'pwd'
-                sh 'ls -al RollingPictures-Backend/api-module'
                 sh 'docker build -t rolling-pictures:latest RollingPictures-Backend/'
             }
             post {
