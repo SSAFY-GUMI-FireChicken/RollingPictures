@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Git Clonning...'
                 git url: 'http://lab.ssafy.com/seung7642/jenkins-test',
-                    credentialsId: 'username-password'
+                    credentialsId: 'jenkins-credentials-id'
 
                 sh 'ls -al'
                 dir('RollingPictures-Backend/') {
