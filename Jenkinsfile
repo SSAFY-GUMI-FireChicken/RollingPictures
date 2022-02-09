@@ -39,7 +39,7 @@ pipeline {
         stage('Docker run') {
             steps {
                 echo 'Docker running...'
-                sh 'docker ps -f name=rolling-pictures:latest -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker ps -f name=rolling-pictures -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a --filter ancestor=rolling-pictures --filter status=exited -q | xargs -r docker container rm'
                 sh 'docker images --no-trunc -a -q --filter="dangling=true" | xargs --no-run-if-empty docker rmi'
                 sh 'docker run -d -p 8185:8185 --name rolling-pictures rolling-pictures:latest'
