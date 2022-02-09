@@ -10,9 +10,8 @@ pipeline {
 
                 sh 'ls -al'
                 dir('RollingPictures-Backend/') {
-                    sh 'java -version'
-                    sh './gradlew build'
-                    sh 'ls -al api-module/build/libs'
+                    sh './gradlew cleanQuerydslSourcesDir'
+                    sh './gradlew bootJar'
                 }
             }
             post {
