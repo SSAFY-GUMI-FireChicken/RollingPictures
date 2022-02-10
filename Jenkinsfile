@@ -5,7 +5,7 @@ pipeline {
         stage('Git clonning and Build') {
             steps {
                 echo 'Git Clonning...'
-                git url: 'http://lab.ssafy.com/seung7642/jenkins-test',
+                git url: 'https://lab.ssafy.com/s06-webmobile4-sub2/S06P12D208',
                     credentialsId: 'jenkins-credentials-id'
 
                 sh 'ls -al'
