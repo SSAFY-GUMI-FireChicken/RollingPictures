@@ -28,6 +28,6 @@ public class SocketService {
     }
 
     public void sendNextSignal(String channelCode, int roundNum) {
-        simpTemplate.convertAndSend("/channel/next/" + channelCode, roundNum);
+        simpTemplate.convertAndSend("/channel/game/next/" + channelCode, roundNum);
     }
 }

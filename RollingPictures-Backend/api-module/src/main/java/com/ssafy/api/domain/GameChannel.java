@@ -27,6 +27,10 @@ public class GameChannel {
 
     private String code;
 
+    private Integer curRoundNumber;
+
+    private Integer conPeopleCnt;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "channel_id")
     private Channel channel;
@@ -37,12 +41,28 @@ public class GameChannel {
     @OneToMany(mappedBy = "gameChannel", cascade = CascadeType.ALL)
     private List<GameChannelUserOrder> gameChannelUserOrders = new ArrayList<>();
 
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "progress_id")
+    private Progress progress;
+
     public void addSection(Section section) {
         section.changeGameChannel(this);
     }
 
     public void addGameChannelUserOrder(GameChannelUserOrder order) {
         order.changeGameChannel(this);
+    }
+
+    public void changeProgress(Progress progress) {
+        this.progress = progress;
+    }
+
+    public void changeConPeopleCnt(int amount) {
+        conPeopleCnt += amount;
+    }
+
+    public void addCurRoundNumber() {
+        curRoundNumber++;
     }
 
     @Override
