@@ -13,11 +13,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter
+import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recyclerView
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.sectionResDTO
 import com.firechicken.rollingpictures.databinding.FragmentGameWaitingBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
@@ -25,13 +28,12 @@ import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.service.GameChannelService
 import com.firechicken.rollingpictures.service.SectionService
 import com.firechicken.rollingpictures.util.RetrofitCallback
+import kotlinx.android.synthetic.main.fragment_game_waiting.*
 
 private const val TAG = "GameWaitingFragment_싸피"
 
 class GameWaitingFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var playerRecyclerViewAdapter: PlayerRecyclerViewAdapter
 
     private lateinit var fragmentGameWaitingBinding: FragmentGameWaitingBinding
     private lateinit var fContext:Context
@@ -52,7 +54,22 @@ class GameWaitingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefs.setEnteredChannel(channelResDTO.data.code);
+        prefs.setEnteredChannel(channelResDTO.data.code)
+
+        for(player in channelResDTO.data.users){
+            if(player.id== loginUserResDTO.data.id){
+                if(player.isLeader=="Y"){
+                    startGameButton.setText("START GAME")
+                    startGameButton.setEnabled(true)
+                }else{
+                    startGameButton.setText("WAITING FOR GAME TO START...")
+                    startGameButton.setTextSize(16F)
+                    startGameButton.setEnabled(false)
+                }
+                break
+            }
+        }
+
 
         fragmentGameWaitingBinding.exitRoom.setOnClickListener {
             val dialog = GameExitDialog(requireContext())
@@ -168,4 +185,6 @@ class GameWaitingFragment : Fragment() {
         Log.i(TAG, text)
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
+
+
 }

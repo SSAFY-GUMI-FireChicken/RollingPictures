@@ -8,16 +8,30 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.R
+import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter.UserInfoHolder
+import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.dto.UserInfoResDTO
+import kotlinx.android.synthetic.main.fragment_game_waiting.*
+import kotlinx.android.synthetic.main.fragment_game_waiting.view.*
+import kotlinx.android.synthetic.main.list_item_player.view.*
 
 class PlayerRecyclerViewAdapter(
     private val context: Context,
     private val playerList: MutableList<UserInfoResDTO>
-) : RecyclerView.Adapter<PlayerRecyclerViewAdapter.UserInfoHolder>() {
+) : RecyclerView.Adapter<UserInfoHolder>() {
 
     inner class UserInfoHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        fun bindInfo(player: String) {
-            view.findViewById<TextView>(R.id.playerButton).text = player
+        fun bindInfo(player: UserInfoResDTO) {
+            view.playerButton.text = player.nickname
+            view.playerButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            if (playerList[position].isLeader == "Y") {
+                view.playerButton.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    context.getResources().getDrawable(R.drawable.crown),
+                    null
+                )
+            }
         }
     }
 
@@ -31,27 +45,13 @@ class PlayerRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: UserInfoHolder, position: Int) {
         holder.apply {
-            bindInfo(playerList[position].nickname)
-            val player = itemView.findViewById<AppCompatButton>(R.id.playerButton)
-            player.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-            //임의로 방장(푸읍) 선정하여 왕관 표시
-            if (player.text.toString() == "푸읍") {
-                player.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    context.getResources().getDrawable(R.drawable.crown),
-                    null
-                )
-            }
+            bindInfo(playerList[position])
+
         }
     }
 
     override fun getItemCount(): Int = playerList.size
 
-    fun deleteItem(index: Int) {
-        playerList.removeAt(index)
-        notifyDataSetChanged()
-    }
 
 
 }
