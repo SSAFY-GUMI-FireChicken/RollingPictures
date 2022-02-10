@@ -17,7 +17,9 @@ import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recyclerView
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
@@ -48,6 +50,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.fragment_game_waiting.*
+import kotlinx.android.synthetic.main.fragment_game_waiting.view.*
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
@@ -77,6 +82,7 @@ class GameActivity : AppCompatActivity() {
     private val mGson = GsonBuilder().create()
 
     private lateinit var activityGameActivity: ActivityGameBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -323,7 +329,7 @@ class GameActivity : AppCompatActivity() {
 
                 //channel/in 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
-                playerList.add(user)
+                addPlayer(user)
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                 transaction.commit()
@@ -338,7 +344,7 @@ class GameActivity : AppCompatActivity() {
 
                 //channel/out 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
-                playerList.remove(user)
+                removePlayer(user)
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                 transaction.commit()
@@ -356,11 +362,72 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
+        val dispTopic4: Disposable = mStompClient!!.topic("/channel/leader/${ApplicationClass.channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+
+                //channel/leader 신호가 들어왔을 때 실행할 함수
+                val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
+                updateLeader(user)
+
+                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                transaction.commit()
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
         compositeDisposable!!.add(dispTopic)
         compositeDisposable!!.add(dispTopic2)
         compositeDisposable!!.add(dispTopic3)
+        compositeDisposable!!.add(dispTopic4)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
+    }
+
+    //player 입장
+    private fun addPlayer(user: UserInfoResDTO) {
+        channelResDTO.data.users.add(user)
+            playerList = channelResDTO.data.users
+        playerRecyclerViewAdapter.notifyDataSetChanged()
+        recyclerView.smoothScrollToPosition(playerList.size - 1)
+    }
+
+    //player 퇴장
+    private fun removePlayer(user: UserInfoResDTO) {
+        channelResDTO.data.users.remove(user)
+        playerList = channelResDTO.data.users
+        playerRecyclerViewAdapter.notifyDataSetChanged()
+        recyclerView.smoothScrollToPosition(playerList.size - 1)
+
+    }
+
+    //Leader 변경
+    private fun updateLeader(user: UserInfoResDTO) {
+        channelResDTO.data.apply{
+            for(i: Int in 0..users.size-1){
+                if(users[i].id==user.id){
+                    users[i].isLeader="Y"
+                }
+            }
+            playerList = users
+        }
+        playerRecyclerViewAdapter.notifyDataSetChanged()
+        recyclerView.smoothScrollToPosition(playerList.size - 1)
+        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
+        for(player in channelResDTO.data.users){
+            if(player.id== ApplicationClass.loginUserResDTO.data.id){
+                if(player.isLeader=="Y"){
+                    gameWaitingFragment.startGameButton.setText("START GAME")
+                    gameWaitingFragment.startGameButton.setEnabled(true)
+                }else{
+                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
+                    gameWaitingFragment.startGameButton.setTextSize(16F)
+                    gameWaitingFragment.startGameButton.setEnabled(false)
+                }
+                break
+            }
+        }
     }
 
     // 스텀프 통신 해제

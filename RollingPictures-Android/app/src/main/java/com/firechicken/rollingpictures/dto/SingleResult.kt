@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class SingleResult<T>(
-    val data: T,
+    var data: T,
     val msg: String?,
     val output :Int,
 )
