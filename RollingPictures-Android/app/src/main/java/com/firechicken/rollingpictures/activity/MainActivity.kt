@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                 if(responseData.data != null){
                     if (responseData.data.id > 0) {
                         ApplicationClass.channelResDTO = responseData
-                        val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
+                        val intent = Intent(this@MainActivity, GameActivity::class.java)
                         intent.putExtra("code", roomcode)
                         startActivity(intent)
                     } else {

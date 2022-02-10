@@ -22,7 +22,7 @@
     <string name="player">Player</string>
     <string name="start_game">START GAME</string>
     <string name="exit_room">EXIT ROOM</string>
-    <string name="current_round">Round X</string>
+    <string name="current_round">대기실</string>
     <string name="slash_round">2 / 6</string>
     <string name="complete_round">COMPLETE</string>
     <string name="guide_round">다음 그림을 보고 제시어를 입력하세요.</string>
@@ -41,10 +41,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="guide_code">지금 계신 방의 코드를 공유하세요!</string>
 
-    <string name="no_permissions_granted">We can not give you service without your permission</string>
-    <string name="permissions_dialog_title">We need your help</string>
-    <string name="accept_permissions_dialog">GIVE PERMISSIONS!</string>
-    <string name="cancel_dialog">CANCEL</string>
+    <string name="no_permissions_granted">권한의 허용 없이는 게임 진행이 불가합니다!</string>
+    <string name="permissions_dialog_title">권한 요청</string>
+    <string name="accept_permissions_dialog">게임 이용을 위한 권한을 허용해주세요!</string>
+    <string name="cancel_dialog">닫기</string>
     <string name="open_source_info_title">오픈 소스 정보</string>
     <string name="open_source_info_sub">Android용 RollingPictures 앱은 다음의 오픈 소스 소프트웨어를 사용하여 만들어졌습니다.</string>
     <string name="os_title_android_draw">AndroidDraw</string>
