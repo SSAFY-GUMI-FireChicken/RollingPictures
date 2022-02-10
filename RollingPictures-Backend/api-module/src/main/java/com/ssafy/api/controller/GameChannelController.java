@@ -10,10 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -39,4 +36,9 @@ public class GameChannelController {
         }
     }
 
+    @ApiOperation(value = "게임방 삭제", notes = "게임방 삭제")
+    @DeleteMapping("/{id}")
+    public SingleResult<Boolean> deleteGameChannel(@PathVariable("id") Long gameChannleId) {
+        return responseService.getSingleResult(true);
+    }
 }
