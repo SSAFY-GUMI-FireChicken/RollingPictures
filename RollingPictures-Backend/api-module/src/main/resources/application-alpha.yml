@@ -89,7 +89,7 @@ app:
 # swagger에서 테스트 할 때의 host
 swagger:
 #  host: jayutest.best:40005
-  host: localhost:8185
+  host: i6d208.p.ssafy.io:8185
 
 
 
