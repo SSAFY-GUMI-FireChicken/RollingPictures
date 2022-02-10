@@ -5,6 +5,10 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url "https://jitpack.io" }
         jcenter() // Warning: this repository is going to shut down soon
+
     }
+//    dependencies {
+//        implementation 'com.github.NaikSoftware:StompProtocolAndroid:1.6.6'
+//    }
 }
 include ':app'
