@@ -2,7 +2,9 @@ package com.firechicken.rollingpictures.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class UserIdResDTO(
-//    @SerializedName("id")
-    var id: Long
+
+data class SingleResult<T>(
+    val data: T,
+    val msg: String?,
+    val output :Int,
 )

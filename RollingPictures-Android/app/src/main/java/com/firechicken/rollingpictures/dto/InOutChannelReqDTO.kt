@@ -1,6 +1,6 @@
 package com.firechicken.rollingpictures.dto
 
-data class LoginUserResDTO(
+data class InOutChannelReqDTO(
+    var code: String,
     var id: Long,
-    var token: String
 )

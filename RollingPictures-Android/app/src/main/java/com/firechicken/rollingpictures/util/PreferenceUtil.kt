@@ -37,5 +37,15 @@ class PreferenceUtil(context: Context) {
         editor.apply()
     }
 
+    fun getEnteredChannel(): String{
+        return prefs.getString("in_channel", "none")!!
+    }
+
+    fun setEnteredChannel(code: String){
+        val editor = prefs.edit()
+        editor.putString("in_channel", code)
+        editor.apply()
+    }
+
 }
 
