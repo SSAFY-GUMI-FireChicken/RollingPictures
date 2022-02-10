@@ -73,7 +73,7 @@ spring:
 server:
   # 프로젝트 환경의 포트 설정
   port: 8185
-  domain: http://127.0.0.1
+  domain: http://i6d208.p.ssafy.io
   servlet:
     session:
       timeout: 1440m
