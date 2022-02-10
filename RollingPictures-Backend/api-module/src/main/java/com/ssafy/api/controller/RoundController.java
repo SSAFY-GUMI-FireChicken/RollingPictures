@@ -5,10 +5,13 @@ import com.ssafy.api.domain.Section;
 import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.RoundReqDTO;
 import com.ssafy.api.dto.res.RoundResDTO;
+import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.api.repository.RoundRepository;
 import com.ssafy.api.repository.SectionRepository;
+import com.ssafy.api.service.ProgressService;
 import com.ssafy.api.service.RoundService;
 import com.ssafy.api.service.SignService;
+import com.ssafy.api.service.SocketService;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.S3Uploader;
 import com.ssafy.api.service.common.SingleResult;
@@ -39,6 +42,9 @@ public class RoundController {
     private final ResponseService responseService;
     private final SignService signService;
     private final SectionRepository sectionRepository;
+    private final ProgressService progressService;
+    private final SocketService socketService;
+    private final ChannelUserRepository channelUserRepository;
 
 
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
@@ -46,6 +52,11 @@ public class RoundController {
     public SingleResult<RoundResDTO> roundRegister(
             @Valid RoundReqDTO req,
             @RequestParam(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
+
+        if (channelUserRepository.findByUser_Id(req.getId()).getSessionId() == null
+                || channelUserRepository.findByUser_Id(req.getId()).getSessionId().equals(null)) {
+            throw new ApiMessageException("STOMP 연결이 필요한 유저입니다.");
+        }
 
         User currentUser = signService.findUserById(req.getId());
         List<User> userOrders = sectionRepository.findOrder(req.getGameChannelId());
@@ -64,7 +75,6 @@ public class RoundController {
             img = s3Uploader.upload(multipartFile, section.getCode() + "/" + userOrders.get(hostIndex).getId() + "/" + req.getRoundNumber() + "ROUND-" + currentUser.getId() + ".JPG");
         }
 
-
         Round round = Round.builder()
                 .roundNumber(req.getRoundNumber())
                 .imgSrc(img)
@@ -72,6 +82,10 @@ public class RoundController {
                 .user(currentUser)
                 .build();
         long roundId = roundService.post(round);
+
+        if (progressService.isNextRound(req.getRoundNumber(), req.getGameChannelId())) {
+            socketService.sendNextSignal(section.getCode(), req.getRoundNumber() + 1);
+        }
 
         return responseService.getSingleResult(RoundResDTO.builder().id(roundId).build());
     }

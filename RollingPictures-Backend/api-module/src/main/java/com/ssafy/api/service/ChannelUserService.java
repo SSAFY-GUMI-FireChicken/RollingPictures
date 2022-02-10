@@ -117,7 +117,12 @@ public class ChannelUserService {
     public ChannelUser changeSessionId(Long userId, String sessionId) {
        ChannelUser channelUser = channelUserRepository.findByUser_Id(userId);
        channelUser.changeSessionId(sessionId);
-       return channelUserRepository.save(channelUser);
+
+        if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
+            channelUser.getChannel().getGameChannel().changeConPeopleCnt(1);
+        }
+
+        return channelUserRepository.save(channelUser);
     }
 
     /**
@@ -136,6 +141,7 @@ public class ChannelUserService {
         channelUser.changeSessionId(null);
 
         if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
+            channelUser.getChannel().getGameChannel().changeConPeopleCnt(-1);
             channelUserRepository.save(channelUser);
         } else {
             deleteChannelUser(channelUser);
