@@ -1,7 +1,6 @@
 package com.firechicken.rollingpictures.activity
 
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -41,7 +40,7 @@ class CreateRoomActivity : AppCompatActivity() {
                     Toast.makeText(this@CreateRoomActivity, R.string.minimum_count, Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    countTextView.setText(Integer.toString((maximumCnt - 1)))
+                    countTextView.text = Integer.toString((maximumCnt - 1))
                 }
             }
 
@@ -51,7 +50,7 @@ class CreateRoomActivity : AppCompatActivity() {
                     Toast.makeText(this@CreateRoomActivity, R.string.maximum_count, Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    countTextView.setText(Integer.toString((maximumCnt + 1)))
+                    countTextView.text = Integer.toString((maximumCnt + 1))
                 }
             }
 
@@ -67,37 +66,35 @@ class CreateRoomActivity : AppCompatActivity() {
 
     private fun makeChannel(userId: Long) {
         val req = MakeChannelReqDTO(userId, "Title", "N", 4)
+
         Log.d(TAG, "makeChannel: ")
+
         ChannelService().makeChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
                 if (responseData.data.id > 0) {
                     channelResDTO = responseData
                     Log.d(TAG, "onSuccess: ${responseData}")
-                    val intent = Intent(this@CreateRoomActivity, GameWaitingActivity::class.java)
+                    val intent = Intent(this@CreateRoomActivity, GameActivity::class.java)
                     startActivity(intent)
                 } else {
                     Log.d(TAG, "onSuccess: null")
-                    Toast.makeText(
-                        this@CreateRoomActivity,
-                        "문제가 발생하였습니다. 다시 시도해주세요.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toast("makeChannel에서 문제가 발생하였습니다. 다시 시도해주세요.")
                 }
             }
 
             override fun onFailure(code: Int) {
                 Log.d(TAG, "onFailure: ")
-                Toast.makeText(this@CreateRoomActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                    .show()
+                toast("makeChannel에서 실패문제가 발생하였습니다. 다시 시도해주세요.")
             }
 
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
-                Toast.makeText(this@CreateRoomActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                    .show()
+                toast("makeChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
             }
         })
     }
-
-
+    private fun toast(text: String) {
+        Log.i(TAG, text)
+        Toast.makeText(this@CreateRoomActivity, text, Toast.LENGTH_SHORT).show()
+    }
 }
