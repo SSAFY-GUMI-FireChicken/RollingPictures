@@ -57,6 +57,10 @@ public class ChannelController {
             throw new ApiMessageException("이미 방에 입장한 상태입니다.");
         }
 
+        if (req.getMaxPeopleCnt() > 6) {
+            throw new ApiMessageException("최대 인원 수를 6 이상으로 설정할 수 없습니다.");
+        }
+
         channelChk = channelService.createChannel(req);
         ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channelChk, user, YNCode.Y);
 
@@ -98,8 +102,7 @@ public class ChannelController {
 
         ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channel, user, YNCode.N);
 
-        return responseService.getSingleResult(ChannelResDTO
-                .builder()
+        return responseService.getSingleResult(ChannelResDTO.builder()
                 .id(channel.getId())
                 .code(channel.getCode())
                 .isPublic(channel.getIsPublic())
@@ -138,5 +141,16 @@ public class ChannelController {
     public SingleResult<ChannelListResDTO> getChannelList(@RequestParam(value="page", defaultValue = "0") int page,
                                                           @RequestParam(value="batch" , defaultValue = "10") int batch) {
         return responseService.getSingleResult(channelService.getChannelList(page, batch));
+    }
+
+    @Transactional
+    @ApiOperation(value = "방 설정 수정", notes = "방 설정 수정")
+    @PutMapping
+    public @ResponseBody SingleResult<ChannelResDTO> changeChannelOption(@RequestBody @Valid MakeChannelReqDTO req) {
+        try {
+            return responseService.getSingleResult(channelService.changeChannelOption(req));
+        } catch (ApiMessageException apiMessageException) {
+            throw apiMessageException;
+        }
     }
 }
