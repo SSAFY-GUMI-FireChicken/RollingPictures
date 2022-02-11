@@ -38,7 +38,7 @@ public class GameChannel {
     @OneToMany(mappedBy = "gameChannel")
     private List<Section> sections = new ArrayList<>();
 
-    @OneToMany(mappedBy = "gameChannel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gameChannel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GameChannelUserOrder> gameChannelUserOrders = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
