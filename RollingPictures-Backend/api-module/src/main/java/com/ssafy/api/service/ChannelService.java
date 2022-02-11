@@ -124,6 +124,8 @@ public class ChannelService {
 
         if (req.getMaxPeopleCnt() < channel.getCurPeopleCnt()) {
             throw new ApiMessageException("최대 인원을 현재 인원보다 적게 변경할 수 없습니다.");
+        } else if (req.getMaxPeopleCnt() > 6) {
+            throw new ApiMessageException("최대 인원 수를 6 이상으로 설정할 수 없습니다.");
         } else {
             channel.changeMaxPeopleCnt(req.getMaxPeopleCnt());
         }

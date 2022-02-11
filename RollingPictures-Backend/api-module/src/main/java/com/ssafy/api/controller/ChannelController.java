@@ -57,6 +57,10 @@ public class ChannelController {
             throw new ApiMessageException("이미 방에 입장한 상태입니다.");
         }
 
+        if (req.getMaxPeopleCnt() > 6) {
+            throw new ApiMessageException("최대 인원 수를 6 이상으로 설정할 수 없습니다.");
+        }
+
         channelChk = channelService.createChannel(req);
         ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channelChk, user, YNCode.Y);
 
