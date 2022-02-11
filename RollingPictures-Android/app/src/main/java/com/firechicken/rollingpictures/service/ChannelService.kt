@@ -80,4 +80,25 @@ class ChannelService {
         })
     }
 
+    fun updateChannel(req: MakeChannelReqDTO, callback: RetrofitCallback<SingleResult<ChannelResDTO>>) {
+        RetrofitUtil.channelService.updateChannel(req).enqueue(object : Callback<SingleResult<ChannelResDTO>> {
+            override fun onResponse(call: Call<SingleResult<ChannelResDTO>>, response: Response<SingleResult<ChannelResDTO>>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    Log.d(TAG, "onResponse: 성공")
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    Log.d(TAG, "onResponse: 다른코드")
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<SingleResult<ChannelResDTO>>, t: Throwable) {
+                Log.d(TAG, "onFailure: ")
+                callback.onError(t)
+            }
+        })
+    }
 }

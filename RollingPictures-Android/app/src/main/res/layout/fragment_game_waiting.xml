@@ -117,5 +117,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.8" />
 
+    <ImageButton
+        android:id="@+id/settingImageButton"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toEndOf="@+id/playerCountTextView"
+        app:layout_constraintTop_toBottomOf="@+id/roomCodeTextView"
+        app:srcCompat="@drawable/ic_baseline_settings_applications_24" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
