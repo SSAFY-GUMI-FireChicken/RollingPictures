@@ -85,22 +85,10 @@ public class ChannelUserService {
                 ChannelUser newLeader = channelUser.getChannel().getChannelUsers().get(0);
                 newLeader.changeIsLeader(YNCode.Y);
 
-                socketService.sendChangingLeader(channelUser.getChannel().getCode(), UserInfoResDTO
-                        .builder()
-                        .id(newLeader.getUser().getId())
-                        .nickname(newLeader.getUser().getNickname())
-                        .isLeader(newLeader.getIsLeader())
-                        .build()
-                );
+                socketService.sendChangingLeader(channelUser);
             }
 
-            socketService.sendOutChannelUser(channelUser.getChannel().getCode(), UserInfoResDTO
-                    .builder()
-                    .id(channelUser.getUser().getId())
-                    .nickname(channelUser.getUser().getNickname())
-                    .isLeader(channelUser.getIsLeader())
-                    .build()
-            );
+            socketService.sendOutChannelUser(channelUser);
 
             channelUser.getChannel().changeCurPeopleCnt(-1);
         }
@@ -128,7 +116,7 @@ public class ChannelUserService {
     /**
      * sessionId update
      * @param sessionId
-     * @return channelUser
+     * @return
      */
     @Transactional(readOnly = false)
     public void removeSessionId(String sessionId) {
