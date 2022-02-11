@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.dto.res.ChannelResDTO;
 import com.ssafy.api.dto.res.UserInfoResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -21,6 +22,10 @@ public class SocketService {
 
     public void sendChangingLeader(String channelCode, UserInfoResDTO userInfoResDTO) {
         simpTemplate.convertAndSend("/channel/leader/" + channelCode, userInfoResDTO);
+    }
+
+    public void sendChangingOption(ChannelResDTO channelResDTO) {
+        simpTemplate.convertAndSend("/channel/option/" + channelResDTO.getCode(), channelResDTO);
     }
 
     public void sendStartGame(String channelCode, Long gameChannelId) {

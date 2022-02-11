@@ -98,8 +98,7 @@ public class ChannelController {
 
         ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channel, user, YNCode.N);
 
-        return responseService.getSingleResult(ChannelResDTO
-                .builder()
+        return responseService.getSingleResult(ChannelResDTO.builder()
                 .id(channel.getId())
                 .code(channel.getCode())
                 .isPublic(channel.getIsPublic())
@@ -138,5 +137,16 @@ public class ChannelController {
     public SingleResult<ChannelListResDTO> getChannelList(@RequestParam(value="page", defaultValue = "0") int page,
                                                           @RequestParam(value="batch" , defaultValue = "10") int batch) {
         return responseService.getSingleResult(channelService.getChannelList(page, batch));
+    }
+
+    @Transactional
+    @ApiOperation(value = "방 옵션 수정", notes = "방 옵션 수정")
+    @PutMapping
+    public @ResponseBody SingleResult<ChannelResDTO> changeChannelOption(@RequestBody @Valid MakeChannelReqDTO req) {
+        try {
+            return responseService.getSingleResult(channelService.changeChannelOption(req));
+        } catch (ApiMessageException apiMessageException) {
+            throw apiMessageException;
+        }
     }
 }
