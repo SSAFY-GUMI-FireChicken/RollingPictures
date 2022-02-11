@@ -144,7 +144,7 @@ public class ChannelController {
     }
 
     @Transactional
-    @ApiOperation(value = "방 옵션 수정", notes = "방 옵션 수정")
+    @ApiOperation(value = "방 설정 수정", notes = "방 설정 수정")
     @PutMapping
     public @ResponseBody SingleResult<ChannelResDTO> changeChannelOption(@RequestBody @Valid MakeChannelReqDTO req) {
         try {

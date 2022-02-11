@@ -25,7 +25,7 @@ public class SocketService {
     }
 
     public void sendChangingOption(ChannelResDTO channelResDTO) {
-        simpTemplate.convertAndSend("/channel/option/" + channelResDTO.getCode(), channelResDTO);
+        simpTemplate.convertAndSend("/channel/setting/" + channelResDTO.getCode(), channelResDTO);
     }
 
     public void sendStartGame(String channelCode, Long gameChannelId) {
