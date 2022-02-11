@@ -16,17 +16,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recyclerView
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
-import com.firechicken.rollingpictures.dto.ChannelResDTO
-import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
-import com.firechicken.rollingpictures.dto.SingleResult
-import com.firechicken.rollingpictures.dto.UserInfoResDTO
+import com.firechicken.rollingpictures.dto.*
+import com.firechicken.rollingpictures.fragment.GameDrawingFragment
 import com.firechicken.rollingpictures.fragment.GameWaitingFragment
 import com.firechicken.rollingpictures.fragment.GameWritingFragment
 import com.firechicken.rollingpictures.service.ChannelService
@@ -90,6 +90,8 @@ class GameActivity : AppCompatActivity() {
 
         activityGameActivity = ActivityGameBinding.inflate(layoutInflater)
         setContentView(activityGameActivity.root)
+
+        gameChannelResDTO = SingleResult (GameChannelResDTO(0),"",0)
 
         // 시간 표시 (게임진행 중에만 사용함)
         val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
@@ -356,6 +358,12 @@ class GameActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
                 Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+                roundNum=1
+                var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
+                Log.d(TAG, "connectStomp: ${res}")
+                gameChannelResDTO.data.id = res
+                gameChannelResDTO.msg = "성공"
+                gameChannelResDTO.output = 1
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                 transaction.commit()
@@ -366,7 +374,7 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+                Log.d(TAG, "dispTopic4 Received " + topicMessage.getPayload())
 
                 //channel/leader 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
@@ -374,6 +382,25 @@ class GameActivity : AppCompatActivity() {
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                 transaction.commit()
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
+        val dispTopic5: Disposable = mStompClient!!.topic("/channel/game/next/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+
+                //channel/game/next 신호가 들어왔을 때 실행할 함수
+                roundNum = mGson.fromJson(topicMessage.getPayload(), Int::class.java)
+                if(roundNum%2==1){
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
+                    transaction.commit()
+                }else{
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameDrawingFragment())
+                    transaction.commit()
+                }
+
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 

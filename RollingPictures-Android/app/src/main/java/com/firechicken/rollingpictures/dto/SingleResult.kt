@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 
 data class SingleResult<T>(
     var data: T,
-    val msg: String?,
-    val output :Int,
+    var msg: String?,
+    var output :Int,
 )

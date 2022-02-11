@@ -1,6 +1,7 @@
 package com.firechicken.rollingpictures.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
@@ -10,12 +11,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.activity.MainActivity
+import com.firechicken.rollingpictures.config.ApplicationClass
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
 import com.firechicken.rollingpictures.databinding.FragmentGameDrawingBinding
+import com.firechicken.rollingpictures.dto.LoginUserResDTO
+import com.firechicken.rollingpictures.dto.RoundResDTO
+import com.firechicken.rollingpictures.dto.SingleResult
+import com.firechicken.rollingpictures.service.RoundService
+import com.firechicken.rollingpictures.service.UserService
+import com.firechicken.rollingpictures.util.RetrofitCallback
+import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.fragment_game_drawing.*
+import kotlinx.android.synthetic.main.fragment_game_writing.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -35,11 +50,16 @@ class GameDrawingFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
+
+        (activity as GameActivity).roundTextView.setText("Round ${roundNum}")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        roundView(gameChannelResDTO.data.id, loginUserResDTO.data.id, roundNum)
+
 
         setDrawTools()
         colorSelector()
@@ -213,6 +233,35 @@ class GameDrawingFragment : Fragment() {
             binding.brushSetting.linearLayout.visibility = View.GONE
             isBrushSettingOpen = false
         }
+    }
+
+    //글 조회
+    private fun roundView(gameChannelId: Long, id: Long, roundNumber: Int) {
+        RoundService().roundView(gameChannelId, id, roundNumber, object :
+            RetrofitCallback<SingleResult<RoundResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
+                if (responseData.output == 1) {
+                    writingTextView.setText(responseData.data.imgSrc)
+
+                } else {
+                    Toast.makeText(
+                        context,
+                        "문제가 발생하였습니다. 다시 시도해주세요.1",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.2", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun onError(t: Throwable) {
+                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
     }
 
 }
