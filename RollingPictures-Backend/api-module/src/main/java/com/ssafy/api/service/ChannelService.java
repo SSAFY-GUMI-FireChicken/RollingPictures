@@ -7,8 +7,10 @@ import com.ssafy.api.dto.res.ChannelListResDTO;
 import com.ssafy.api.dto.res.ChannelResDTO;
 import com.ssafy.api.dto.res.UserInfoResDTO;
 import com.ssafy.api.repository.ChannelRepository;
+import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
+import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ChannelService {
     private final ChannelRepository channelRepository;
+    private final ChannelUserRepository channelUserRepository;
     private final SocketService socketService;
 
     /**
@@ -145,5 +148,47 @@ public class ChannelService {
         }
 
         channelRepository.save(channel);
+    }
+
+    @Transactional(readOnly = false)
+    public ChannelResDTO changeChannelOption(MakeChannelReqDTO req) throws ApiMessageException {
+        ChannelUser channelUser = channelUserRepository.findByUser_Id(req.getId());
+
+        if (channelUser == null) {
+            throw new ApiMessageException("방에 입장한 상태가 아닙니다.");
+        } else if (channelUser.getIsLeader() == YNCode.N) {
+            throw new ApiMessageException("방장만 변경할 수 있습니다.");
+        }
+
+        Channel channel = channelUser.getChannel();
+
+        channel.changeTitle(req.getTitle());
+        channel.changeIsPublic(req.getIsPublic());
+
+        if (req.getMaxPeopleCnt() < channel.getCurPeopleCnt()) {
+            throw new ApiMessageException("최대 인원을 현재 인원보다 적게 변경할 수 없습니다.");
+        } else if (req.getMaxPeopleCnt() > 6) {
+            throw new ApiMessageException("최대 인원 수를 6 이상으로 설정할 수 없습니다.");
+        } else {
+            channel.changeMaxPeopleCnt(req.getMaxPeopleCnt());
+        }
+
+        Channel channelChk = channelRepository.save(channel);
+        if (channelChk == null) {
+            throw new ApiMessageException("방 옵션 변경에 실패하였습니다.");
+        } else {
+            ChannelResDTO channelResDTO = ChannelResDTO.builder()
+                    .id(channel.getId())
+                    .code(channel.getCode())
+                    .isPublic(channel.getIsPublic())
+                    .curPeopleCnt(channel.getCurPeopleCnt())
+                    .maxPeopleCnt(channel.getMaxPeopleCnt())
+                    .title(channel.getTitle())
+                    .users(channel.changeToUserInfo())
+                    .build();
+
+            socketService.sendChangingOption(channelResDTO);
+            return channelResDTO;
+        }
     }
 }
