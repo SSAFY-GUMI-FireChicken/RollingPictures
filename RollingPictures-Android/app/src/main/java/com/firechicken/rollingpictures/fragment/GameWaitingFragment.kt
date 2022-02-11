@@ -98,7 +98,7 @@ class GameWaitingFragment : Fragment() {
         }
 
 
-        fragmentGameWaitingBinding.playerCountTextView.text = "${playerRecyclerViewAdapter.itemCount}/10"
+        fragmentGameWaitingBinding.playerCountTextView.text = "${playerRecyclerViewAdapter.itemCount}/${channelResDTO.data.maxPeopleCnt}"
 
         fragmentGameWaitingBinding.copyImageButton.setOnClickListener {
             val clipboard = fContext.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager

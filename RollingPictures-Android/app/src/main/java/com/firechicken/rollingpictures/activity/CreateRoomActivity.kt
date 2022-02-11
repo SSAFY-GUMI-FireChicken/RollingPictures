@@ -24,12 +24,16 @@ class CreateRoomActivity : AppCompatActivity() {
         setContentView(activityCreateRoomBinding.root)
 
         activityCreateRoomBinding.apply {
+            var isPublic = "N"
+
             publicButton.setOnClickListener {
+                isPublic = "Y"
                 publicButton.setBackgroundDrawable(getDrawable(R.drawable.bg_round))
                 privateButton.setBackgroundDrawable(getDrawable(R.drawable.bg_tool_detail))
             }
 
             privateButton.setOnClickListener {
+                isPublic = "N"
                 privateButton.setBackgroundDrawable(getDrawable(R.drawable.bg_round))
                 publicButton.setBackgroundDrawable(getDrawable(R.drawable.bg_tool_detail))
             }
@@ -55,7 +59,7 @@ class CreateRoomActivity : AppCompatActivity() {
             }
 
             okButton.setOnClickListener {
-                makeChannel(prefs.getId()!!)
+                makeChannel(prefs.getId()!!, roomTitleEditText.text.toString(), isPublic, countTextView.text.toString().toInt())
             }
 
             cancelButton.setOnClickListener {
@@ -64,8 +68,8 @@ class CreateRoomActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeChannel(userId: Long) {
-        val req = MakeChannelReqDTO(userId, "Title", "N", 4)
+    private fun makeChannel(userId: Long, title: String, isPublic: String, maxPeopleCnt: Int) {
+        val req = MakeChannelReqDTO(userId, title, isPublic, maxPeopleCnt)
 
         Log.d(TAG, "makeChannel: ")
 
@@ -93,6 +97,7 @@ class CreateRoomActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun toast(text: String) {
         Log.i(TAG, text)
         Toast.makeText(this@CreateRoomActivity, text, Toast.LENGTH_SHORT).show()
