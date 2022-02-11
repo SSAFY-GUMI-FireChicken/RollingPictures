@@ -44,7 +44,7 @@
 
     <string name="no_permissions_granted">권한의 허용 없이는 게임 진행이 불가합니다!</string>
     <string name="permissions_dialog_title">권한 요청</string>
-    <string name="accept_permissions_dialog">게임 이용을 위한 권한을 허용해주세요!</string>
+    <string name="accept_permissions_dialog">권한 허용</string>
     <string name="cancel_dialog">닫기</string>
     <string name="open_source_info_title">오픈 소스 정보</string>
     <string name="open_source_info_sub">Android용 RollingPictures 앱은 다음의 오픈 소스 소프트웨어를 사용하여 만들어졌습니다.</string>

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface GameChannelRepository extends JpaRepository<GameChannel, Long> {
+public interface GameChannelRepository extends JpaRepository<GameChannel, Long>, GameChannelRepositoryCustom {
     Optional<GameChannel> findByChannel(Channel channel);
+
+    void deleteByChannel_Id(Long channelId);
 }

@@ -35,6 +35,12 @@ public class GameChannelService {
         Channel findChannel = channelRepository.findChannelById(dto.getChannelId())
                 .orElseThrow(() -> new ApiMessageException("잘못된 채널입니다."));
 
+        if ("Y".equals(findChannel.getIsPlaying().getValue())) {
+            throw new ApiMessageException("현재 게임 중인 방입니다.");
+        } else {
+            deleteGameChannel(dto.getChannelId());
+        }
+
         for (ChannelUser channelUser : findChannel.getChannelUsers()) {
             if ("Y".equals(channelUser.getIsLeader().getValue())) {
                 long userId = channelUser.getUser().getId();
@@ -42,10 +48,6 @@ public class GameChannelService {
                     throw new ApiMessageException("방장이 아닙니다.");
                 }
             }
-        }
-
-        if (gameChannelRepository.findByChannel(findChannel).isPresent()) {
-            throw new ApiMessageException("이미 게임방이 존재합니다.");
         }
 
         GameChannel gameChannel = GameChannel.builder()
@@ -86,5 +88,10 @@ public class GameChannelService {
         return GameChannelCreateResDTO.builder()
                 .id(save.getId())
                 .build();
+    }
+
+    @Transactional
+    public void deleteGameChannel(Long channelId) {
+        gameChannelRepository.deleteByChannel_Id(channelId);
     }
 }
