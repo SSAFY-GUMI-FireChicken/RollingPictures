@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -28,7 +29,6 @@ public class ChannelService {
 
     /**
      * code로 방 조회
-     *
      * @param code
      * @return channel
      */
@@ -38,7 +38,6 @@ public class ChannelService {
 
     /**
      * 방 생성 후 channel 리턴
-     *
      * @return channel
      */
     @Transactional(readOnly = false)
@@ -65,7 +64,6 @@ public class ChannelService {
 
     /**
      * 방 삭제
-     *
      * @param channel
      */
     @Transactional(readOnly = false)
@@ -75,7 +73,6 @@ public class ChannelService {
 
     /**
      * 방 목록 조회
-     *
      * @return List
      */
     @Transactional(readOnly = false)
@@ -107,8 +104,54 @@ public class ChannelService {
         return result;
     }
 
+
+    /**
+     * 채널 상태 변경 & 연결되지 않은 유저 자동 퇴장
+     * @param
+     * @return
+     */
     @Transactional(readOnly = false)
-    public ChannelResDTO changeChannelOption(MakeChannelReqDTO req) throws ApiMessageException {
+    public void deleteUnconnectChannelUsers(Long gameChannelId) {
+        Channel channel = channelRepository.findByGameChannel_Id(gameChannelId);
+
+        channel.changeIsPlaying(YNCode.N);
+        List<ChannelUser> users = channel.getChannelUsers();
+
+        boolean isDeletedLeader = false;
+        ChannelUser newLeader = null;
+
+        Iterator<ChannelUser> iter = users.iterator();
+
+        while (iter.hasNext()) {
+            ChannelUser channelUser = iter.next();
+
+            if (channelUser.getSessionId() == null || channelUser.getSessionId().equals(null)) {
+                iter.remove();
+
+                if (channelUser.getIsLeader() == YNCode.Y) {
+                    isDeletedLeader = true;
+                }
+
+                channelUser.getChannel().changeCurPeopleCnt(-1);
+                channelUserRepository.delete(channelUser);
+
+                socketService.sendOutChannelUser(channelUser);
+            } else if (isDeletedLeader) {
+                isDeletedLeader = false;
+                newLeader = channelUser;
+                newLeader.changeIsLeader(YNCode.Y);
+            }
+        }
+
+        if (newLeader != null) {
+            socketService.sendChangingLeader(newLeader);
+        }
+
+        channelRepository.save(channel);
+    }
+
+    @Transactional(readOnly = false)
+    public ChannelResDTO changeChannelSetting(MakeChannelReqDTO req) throws ApiMessageException {
         ChannelUser channelUser = channelUserRepository.findByUser_Id(req.getId());
 
         if (channelUser == null) {

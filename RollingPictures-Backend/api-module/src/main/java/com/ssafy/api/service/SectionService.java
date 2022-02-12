@@ -8,7 +8,6 @@ import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.api.repository.GameChannelRepository;
 import com.ssafy.api.repository.GameChannelUserOrderRepository;
 import com.ssafy.api.repository.SectionRepository;
-import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
