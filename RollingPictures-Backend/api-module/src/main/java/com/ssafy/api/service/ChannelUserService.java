@@ -20,6 +20,7 @@ public class ChannelUserService {
     private final ChannelUserRepository channelUserRepository;
     private final ChannelService channelService;
     private final SocketService socketService;
+    private final GameChannelService gameChannelService;
 
     /**
      * channelUser 생성 후 리턴
@@ -77,6 +78,8 @@ public class ChannelUserService {
     @Transactional(readOnly = false)
     public void deleteChannelUser(ChannelUser channelUser) {
         if (channelUser.getChannel().getCurPeopleCnt() == 1) {
+            Long channelId = channelUser.getChannel().getId();
+            gameChannelService.deleteGameChannel(channelId);
             channelService.deleteChannel(channelUser.getChannel());
         } else {
             channelUser.getChannel().getChannelUsers().remove(channelUser);
