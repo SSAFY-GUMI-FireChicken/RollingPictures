@@ -31,7 +31,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@Api(tags = {"04. 섹션"})
+@Api(tags = {"05. 섹션"})
 @Slf4j
 @RequiredArgsConstructor
 @RestController

@@ -146,9 +146,9 @@ public class ChannelController {
     @Transactional
     @ApiOperation(value = "방 설정 수정", notes = "방 설정 수정")
     @PutMapping
-    public @ResponseBody SingleResult<ChannelResDTO> changeChannelOption(@RequestBody @Valid MakeChannelReqDTO req) {
+    public @ResponseBody SingleResult<ChannelResDTO> changeChannelSetting(@RequestBody @Valid MakeChannelReqDTO req) {
         try {
-            return responseService.getSingleResult(channelService.changeChannelOption(req));
+            return responseService.getSingleResult(channelService.changeChannelSetting(req));
         } catch (ApiMessageException apiMessageException) {
             throw apiMessageException;
         }
