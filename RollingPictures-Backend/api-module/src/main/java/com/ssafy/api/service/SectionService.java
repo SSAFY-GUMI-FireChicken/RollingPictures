@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.SectionCreateReqDTO;
+import com.ssafy.api.dto.res.SectionAllRetrieveResDTO;
 import com.ssafy.api.dto.res.SectionCreateResDTO;
 import com.ssafy.api.dto.res.SectionRetrieveResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
@@ -48,6 +49,26 @@ public class SectionService {
                     .userId(round.getUser().getId())
                     .roundNum(round.getRoundNumber())
                     .build());
+        }
+        return result;
+    }
+
+    public List<SectionAllRetrieveResDTO> getSection(Long gameChannelId) throws Exception {
+        GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
+                .orElseThrow(() -> new ApiMessageException("잘못된 게임방 정보입니다."));
+
+        List<SectionAllRetrieveResDTO> result = new ArrayList<>();
+        for (Section section : findGameChannel.getSections()) {
+            SectionAllRetrieveResDTO dto = new SectionAllRetrieveResDTO();
+            dto.setSectionId(section.getId());
+            for (Round round : section.getRounds()) {
+                dto.getRoundInfos().add(SectionAllRetrieveResDTO.RoundInfo.of(
+                        round.getUser().getUsername(),
+                        round.getKeyword(),
+                        round.getImgSrc(),
+                        round.getRoundNumber()));
+            }
+            result.add(dto);
         }
         return result;
     }
