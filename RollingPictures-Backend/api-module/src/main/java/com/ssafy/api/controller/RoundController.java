@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Api(tags = {"05. 라운드"})
+@Api(tags = {"06. 라운드"})
 @Slf4j
 @RequiredArgsConstructor // Lombok 라이브러리, final 필드에 대한 생성자를 생성함.
 @RestController

@@ -5,10 +5,8 @@ import com.ssafy.api.domain.ChannelUser;
 import com.ssafy.api.dto.req.MakeChannelReqDTO;
 import com.ssafy.api.dto.res.ChannelListResDTO;
 import com.ssafy.api.dto.res.ChannelResDTO;
-import com.ssafy.api.dto.res.UserInfoResDTO;
 import com.ssafy.api.repository.ChannelRepository;
 import com.ssafy.api.repository.ChannelUserRepository;
-import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
@@ -132,10 +130,12 @@ public class ChannelService {
 
                 if (channelUser.getIsLeader() == YNCode.Y) {
                     isDeletedLeader = true;
-                    channelUser.getChannel().changeCurPeopleCnt(-1);
-
-                    socketService.sendOutChannelUser(channelUser);
                 }
+
+                channelUser.getChannel().changeCurPeopleCnt(-1);
+                channelUserRepository.delete(channelUser);
+
+                socketService.sendOutChannelUser(channelUser);
             } else if (isDeletedLeader) {
                 isDeletedLeader = false;
                 newLeader = channelUser;
@@ -151,7 +151,7 @@ public class ChannelService {
     }
 
     @Transactional(readOnly = false)
-    public ChannelResDTO changeChannelOption(MakeChannelReqDTO req) throws ApiMessageException {
+    public ChannelResDTO changeChannelSetting(MakeChannelReqDTO req) throws ApiMessageException {
         ChannelUser channelUser = channelUserRepository.findByUser_Id(req.getId());
 
         if (channelUser == null) {

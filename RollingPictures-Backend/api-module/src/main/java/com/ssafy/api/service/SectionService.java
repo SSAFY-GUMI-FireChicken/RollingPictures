@@ -86,7 +86,7 @@ public class SectionService {
                     .build());
         }
 
-        socketService.sendGameStart(channel.getCode(), dto.getGameChannelId());
+        socketService.sendStartGame(channel.getCode(), dto.getGameChannelId());
         return result;
     }
 }
