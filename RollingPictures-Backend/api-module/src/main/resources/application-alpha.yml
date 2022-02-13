@@ -73,7 +73,13 @@ spring:
 server:
   # 프로젝트 환경의 포트 설정
   port: 8185
-  domain: http://i6d208.p.ssafy.io
+  domain: https://i6d208.p.ssafy.io
+  ssl:
+    key-store-type: PKCS12
+    key-store=classpath: keystore/keystore.p12
+    key-store-password: fhffld0218!
+    trust.store=classpath: keystore/keystore.p12
+    trust.store.password: fhffld0218!
   servlet:
     session:
       timeout: 1440m
