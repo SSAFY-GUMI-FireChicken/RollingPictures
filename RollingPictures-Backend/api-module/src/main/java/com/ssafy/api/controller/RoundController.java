@@ -8,13 +8,11 @@ import com.ssafy.api.dto.res.RoundResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.api.repository.RoundRepository;
 import com.ssafy.api.repository.SectionRepository;
-import com.ssafy.api.service.ProgressService;
-import com.ssafy.api.service.RoundService;
-import com.ssafy.api.service.SignService;
-import com.ssafy.api.service.SocketService;
+import com.ssafy.api.service.*;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.S3Uploader;
 import com.ssafy.api.service.common.SingleResult;
+import com.ssafy.core.code.ProgressCode;
 import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
 import io.swagger.annotations.Api;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Api(tags = {"05. 라운드"})
+@Api(tags = {"06. 라운드"})
 @Slf4j
 @RequiredArgsConstructor // Lombok 라이브러리, final 필드에 대한 생성자를 생성함.
 @RestController
@@ -45,6 +43,7 @@ public class RoundController {
     private final ProgressService progressService;
     private final SocketService socketService;
     private final ChannelUserRepository channelUserRepository;
+    private final ChannelService channelService;
 
 
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
@@ -85,8 +84,16 @@ public class RoundController {
                 .build();
         long roundId = roundService.post(round);
 
-        if (progressService.isNextRound(req.getRoundNumber(), req.getGameChannelId())) {
-            socketService.sendNextSignal(section.getCode(), req.getRoundNumber() + 1);
+        switch (progressService.isNextRound(req.getRoundNumber(), req.getGameChannelId())) {
+            case NEXT:
+                socketService.sendNextSignal(section.getCode(), req.getRoundNumber() + 1);
+                break;
+            case END :
+                socketService.sendGameEnd(section.getCode(), req.getRoundNumber() + 1);
+                channelService.deleteUnconnectChannelUsers(req.getGameChannelId());
+                break;
+            case NONE :
+                break;
         }
 
         return responseService.getSingleResult(RoundResDTO.builder().id(roundId).build());

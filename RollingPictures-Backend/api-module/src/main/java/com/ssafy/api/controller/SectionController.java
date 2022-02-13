@@ -5,10 +5,7 @@ import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.RoundReqDTO;
 import com.ssafy.api.dto.req.SectionCreateReqDTO;
 import com.ssafy.api.dto.req.SectionDeleteReqDTO;
-import com.ssafy.api.dto.res.RoundResDTO;
-import com.ssafy.api.dto.res.SectionCreateResDTO;
-import com.ssafy.api.dto.res.SectionDeleteResDTO;
-import com.ssafy.api.dto.res.SectionRetrieveResDTO;
+import com.ssafy.api.dto.res.*;
 import com.ssafy.api.service.GameChannelService;
 import com.ssafy.api.service.RoundService;
 import com.ssafy.api.service.SectionService;
@@ -31,7 +28,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@Api(tags = {"04. 섹션"})
+@Api(tags = {"05. 섹션"})
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -68,6 +65,19 @@ public class SectionController {
         }
     }
 
+    @ApiOperation(value = "섹션 조회", notes = "게임방의 모든 섹션을 조회합니다.")
+    @GetMapping("/all")
+    public ListResult<SectionAllRetrieveResDTO> section(Long gameChannelId) {
+        try {
+            List<SectionAllRetrieveResDTO> section = sectionService.getSection(gameChannelId);
+            return responseService.getListResult(section);
+        } catch (ApiMessageException e) {
+            return responseService.getListResult(new ArrayList<>());
+        } catch (Exception e) {
+            return responseService.getListResult(new ArrayList<>());
+        }
+    }
+
     @ApiOperation(value = "섹션 삭제", notes = "섹션 삭제")
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String Test(
@@ -76,6 +86,4 @@ public class SectionController {
         String result = s3Uploader.delete(req.getCode());
         return result;
     }
-
-
 }

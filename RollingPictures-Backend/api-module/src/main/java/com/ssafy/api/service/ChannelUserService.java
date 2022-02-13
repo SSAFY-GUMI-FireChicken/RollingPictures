@@ -3,10 +3,12 @@ package com.ssafy.api.service;
 import com.ssafy.api.domain.Channel;
 import com.ssafy.api.domain.ChannelUser;
 import com.ssafy.api.domain.User;
+import com.ssafy.api.dto.req.InOutChannelReqDTO;
 import com.ssafy.api.dto.res.UserInfoResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
+import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,22 +90,10 @@ public class ChannelUserService {
                 ChannelUser newLeader = channelUser.getChannel().getChannelUsers().get(0);
                 newLeader.changeIsLeader(YNCode.Y);
 
-                socketService.sendChangingLeader(channelUser.getChannel().getCode(), UserInfoResDTO
-                        .builder()
-                        .id(newLeader.getUser().getId())
-                        .nickname(newLeader.getUser().getNickname())
-                        .isLeader(newLeader.getIsLeader())
-                        .build()
-                );
+                socketService.sendChangingLeader(channelUser);
             }
 
-            socketService.sendOutChannelUser(channelUser.getChannel().getCode(), UserInfoResDTO
-                    .builder()
-                    .id(channelUser.getUser().getId())
-                    .nickname(channelUser.getUser().getNickname())
-                    .isLeader(channelUser.getIsLeader())
-                    .build()
-            );
+            socketService.sendOutChannelUser(channelUser);
 
             channelUser.getChannel().changeCurPeopleCnt(-1);
         }
@@ -131,7 +121,7 @@ public class ChannelUserService {
     /**
      * sessionId update
      * @param sessionId
-     * @return channelUser
+     * @return
      */
     @Transactional(readOnly = false)
     public void removeSessionId(String sessionId) {
@@ -145,9 +135,34 @@ public class ChannelUserService {
 
         if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
             channelUser.getChannel().getGameChannel().changeConPeopleCnt(-1);
-            channelUserRepository.save(channelUser);
+
+            if (channelUser.getChannel().getGameChannel().getConPeopleCnt() == 0) {
+                channelService.deleteChannel(channelUser.getChannel());
+            } else {
+                channelUserRepository.save(channelUser);
+            }
         } else {
             deleteChannelUser(channelUser);
+        }
+    }
+
+    /**
+     * 유저별 게임 진행 상태 변경
+     * @param inOutChannelReqDTO
+     */
+    @Transactional(readOnly = false)
+    public void changeChannelUserStatus(InOutChannelReqDTO inOutChannelReqDTO) {
+        ChannelUser channelUser = channelUserRepository.findByUser_Id(inOutChannelReqDTO.getId());
+
+        if (channelUser == null) {
+            throw new ApiMessageException("방에 입장하지 않은 상태입니다.");
+        } else if (!channelUser.getChannel().getCode().equals(inOutChannelReqDTO.getCode())) {
+            throw new ApiMessageException("입장한 방이 아닙니다.");
+        }
+
+        channelUser.changeGamePlayState(GamePlayState.NONE);
+        if (channelUserRepository.save(channelUser) == null) {
+            throw new ApiMessageException("채널 유저 상태 변경에 실패하였습니다.");
         }
     }
 }

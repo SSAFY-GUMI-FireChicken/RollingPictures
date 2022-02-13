@@ -35,7 +35,7 @@ public class GameChannel {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    @OneToMany(mappedBy = "gameChannel")
+    @OneToMany(mappedBy = "gameChannel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
     @OneToMany(mappedBy = "gameChannel", cascade = CascadeType.ALL, orphanRemoval = true)
