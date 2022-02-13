@@ -82,8 +82,10 @@ class GameWaitingFragment : Fragment() {
                 dialog.showDialog()
                 dialog.setOnClickListener(object : GameSettingDialog.OnDialogClickListener {
                     override fun onDialogOkClick(changedChannel: MakeChannelReqDTO) {
-                        GameActivity().outChannel(channelResDTO.data.code, prefs.getId()!!)
-                        prefs.setEnteredChannel("none")
+                        GameActivity().updateChannel(changedChannel)
+                        fragmentGameWaitingBinding.playerCountTextView.text = "${playerRecyclerViewAdapter.itemCount}/${channelResDTO.data.maxPeopleCnt}"
+
+                        //prefs.setEnteredChannel("none")
                         dialog.dialog.dismiss()
                     }
                 })

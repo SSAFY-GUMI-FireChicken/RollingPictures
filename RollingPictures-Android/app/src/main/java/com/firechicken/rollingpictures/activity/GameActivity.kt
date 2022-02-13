@@ -321,7 +321,7 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispLifecycle)
 
 
-        val dispTopic: Disposable = mStompClient!!.topic("/channel/in/${ApplicationClass.channelResDTO.data.code}") //인식할 Stomp URI
+        val dispTopic: Disposable = mStompClient!!.topic("/channel/in/${channelResDTO.data.code}") //인식할 Stomp URI
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -366,7 +366,7 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+                Log.d(TAG, "dispTopic4 Received " + topicMessage.getPayload())
 
                 //channel/leader 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
@@ -381,7 +381,9 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+                val channelStmpResDto = mGson.fromJson(topicMessage.getPayload(), ChannelResDTO::class.java)
+                channelResDTO.data = channelStmpResDto
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                 transaction.commit()
@@ -425,35 +427,35 @@ class GameActivity : AppCompatActivity() {
             playerList = users
         }
         playerRecyclerViewAdapter.notifyDataSetChanged()
-        recyclerView.smoothScrollToPosition(playerList.size - 1)
-        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
-        for(player in channelResDTO.data.users){
-            if(player.id== ApplicationClass.loginUserResDTO.data.id){
-                if(player.isLeader=="Y"){
-                    gameWaitingFragment.startGameButton.setText("START GAME")
-                    gameWaitingFragment.startGameButton.setEnabled(true)
-                    gameWaitingFragment.settingImageButton.visibility = View.VISIBLE
-                }else{
-                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
-                    gameWaitingFragment.startGameButton.setTextSize(16F)
-                    gameWaitingFragment.startGameButton.setEnabled(false)
-                    gameWaitingFragment.settingImageButton.visibility = View.GONE
-                }
-                break
-            }
-        }
-        if(gameWaitingFragment.settingImageButton.isVisible){
-            gameWaitingFragment.settingImageButton.setOnClickListener {
-                val dialog = GameSettingDialog(this)
-                dialog.showDialog()
-                dialog.setOnClickListener(object : GameSettingDialog.OnDialogClickListener {
-                    override fun onDialogOkClick(changedChannel: MakeChannelReqDTO) {
-                        updateChannel(changedChannel)
-                        dialog.dialog.dismiss()
-                    }
-                })
-            }
-        }
+//        recyclerView.smoothScrollToPosition(playerList.size - 1)
+//        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
+//        for(player in channelResDTO.data.users){
+//            if(player.id== ApplicationClass.loginUserResDTO.data.id){
+//                if(player.isLeader=="Y"){
+//                    gameWaitingFragment.startGameButton.setText("START GAME")
+//                    gameWaitingFragment.startGameButton.setEnabled(true)
+//                    gameWaitingFragment.settingImageButton.visibility = View.VISIBLE
+//                }else{
+//                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
+//                    gameWaitingFragment.startGameButton.setTextSize(16F)
+//                    gameWaitingFragment.startGameButton.setEnabled(false)
+//                    gameWaitingFragment.settingImageButton.visibility = View.GONE
+//                }
+//                break
+//            }
+//        }
+//        if(gameWaitingFragment.settingImageButton.isVisible){
+//            gameWaitingFragment.settingImageButton.setOnClickListener {
+//                val dialog = GameSettingDialog(this)
+//                dialog.showDialog()
+//                dialog.setOnClickListener(object : GameSettingDialog.OnDialogClickListener {
+//                    override fun onDialogOkClick(changedChannel: MakeChannelReqDTO) {
+//                        updateChannel(changedChannel)
+//                        dialog.dialog.dismiss()
+//                    }
+//                })
+//            }
+//        }
     }
 
     // 스텀프 통신 해제
@@ -502,12 +504,13 @@ class GameActivity : AppCompatActivity() {
     }
 
     // 방장이 방의 설정을 수정했을 때
-    private fun updateChannel(changedChannel: MakeChannelReqDTO) {
+    fun updateChannel(changedChannel: MakeChannelReqDTO) {
 
         Log.d(TAG, "makeChannel: ")
 
-        ChannelService().makeChannel(changedChannel, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
+        ChannelService().updateChannel(changedChannel, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
+                Log.d(TAG, "updateChannel ChannelResDTO: ${responseData}")
                 if (responseData.data.id > 0) {
                     channelResDTO = responseData
                     Log.d(TAG, "onSuccess: ${responseData}")
