@@ -50,8 +50,10 @@ public class RoundController {
     @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> roundRegister(
-            @Valid RoundReqDTO req,
-            @RequestParam(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
+            @RequestPart @Valid RoundReqDTO req,
+            @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
+//            @Valid RoundReqDTO req,
+//            @RequestParam(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
 
         if (channelUserRepository.findByUser_Id(req.getId()).getSessionId() == null
                 || channelUserRepository.findByUser_Id(req.getId()).getSessionId().equals(null)) {

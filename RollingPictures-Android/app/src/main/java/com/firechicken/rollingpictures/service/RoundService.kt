@@ -4,6 +4,8 @@ import android.util.Log
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import com.firechicken.rollingpictures.util.RetrofitUtil
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,9 +14,46 @@ private const val TAG = "RoundService_싸피"
 
 class RoundService {
 
+//    //라운드 등록
+//    fun roundRegister(
+//        gameChannelId: Long,
+//        id: Long,
+//        keyword: String?,
+//        roundNumber: Int,
+//        multipartFile: MultipartBody.Part?,
+//        callback: RetrofitCallback<SingleResult<RoundResDTO>>
+//    ) {
+//        RetrofitUtil.roundService.roundRegister(gameChannelId, id, keyword, roundNumber, multipartFile).enqueue(object : Callback<SingleResult<RoundResDTO>> {
+//            override fun onResponse(call: Call<SingleResult<RoundResDTO>>, response: Response<SingleResult<RoundResDTO>>) {
+//                val res = response.body()
+//                Log.d(TAG, "onResponse: ${res}")
+//                Log.d(TAG, "onResponse: prev")
+//                if (response.code() == 200) {
+//                    Log.d(TAG, "onResponse: 성공")
+//                    if (res != null) {
+//                        callback.onSuccess(response.code(), res)
+//                    }
+//                } else {
+//                    Log.d(TAG, "onResponse: 다른코드")
+//                    callback.onFailure(response.code())
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<SingleResult<RoundResDTO>>, t: Throwable) {
+//                Log.d(TAG, "onFailure: ")
+//                callback.onError(t)
+//            }
+//        })
+//    }
+
+
     //라운드 등록
-    fun roundRegister(round: RoundReqDTO, callback: RetrofitCallback<SingleResult<RoundResDTO>>) {
-        RetrofitUtil.roundService.roundRegister(round).enqueue(object : Callback<SingleResult<RoundResDTO>> {
+    fun roundRegister(
+        req: RoundReqDTO,
+        multipartFile: MultipartBody.Part?,
+        callback: RetrofitCallback<SingleResult<RoundResDTO>>
+    ) {
+        RetrofitUtil.roundService.roundRegister(req, multipartFile).enqueue(object : Callback<SingleResult<RoundResDTO>> {
             override fun onResponse(call: Call<SingleResult<RoundResDTO>>, response: Response<SingleResult<RoundResDTO>>) {
                 val res = response.body()
                 Log.d(TAG, "onResponse: ${res}")

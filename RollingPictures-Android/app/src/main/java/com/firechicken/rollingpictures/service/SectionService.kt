@@ -35,4 +35,35 @@ class SectionService {
         })
     }
 
+    fun getSection(
+        gameChannelId: Long,
+        userId: Long,
+        callback: RetrofitCallback<ListResult<SectionRetrieveResDTO>>
+    ) {
+        RetrofitUtil.sectionService.getSection(gameChannelId, userId)
+            .enqueue(object : Callback<ListResult<SectionRetrieveResDTO>> {
+                override fun onResponse(
+                    call: Call<ListResult<SectionRetrieveResDTO>>,
+                    response: Response<ListResult<SectionRetrieveResDTO>>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 200) {
+                        if (res != null) {
+                            Log.d(TAG, "onResponse1: ${res}")
+                            callback.onSuccess(response.code(), res)
+                        }
+                    } else {
+                        Log.d(TAG, "onResponse2: ")
+
+                        callback.onFailure(response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<ListResult<SectionRetrieveResDTO>>, t: Throwable) {
+                    Log.d(TAG, "onResponse3: ")
+                    callback.onError(t)
+                }
+            })
+    }
+
 }

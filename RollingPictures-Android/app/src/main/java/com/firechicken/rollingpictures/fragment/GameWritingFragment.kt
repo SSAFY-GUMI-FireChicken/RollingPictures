@@ -19,6 +19,15 @@ import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.fragment_game_writing.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+
+
+
+
+
+
 
 private const val TAG = "GameWritingFragment_싸피"
 class GameWritingFragment : Fragment() {
@@ -40,6 +49,12 @@ class GameWritingFragment : Fragment() {
 
     }
 
+//    private fun createPartFromString(descriptionString: String): RequestBody? {
+//        return RequestBody.create(
+//            MultipartBody.FORM, descriptionString
+//        )
+//    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(roundNum==1){
@@ -53,14 +68,21 @@ class GameWritingFragment : Fragment() {
         completeButton.setOnClickListener {
 
             Log.d(TAG, "onViewCreated: ${gameChannelResDTO.data.id}, ${prefs.getId()!!}, ${writingEditText.text.toString()}, ${roundNum}")
-            roundRegister(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
-
+//            roundRegister(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
+            val req = RoundReqDTO(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
+//            val body: MutableMap<String, RequestBody> = HashMap()
+//            createPartFromString
+//            body["gameChannelId"] = RequestBody.Companion.create(MediaType.parse(RoundReqDTO))
+//            body["age"] =
+//                create(java.lang.String.valueOf(memberDTO.getAge()), MediaType.parse("text/plain"))
+//            roundRegister(mutableMapOf("gameChannelId" to "${gameChannelResDTO.data.id}", "id" to "${prefs.getId()!!}", "keyword" to "${writingEditText.text.toString()}", "roundNumber" to "${roundNum}"))
+            roundRegister(req)
         }
     }
 
-    private fun roundRegister(gameChannelId: Long, id: Long, keyword: String, roundNumber: Int) {
-        val round = RoundReqDTO(gameChannelId, id, keyword, roundNumber)
-        RoundService().roundRegister(round, object : RetrofitCallback<SingleResult<RoundResDTO>> {
+    private fun roundRegister(req: RoundReqDTO) {
+//        val round = RoundReqDTO(gameChannelId, id, keyword, roundNumber)
+        RoundService().roundRegister(req, null, object : RetrofitCallback<SingleResult<RoundResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
                 if (responseData.output==1) {
 

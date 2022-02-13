@@ -20,3 +20,4 @@ interface ChannelApi {
     fun outChannel(@Body body: InOutChannelReqDTO): Call<SingleResult<Any>>
 //    fun outChannel(@Body body: InOutChannelReqDTO): Call<ChannelResDTO>
 }
+
