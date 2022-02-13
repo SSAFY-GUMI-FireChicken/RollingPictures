@@ -31,7 +31,7 @@ public class Section extends BaseEntity {
     @JoinColumn(name = "game_channel_id")
     private GameChannel gameChannel;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Round> rounds = new ArrayList<>();
 
     public void changeGameChannel(GameChannel gameChannel) {
