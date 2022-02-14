@@ -9,16 +9,6 @@ import java.io.File
 
 interface RoundApi {
 
-//    //라운드 등록
-//    @POST("api/round")
-//    fun roundRegister(
-//        @Query("gameChannelId") gameChannelId: Long,
-//        @Query("id") id: Long,
-//        @Query("keyword") keyword: String?,
-//        @Query("roundNumber") roundNumber: Int,
-//        @Part("multipartFile") multipartFile: MultipartBody.Part?
-//    ): Call<SingleResult<RoundResDTO>>
-
     //라운드 등록
 
     @Multipart

@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -41,10 +42,12 @@ import java.util.*
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.*
 import java.nio.file.Files
 import org.apache.commons.fileupload.disk.DiskFileItem
 import org.apache.commons.io.IOUtils
+import retrofit2.http.Multipart
 
 
 private const val TAG = "GameDrawingFragment_싸피"
@@ -81,7 +84,9 @@ class GameDrawingFragment : Fragment() {
 
 
         binding.completeButton.setOnClickListener {
-            transmitPictures()
+//            transmitPictures()
+
+            savePhoto()
         }
     }
 
@@ -215,72 +220,35 @@ class GameDrawingFragment : Fragment() {
         })
     }
 
-    private fun transmitPictures() {
-        // TODO: 2022-01-24 갤러리에 저장하는 코드인데, 갤러리 저장 대신 서버로 전송되게 변경해야 합니다 !!
+
+
+    private fun savePhoto() {
         val bStream = ByteArrayOutputStream()
         val bitmap = binding.drawView.getBitmap()
-        var imageFile: File? = null
-        try {
-            imageFile = createFileFromBitmap(bitmap)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
 
+        val filename = "RP_${System.currentTimeMillis()}"
+        saveImage(bitmap, filename)
+    }
 
-        Log.d(TAG, "transmitPictures: ${imageFile}")
-
-        Log.d(TAG, "transmitPictures: ${imageFile!!.freeSpace},${imageFile!!.absolutePath}, ${imageFile!!.absoluteFile}")
-
-        val formFile = RequestBody.create("application/pdf".toMediaTypeOrNull(), imageFile)
-
-        val body = MultipartBody.Part.createFormData("file", imageFile.name, formFile)
-
-        Log.d(TAG, "transmitPictures: ${formFile}")
-        Log.d(TAG, "transmitPictures: ${body}")
-
+    private fun saveImage(bitmap: Bitmap, fileName: String) {
+        val imageDir = "${Environment.DIRECTORY_PICTURES}/RollingPictures/"
+        val path = Environment.getExternalStoragePublicDirectory(imageDir)
+        Log.e("path", path.toString())
+        val file = File(path, "$fileName.png")
+        path.mkdirs()
+        file.createNewFile()
+        val outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+        val multipartFile = MultipartBody.Part.createFormData("multipartFile", "${fileName}.png", file.asRequestBody())
         val req = RoundReqDTO(gameChannelResDTO.data.id, ApplicationClass.prefs.getId()!!, null, roundNum)
-        roundRegister(req, body)
-    }
-
-    @Throws(IOException::class)
-    private fun createFileFromBitmap(bitmap: Bitmap): File? {
-        val newFile = File(requireActivity().filesDir, makeImageFileName())
-        val fileOutputStream = FileOutputStream(newFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-        fileOutputStream.close()
-        return newFile
-    }
-    private fun makeImageFileName(): String? {
-        val simpleDateFormat = SimpleDateFormat("yyyyMMdd_hhmmss")
-        val date = Date()
-        val strDate: String = simpleDateFormat.format(date)
-        return "$strDate.png"
+        roundRegister(req, multipartFile)
     }
 
 
-//    private fun savePhoto() {
-//        // TODO: 2022-01-24 갤러리에 저장하는 코드인데, 갤러리 저장 대신 서버로 전송되게 변경해야 합니다 !!
-//        val bStream = ByteArrayOutputStream()
-//        val bitmap = binding.drawView.getBitmap()
-//
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
-//
-//        val filename = "RP_${System.currentTimeMillis()}"
-//        saveImage(bitmap, filename)
-//    }
-//
-//    private fun saveImage(bitmap: Bitmap, fileName: String) {
-//        val imageDir = "${Environment.DIRECTORY_PICTURES}/RollingPictures/"
-//        val path = Environment.getExternalStoragePublicDirectory(imageDir)
-//        Log.e("path", path.toString())
-//        val file = File(path, "$fileName.png")
-//        path.mkdirs()
-//        file.createNewFile()
-//        val outputStream = FileOutputStream(file)
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-//        outputStream.flush()
-//        outputStream.close()
-//    }
+
 
     private fun setColor(color: Int) {
         binding.drawView.setColor(color)

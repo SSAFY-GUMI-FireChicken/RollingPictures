@@ -98,6 +98,7 @@ class GameWritingFragment : Fragment() {
                 if (responseData.output == 1) {
                     pictureImageView.setImageURI(Uri.parse(responseData.data.imgSrc))
 
+                    Log.d(TAG, "onSuccess: 그림 조회")
                 } else {
                     Toast.makeText(
                         context,

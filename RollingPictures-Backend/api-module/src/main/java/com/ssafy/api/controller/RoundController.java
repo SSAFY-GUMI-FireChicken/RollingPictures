@@ -51,18 +51,12 @@ public class RoundController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> roundRegister(
             @RequestPart @Valid RoundReqDTO req,
-            @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
+            @RequestParam(value = "multipartFile", required = false) MultipartFile multipartFile) throws Exception {
 
         if (channelUserRepository.findByUser_Id(req.getId()).getSessionId() == null
                 || channelUserRepository.findByUser_Id(req.getId()).getSessionId().equals(null)) {
             throw new ApiMessageException("STOMP 연결이 필요한 유저입니다.");
         }
-
-//        System.out.println("멀티파일");
-//        System.out.println(multipartFile.getName());
-//        System.out.println(multipartFile.getSize());
-//        System.out.println(multipartFile.getOriginalFilename());
-//        System.out.println(multipartFile.getBytes());
 
 
         User currentUser = signService.findUserById(req.getId());
