@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@Api(tags = {"03. 게임방"})
+@Api(tags = {"04. 게임방"})
 @Slf4j
 @RequiredArgsConstructor
 @RestController

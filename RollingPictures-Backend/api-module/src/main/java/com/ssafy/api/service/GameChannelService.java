@@ -32,10 +32,14 @@ public class GameChannelService {
 
     @Transactional
     public GameChannelCreateResDTO createGameChannel(GameChannelCreateReqDTO dto) {
-        deleteGameChannel(dto.getChannelId());
-
         Channel findChannel = channelRepository.findChannelById(dto.getChannelId())
                 .orElseThrow(() -> new ApiMessageException("잘못된 채널입니다."));
+
+        if ("Y".equals(findChannel.getIsPlaying().getValue())) {
+            throw new ApiMessageException("현재 게임 중인 방입니다.");
+        } else {
+            deleteGameChannel(dto.getChannelId());
+        }
 
         for (ChannelUser channelUser : findChannel.getChannelUsers()) {
             if ("Y".equals(channelUser.getIsLeader().getValue())) {
