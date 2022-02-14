@@ -1,5 +1,6 @@
 package com.firechicken.rollingpictures.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,18 +16,11 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.service.RoundService
-import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.android.synthetic.main.fragment_game_drawing.*
 import kotlinx.android.synthetic.main.fragment_game_writing.*
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-
-
-
-
-
+import kotlinx.android.synthetic.main.fragment_game_writing.completeButton
 
 
 private const val TAG = "GameWritingFragment_싸피"
@@ -49,39 +43,28 @@ class GameWritingFragment : Fragment() {
 
     }
 
-//    private fun createPartFromString(descriptionString: String): RequestBody? {
-//        return RequestBody.create(
-//            MultipartBody.FORM, descriptionString
-//        )
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(roundNum==1){
             guideRoundTextView.setText(getString(R.string.guide_round1))
+            pictureImageView.visibility = View.GONE
         }else{
             guideRoundTextView.setText(getString(R.string.guide_round2))
+            pictureImageView.visibility = View.VISIBLE
         }
 
-        pictureImageView.visibility = View.GONE
+        roundView(gameChannelResDTO.data.id, ApplicationClass.loginUserResDTO.data.id, roundNum)
 
         completeButton.setOnClickListener {
 
             Log.d(TAG, "onViewCreated: ${gameChannelResDTO.data.id}, ${prefs.getId()!!}, ${writingEditText.text.toString()}, ${roundNum}")
-//            roundRegister(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
             val req = RoundReqDTO(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
-//            val body: MutableMap<String, RequestBody> = HashMap()
-//            createPartFromString
-//            body["gameChannelId"] = RequestBody.Companion.create(MediaType.parse(RoundReqDTO))
-//            body["age"] =
-//                create(java.lang.String.valueOf(memberDTO.getAge()), MediaType.parse("text/plain"))
-//            roundRegister(mutableMapOf("gameChannelId" to "${gameChannelResDTO.data.id}", "id" to "${prefs.getId()!!}", "keyword" to "${writingEditText.text.toString()}", "roundNumber" to "${roundNum}"))
             roundRegister(req)
         }
     }
 
     private fun roundRegister(req: RoundReqDTO) {
-//        val round = RoundReqDTO(gameChannelId, id, keyword, roundNumber)
         RoundService().roundRegister(req, null, object : RetrofitCallback<SingleResult<RoundResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
                 if (responseData.output==1) {
@@ -102,6 +85,35 @@ class GameWritingFragment : Fragment() {
 
             override fun onError(t: Throwable) {
                 Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+    //그림 조회
+    private fun roundView(gameChannelId: Long, id: Long, roundNumber: Int) {
+        RoundService().roundView(gameChannelId, id, roundNumber, object :
+            RetrofitCallback<SingleResult<RoundResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
+                if (responseData.output == 1) {
+                    pictureImageView.setImageURI(Uri.parse(responseData.data.imgSrc))
+
+                } else {
+                    Toast.makeText(
+                        context,
+                        "문제가 발생하였습니다. 다시 시도해주세요.1",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.2", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun onError(t: Throwable) {
+                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
                     .show()
             }
         })

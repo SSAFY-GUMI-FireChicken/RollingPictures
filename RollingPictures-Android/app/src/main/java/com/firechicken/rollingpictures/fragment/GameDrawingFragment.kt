@@ -3,6 +3,7 @@ package com.firechicken.rollingpictures.fragment
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.firechicken.rollingpictures.R
@@ -23,6 +25,7 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
 import com.firechicken.rollingpictures.databinding.FragmentGameDrawingBinding
 import com.firechicken.rollingpictures.dto.LoginUserResDTO
+import com.firechicken.rollingpictures.dto.RoundReqDTO
 import com.firechicken.rollingpictures.dto.RoundResDTO
 import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.service.RoundService
@@ -31,9 +34,20 @@ import com.firechicken.rollingpictures.util.RetrofitCallback
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.fragment_game_drawing.*
 import kotlinx.android.synthetic.main.fragment_game_writing.*
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import java.text.SimpleDateFormat
+import java.util.*
+import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.createFormData
+import okhttp3.RequestBody
+import java.io.*
+import java.nio.file.Files
+import org.apache.commons.fileupload.disk.DiskFileItem
+import org.apache.commons.io.IOUtils
+
+
+private const val TAG = "GameDrawingFragment_싸피"
 
 class GameDrawingFragment : Fragment() {
 
@@ -67,7 +81,7 @@ class GameDrawingFragment : Fragment() {
 
 
         binding.completeButton.setOnClickListener {
-            savePhoto()
+            transmitPictures()
         }
     }
 
@@ -183,6 +197,7 @@ class GameDrawingFragment : Fragment() {
             val color = ResourcesCompat.getColor(resources, R.color.palette_gray, null)
             setColor(color)
         }
+
     }
 
     private fun setBrushWidth() {
@@ -200,28 +215,72 @@ class GameDrawingFragment : Fragment() {
         })
     }
 
-    private fun savePhoto() {
+    private fun transmitPictures() {
         // TODO: 2022-01-24 갤러리에 저장하는 코드인데, 갤러리 저장 대신 서버로 전송되게 변경해야 합니다 !!
         val bStream = ByteArrayOutputStream()
         val bitmap = binding.drawView.getBitmap()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+        var imageFile: File? = null
+        try {
+            imageFile = createFileFromBitmap(bitmap)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
 
-        val filename = "RP_${System.currentTimeMillis()}"
-        saveImage(bitmap, filename)
+
+        Log.d(TAG, "transmitPictures: ${imageFile}")
+
+        Log.d(TAG, "transmitPictures: ${imageFile!!.freeSpace},${imageFile!!.absolutePath}, ${imageFile!!.absoluteFile}")
+
+        val formFile = RequestBody.create("application/pdf".toMediaTypeOrNull(), imageFile)
+
+        val body = MultipartBody.Part.createFormData("file", imageFile.name, formFile)
+
+        Log.d(TAG, "transmitPictures: ${formFile}")
+        Log.d(TAG, "transmitPictures: ${body}")
+
+        val req = RoundReqDTO(gameChannelResDTO.data.id, ApplicationClass.prefs.getId()!!, null, roundNum)
+        roundRegister(req, body)
     }
 
-    private fun saveImage(bitmap: Bitmap, fileName: String) {
-        val imageDir = "${Environment.DIRECTORY_PICTURES}/RollingPictures/"
-        val path = Environment.getExternalStoragePublicDirectory(imageDir)
-        Log.e("path", path.toString())
-        val file = File(path, "$fileName.png")
-        path.mkdirs()
-        file.createNewFile()
-        val outputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        outputStream.flush()
-        outputStream.close()
+    @Throws(IOException::class)
+    private fun createFileFromBitmap(bitmap: Bitmap): File? {
+        val newFile = File(requireActivity().filesDir, makeImageFileName())
+        val fileOutputStream = FileOutputStream(newFile)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        fileOutputStream.close()
+        return newFile
     }
+    private fun makeImageFileName(): String? {
+        val simpleDateFormat = SimpleDateFormat("yyyyMMdd_hhmmss")
+        val date = Date()
+        val strDate: String = simpleDateFormat.format(date)
+        return "$strDate.png"
+    }
+
+
+//    private fun savePhoto() {
+//        // TODO: 2022-01-24 갤러리에 저장하는 코드인데, 갤러리 저장 대신 서버로 전송되게 변경해야 합니다 !!
+//        val bStream = ByteArrayOutputStream()
+//        val bitmap = binding.drawView.getBitmap()
+//
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+//
+//        val filename = "RP_${System.currentTimeMillis()}"
+//        saveImage(bitmap, filename)
+//    }
+//
+//    private fun saveImage(bitmap: Bitmap, fileName: String) {
+//        val imageDir = "${Environment.DIRECTORY_PICTURES}/RollingPictures/"
+//        val path = Environment.getExternalStoragePublicDirectory(imageDir)
+//        Log.e("path", path.toString())
+//        val file = File(path, "$fileName.png")
+//        path.mkdirs()
+//        file.createNewFile()
+//        val outputStream = FileOutputStream(file)
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+//        outputStream.flush()
+//        outputStream.close()
+//    }
 
     private fun setColor(color: Int) {
         binding.drawView.setColor(color)
@@ -259,6 +318,34 @@ class GameDrawingFragment : Fragment() {
 
             override fun onError(t: Throwable) {
                 Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+    //그림 등록
+    private fun roundRegister(req: RoundReqDTO, multipartFile: MultipartBody.Part?) {
+        RoundService().roundRegister(req, multipartFile, object : RetrofitCallback<SingleResult<RoundResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
+                if (responseData.output==1) {
+
+                    Log.d(TAG, "onSuccess: ${responseData.data.imgSrc}")
+                } else {
+                    Toast.makeText(
+                        context,
+                        "문제가 발생하였습니다. 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun onError(t: Throwable) {
+                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
                     .show()
             }
         })

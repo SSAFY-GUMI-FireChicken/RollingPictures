@@ -19,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,13 +52,18 @@ public class RoundController {
     public SingleResult<RoundResDTO> roundRegister(
             @RequestPart @Valid RoundReqDTO req,
             @RequestPart(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
-//            @Valid RoundReqDTO req,
-//            @RequestParam(value="이미지", required = false) MultipartFile multipartFile) throws Exception {
 
         if (channelUserRepository.findByUser_Id(req.getId()).getSessionId() == null
                 || channelUserRepository.findByUser_Id(req.getId()).getSessionId().equals(null)) {
             throw new ApiMessageException("STOMP 연결이 필요한 유저입니다.");
         }
+
+//        System.out.println("멀티파일");
+//        System.out.println(multipartFile.getName());
+//        System.out.println(multipartFile.getSize());
+//        System.out.println(multipartFile.getOriginalFilename());
+//        System.out.println(multipartFile.getBytes());
+
 
         User currentUser = signService.findUserById(req.getId());
         List<User> userOrders = sectionRepository.findOrder(req.getGameChannelId());
