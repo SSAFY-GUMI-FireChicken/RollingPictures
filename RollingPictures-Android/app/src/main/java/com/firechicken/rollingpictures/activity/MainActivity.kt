@@ -63,6 +63,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            enterPublicButton.setOnClickListener{
+                val intent = Intent(this@MainActivity, PublicRoomListActivity::class.java)
+                startActivity(intent)
+            }
+
         }
 
         if (!arePermissionGranted()) {

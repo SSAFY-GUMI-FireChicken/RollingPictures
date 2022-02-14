@@ -1,6 +1,7 @@
 package com.firechicken.rollingpictures.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
@@ -22,11 +24,9 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recyclerView
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
+import com.firechicken.rollingpictures.dialog.GameSettingDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
-import com.firechicken.rollingpictures.dto.ChannelResDTO
-import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
-import com.firechicken.rollingpictures.dto.SingleResult
-import com.firechicken.rollingpictures.dto.UserInfoResDTO
+import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.fragment.GameWaitingFragment
 import com.firechicken.rollingpictures.fragment.GameWritingFragment
 import com.firechicken.rollingpictures.service.ChannelService
@@ -321,7 +321,7 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispLifecycle)
 
 
-        val dispTopic: Disposable = mStompClient!!.topic("/channel/in/${ApplicationClass.channelResDTO.data.code}") //인식할 Stomp URI
+        val dispTopic: Disposable = mStompClient!!.topic("/channel/in/${channelResDTO.data.code}") //인식할 Stomp URI
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -336,7 +336,7 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
-        val dispTopic2: Disposable = mStompClient!!.topic("/channel/out/${ApplicationClass.channelResDTO.data.code}")
+        val dispTopic2: Disposable = mStompClient!!.topic("/channel/out/${channelResDTO.data.code}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -351,7 +351,7 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
-        val dispTopic3: Disposable = mStompClient!!.topic("/channel/start/${ApplicationClass.channelResDTO.data.code}")
+        val dispTopic3: Disposable = mStompClient!!.topic("/channel/start/${channelResDTO.data.code}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -362,11 +362,11 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
-        val dispTopic4: Disposable = mStompClient!!.topic("/channel/leader/${ApplicationClass.channelResDTO.data.code}")
+        val dispTopic4: Disposable = mStompClient!!.topic("/channel/leader/${channelResDTO.data.code}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+                Log.d(TAG, "dispTopic4 Received " + topicMessage.getPayload())
 
                 //channel/leader 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
@@ -377,10 +377,24 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
+        val dispTopic6: Disposable = mStompClient!!.topic("/channel/setting/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+                val channelStmpResDto = mGson.fromJson(topicMessage.getPayload(), ChannelResDTO::class.java)
+                channelResDTO.data = channelStmpResDto
+
+                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                transaction.commit()
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
         compositeDisposable!!.add(dispTopic)
         compositeDisposable!!.add(dispTopic2)
         compositeDisposable!!.add(dispTopic3)
         compositeDisposable!!.add(dispTopic4)
+        compositeDisposable!!.add(dispTopic6)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
     }
@@ -413,21 +427,6 @@ class GameActivity : AppCompatActivity() {
             playerList = users
         }
         playerRecyclerViewAdapter.notifyDataSetChanged()
-        recyclerView.smoothScrollToPosition(playerList.size - 1)
-        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
-        for(player in channelResDTO.data.users){
-            if(player.id== ApplicationClass.loginUserResDTO.data.id){
-                if(player.isLeader=="Y"){
-                    gameWaitingFragment.startGameButton.setText("START GAME")
-                    gameWaitingFragment.startGameButton.setEnabled(true)
-                }else{
-                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
-                    gameWaitingFragment.startGameButton.setTextSize(16F)
-                    gameWaitingFragment.startGameButton.setEnabled(false)
-                }
-                break
-            }
-        }
     }
 
     // 스텀프 통신 해제
@@ -475,6 +474,34 @@ class GameActivity : AppCompatActivity() {
         })
     }
 
+    // 방장이 방의 설정을 수정했을 때
+    fun updateChannel(changedChannel: MakeChannelReqDTO) {
+
+        Log.d(TAG, "makeChannel: ")
+
+        ChannelService().updateChannel(changedChannel, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
+            override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
+                Log.d(TAG, "updateChannel ChannelResDTO: ${responseData}")
+                if (responseData.data.id > 0) {
+                    channelResDTO = responseData
+                    Log.d(TAG, "onSuccess: ${responseData}")
+                } else {
+                    Log.d(TAG, "onSuccess: null")
+                    toast("makeChannel에서 문제가 발생하였습니다. 다시 시도해주세요.")
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+                toast("makeChannel에서 실패문제가 발생하였습니다. 다시 시도해주세요.")
+            }
+
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+                toast("makeChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
+            }
+        })
+    }
 
     // 어플리케이션이 Stop 됐을 때
     override fun onStop() {

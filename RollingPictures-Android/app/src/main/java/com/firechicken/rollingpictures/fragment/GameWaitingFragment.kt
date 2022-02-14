@@ -6,9 +6,12 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.activity.GameActivity
@@ -24,6 +27,7 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recycle
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.sectionResDTO
 import com.firechicken.rollingpictures.databinding.FragmentGameWaitingBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
+import com.firechicken.rollingpictures.dialog.GameSettingDialog
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.service.GameChannelService
 import com.firechicken.rollingpictures.service.SectionService
@@ -61,15 +65,32 @@ class GameWaitingFragment : Fragment() {
                 if(player.isLeader=="Y"){
                     startGameButton.setText("START GAME")
                     startGameButton.setEnabled(true)
+                    settingImageButton.visibility = VISIBLE
                 }else{
                     startGameButton.setText("WAITING FOR GAME TO START...")
                     startGameButton.setTextSize(16F)
                     startGameButton.setEnabled(false)
+                    settingImageButton.visibility = GONE
                 }
                 break
             }
         }
 
+        if(settingImageButton.isVisible){
+            settingImageButton.setOnClickListener {
+                val dialog = GameSettingDialog(requireContext())
+                dialog.showDialog()
+                dialog.setOnClickListener(object : GameSettingDialog.OnDialogClickListener {
+                    override fun onDialogOkClick(changedChannel: MakeChannelReqDTO) {
+                        GameActivity().updateChannel(changedChannel)
+                        fragmentGameWaitingBinding.playerCountTextView.text = "${playerRecyclerViewAdapter.itemCount}/${channelResDTO.data.maxPeopleCnt}"
+
+                        //prefs.setEnteredChannel("none")
+                        dialog.dialog.dismiss()
+                    }
+                })
+            }
+        }
 
         fragmentGameWaitingBinding.exitRoom.setOnClickListener {
             val dialog = GameExitDialog(requireContext())

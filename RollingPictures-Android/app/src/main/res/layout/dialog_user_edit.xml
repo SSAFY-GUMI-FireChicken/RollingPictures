@@ -11,7 +11,7 @@
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/margin_size_300"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/fab_margin"
         android:layout_marginTop="@dimen/margin_size_24"

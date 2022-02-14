@@ -4,15 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter.UserInfoHolder
-import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.dto.UserInfoResDTO
-import kotlinx.android.synthetic.main.fragment_game_waiting.*
-import kotlinx.android.synthetic.main.fragment_game_waiting.view.*
 import kotlinx.android.synthetic.main.list_item_player.view.*
 
 class PlayerRecyclerViewAdapter(

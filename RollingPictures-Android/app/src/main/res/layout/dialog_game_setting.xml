@@ -2,10 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_activity"
-    tools:context=".activity.CreateRoomActivity">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_exit_dialog"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_size_20"
+    android:layout_gravity="center">
 
     <EditText
         android:id="@+id/roomTitleEditText"
@@ -13,7 +16,7 @@
         android:layout_width="@dimen/room_edit_width"
         android:layout_height="@dimen/box_height"
         android:layout_marginStart="@dimen/margin_size_68"
-        android:layout_marginTop="@dimen/margin_size_28"
+        android:layout_marginTop="@dimen/margin_size_8"
         android:layout_marginEnd="@dimen/margin_size_68"
         android:background="@drawable/bg_input_dark"
         android:padding="@dimen/padding_size_20"
@@ -25,36 +28,26 @@
         app:layout_constraintWidth_percent="0.8"
         android:maxLength="12"/>
 
-    <TextView
-        android:id="@+id/creatingRoomTextView"
-        style="@style/Text.TitleStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/margin_size_48"
-        android:text="@string/creating_room"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/roomTitleTextView"
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_size_60"
-        android:layout_marginTop="@dimen/margin_size_30"
+        android:layout_marginStart="@dimen/margin_size_32"
+        android:layout_marginTop="@dimen/margin_size_16"
         android:text="@string/room_title"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/creatingRoomTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/settingTextView" />
 
     <TextView
         android:id="@+id/maximumTextView"
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_size_60"
-        android:layout_marginTop="@dimen/margin_size_30"
+        android:layout_marginStart="@dimen/margin_size_32"
+        android:layout_marginTop="@dimen/margin_size_16"
         android:text="@string/room_maximum"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +58,7 @@
         style="@style/Text.DialogTitleStyle"
         android:layout_width="@dimen/public_button_width"
         android:layout_height="@dimen/box_width"
-        android:layout_marginStart="@dimen/margin_size_68"
-        android:layout_marginTop="@dimen/margin_size_28"
+        android:layout_marginTop="@dimen/margin_size_8"
         android:background="@drawable/bg_tool_detail"
         android:text="@string/room_public"
         android:textColor="@color/green_deep_dark"
@@ -80,8 +72,8 @@
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_size_60"
-        android:layout_marginTop="@dimen/margin_size_30"
+        android:layout_marginStart="@dimen/margin_size_32"
+        android:layout_marginTop="@dimen/margin_size_16"
         android:text="@string/room_isPublic"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,10 +84,11 @@
         style="@style/Text.DialogTitleStyle"
         android:layout_width="@dimen/public_button_width"
         android:layout_height="@dimen/box_width"
-        android:layout_marginTop="@dimen/margin_size_28"
+        android:layout_marginTop="@dimen/margin_size_8"
         android:background="@drawable/bg_round"
         android:text="@string/room_private"
         android:textColor="@color/green_deep_dark"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/publicButton"
         app:layout_constraintTop_toBottomOf="@+id/publicTextView"
         app:layout_constraintWidth_percent="0.8" />
@@ -105,13 +98,16 @@
         style="@style/Text.ExitStyle"
         android:layout_width="@dimen/fragment_height"
         android:layout_height="@dimen/box_height"
-        android:layout_marginBottom="@dimen/margin_size_24"
+        android:layout_marginStart="@dimen/margin_size_18"
+        android:layout_marginTop="@dimen/margin_size_16"
+        android:layout_marginBottom="@dimen/margin_size_12"
         android:background="@drawable/bg_button_exit"
         android:text="@android:string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintStart_toEndOf="@+id/okButton"
+        app:layout_constraintTop_toBottomOf="@+id/countTextView"
+        app:layout_constraintWidth_percent="0.45" />
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -119,13 +115,15 @@
         style="@style/Text.ButtonOkStyle"
         android:layout_width="@dimen/fragment_height"
         android:layout_height="@dimen/box_height"
-        android:layout_marginBottom="@dimen/margin_size_8"
+        android:layout_marginTop="@dimen/margin_size_16"
+        android:layout_marginBottom="@dimen/margin_size_12"
         android:background="@drawable/bg_button_ok"
         android:text="@android:string/ok"
-        app:layout_constraintBottom_toTopOf="@+id/cancelButton"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancelButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintTop_toBottomOf="@+id/countTextView"
+        app:layout_constraintWidth_percent="0.45" />
 
 
     <ImageButton
@@ -133,7 +131,7 @@
         android:layout_width="@dimen/small_button_size"
         android:layout_height="@dimen/small_button_size"
         android:layout_marginStart="@dimen/margin_size_140"
-        android:layout_marginTop="@dimen/margin_size_28"
+        android:layout_marginTop="@dimen/margin_size_12"
         android:layout_marginEnd="@dimen/margin_size_28"
         android:background="@drawable/minus"
         android:backgroundTint="@color/green_deep_dark"
@@ -146,7 +144,7 @@
         android:layout_width="@dimen/small_button_size"
         android:layout_height="@dimen/small_button_size"
         android:layout_marginStart="@dimen/margin_size_28"
-        android:layout_marginTop="@dimen/margin_size_28"
+        android:layout_marginTop="@dimen/margin_size_12"
         android:layout_marginEnd="@dimen/margin_size_140"
         android:background="@drawable/add"
         android:backgroundTint="@color/green_deep_dark"
@@ -160,11 +158,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_size_28"
-        android:layout_marginTop="@dimen/margin_size_32"
+        android:layout_marginTop="@dimen/margin_size_16"
         android:layout_marginEnd="@dimen/margin_size_28"
         android:text="@string/room_default_cnt"
         app:layout_constraintEnd_toStartOf="@+id/btnAddCount"
         app:layout_constraintStart_toEndOf="@+id/btnSubCount"
         app:layout_constraintTop_toBottomOf="@+id/maximumTextView" />
+
+    <TextView
+        android:id="@+id/settingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="방 설정"
+        android:textSize="@dimen/dialog_title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
