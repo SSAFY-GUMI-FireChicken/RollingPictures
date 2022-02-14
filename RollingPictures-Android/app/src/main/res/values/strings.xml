@@ -3,7 +3,7 @@
     <string name="welcome_message"> 님, 환영합니다!</string>
     <string name="game_start">GAME START</string>
     <string name="create_room">CREATE ROOM</string>
-    <string name="enter_public_room">ENTER PUBLIC ROOM</string>
+    <string name="public_rooms_list">PUBLIC ROOM LIST</string>
     <string name="ok_kor">확인</string>
     <string name="cancel_kor">취소</string>
     <string name="exit_dialog_title">게임방을 나가시겠습니까?</string>
