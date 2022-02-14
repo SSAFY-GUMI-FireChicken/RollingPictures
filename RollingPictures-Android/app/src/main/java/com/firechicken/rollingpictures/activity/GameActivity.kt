@@ -377,7 +377,7 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
-        val dispTopic5: Disposable = mStompClient!!.topic("/channel/setting/${channelResDTO.data.code}")
+        val dispTopic6: Disposable = mStompClient!!.topic("/channel/setting/${channelResDTO.data.code}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
@@ -394,7 +394,7 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispTopic2)
         compositeDisposable!!.add(dispTopic3)
         compositeDisposable!!.add(dispTopic4)
-        compositeDisposable!!.add(dispTopic5)
+        compositeDisposable!!.add(dispTopic6)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
     }
@@ -427,35 +427,6 @@ class GameActivity : AppCompatActivity() {
             playerList = users
         }
         playerRecyclerViewAdapter.notifyDataSetChanged()
-//        recyclerView.smoothScrollToPosition(playerList.size - 1)
-//        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
-//        for(player in channelResDTO.data.users){
-//            if(player.id== ApplicationClass.loginUserResDTO.data.id){
-//                if(player.isLeader=="Y"){
-//                    gameWaitingFragment.startGameButton.setText("START GAME")
-//                    gameWaitingFragment.startGameButton.setEnabled(true)
-//                    gameWaitingFragment.settingImageButton.visibility = View.VISIBLE
-//                }else{
-//                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
-//                    gameWaitingFragment.startGameButton.setTextSize(16F)
-//                    gameWaitingFragment.startGameButton.setEnabled(false)
-//                    gameWaitingFragment.settingImageButton.visibility = View.GONE
-//                }
-//                break
-//            }
-//        }
-//        if(gameWaitingFragment.settingImageButton.isVisible){
-//            gameWaitingFragment.settingImageButton.setOnClickListener {
-//                val dialog = GameSettingDialog(this)
-//                dialog.showDialog()
-//                dialog.setOnClickListener(object : GameSettingDialog.OnDialogClickListener {
-//                    override fun onDialogOkClick(changedChannel: MakeChannelReqDTO) {
-//                        updateChannel(changedChannel)
-//                        dialog.dialog.dismiss()
-//                    }
-//                })
-//            }
-//        }
     }
 
     // 스텀프 통신 해제
