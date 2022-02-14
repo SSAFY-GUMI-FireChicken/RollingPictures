@@ -87,6 +87,7 @@ public class RoundController {
         switch (progressService.isNextRound(req.getRoundNumber(), req.getGameChannelId())) {
             case NEXT:
                 socketService.sendNextSignal(section.getCode(), req.getRoundNumber() + 1);
+                System.out.println(req);
                 break;
             case END :
                 socketService.sendGameEnd(section.getCode(), req.getRoundNumber() + 1);

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.config.ApplicationClass
@@ -96,7 +97,7 @@ class GameWritingFragment : Fragment() {
             RetrofitCallback<SingleResult<RoundResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
                 if (responseData.output == 1) {
-                    pictureImageView.setImageURI(Uri.parse(responseData.data.imgSrc))
+                    Glide.with(context!!).load(responseData.data.imgSrc).into(pictureImageView)
 
                     Log.d(TAG, "onSuccess: 그림 조회")
                 } else {
