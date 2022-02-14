@@ -9,7 +9,6 @@
     tools:context=".activity.MainActivity">
 
 
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/fragment_height"
@@ -98,4 +97,16 @@
         app:layout_constraintTop_toBottomOf="@+id/roomCodeEditText"
         app:layout_constraintWidth_percent="0.8" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/enterPublicButton"
+        style="@style/Text.ButtonOkStyle"
+        android:layout_width="@dimen/fragment_height"
+        android:layout_height="@dimen/box_height"
+        android:layout_marginTop="@dimen/margin_size_18"
+        android:background="@drawable/bg_button_ok"
+        android:text="@string/enter_public_room"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createButton"
+        app:layout_constraintWidth_percent="0.8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

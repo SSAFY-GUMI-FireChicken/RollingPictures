@@ -22,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomTitleTextView"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.8"
+        android:maxLength="12"/>
 
     <TextView
         android:id="@+id/creatingRoomTextView"
@@ -102,7 +103,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cancelButton"
         style="@style/Text.ExitStyle"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/fragment_height"
         android:layout_height="@dimen/box_height"
         android:layout_marginBottom="@dimen/margin_size_24"
         android:background="@drawable/bg_button_exit"

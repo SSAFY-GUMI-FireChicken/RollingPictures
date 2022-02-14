@@ -25,7 +25,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomTitleTextView"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.8"
+        android:maxLength="12"/>
 
 
     <TextView
@@ -33,7 +34,7 @@
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="@dimen/margin_size_32"
         android:layout_marginTop="@dimen/margin_size_16"
         android:text="@string/room_title"
         android:textSize="@dimen/default_text_size"
@@ -45,7 +46,7 @@
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="@dimen/margin_size_32"
         android:layout_marginTop="@dimen/margin_size_16"
         android:text="@string/room_maximum"
         android:textSize="@dimen/default_text_size"
@@ -71,7 +72,7 @@
         style="@style/Text.PlayerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="@dimen/margin_size_32"
         android:layout_marginTop="@dimen/margin_size_16"
         android:text="@string/room_isPublic"
         android:textSize="@dimen/default_text_size"

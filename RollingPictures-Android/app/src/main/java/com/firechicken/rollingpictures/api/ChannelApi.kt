@@ -6,6 +6,13 @@ import retrofit2.http.*
 
 interface ChannelApi {
 
+    //방 목록 조회
+    @GET("api/channel")
+    fun searchChannelList(
+        @Query("page") page: Int,
+        @Query("batch") batch: Int
+    ): Call<SingleResult<ChannelListResDTO>>
+
     //방 생성
     @POST("api/channel")
     fun makeChannel(@Body body: MakeChannelReqDTO): Call<SingleResult<ChannelResDTO>>

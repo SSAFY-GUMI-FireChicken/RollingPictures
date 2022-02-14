@@ -101,4 +101,37 @@ class ChannelService {
             }
         })
     }
+
+    fun searchChannelList(
+        page: Int,
+        batch: Int,
+        callback: RetrofitCallback<SingleResult<ChannelListResDTO>>
+    ) {
+        Log.d(TAG, "page: ${page}")
+        Log.d(TAG, "batch: ${batch}")
+        RetrofitUtil.channelService.searchChannelList(page, batch)
+            .enqueue(object : Callback<SingleResult<ChannelListResDTO>> {
+                override fun onResponse(
+                    call: Call<SingleResult<ChannelListResDTO>>,
+                    response: Response<SingleResult<ChannelListResDTO>>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 200) {
+                        if (res != null) {
+                            Log.d(TAG, "onResponse1: ${res}")
+                            callback.onSuccess(response.code(), res)
+                        }
+                    } else {
+                        Log.d(TAG, "onResponse2: ")
+
+                        callback.onFailure(response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<SingleResult<ChannelListResDTO>>, t: Throwable) {
+                    Log.d(TAG, "onResponse3: ")
+                    callback.onError(t)
+                }
+            })
+    }
 }
