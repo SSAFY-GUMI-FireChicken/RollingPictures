@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.PublicRoomListActivity"
+    android:background="@drawable/bg_activity">
+
+    <TextView
+        android:id="@+id/roundTextView"
+        style="@style/Text.TitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/margin_size_48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/public_room_list" />
+
+    <ImageButton
+        android:id="@+id/refreshImageButton"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:layout_marginStart="@dimen/margin_size_16"
+        android:layout_marginTop="@dimen/margin_size_4"
+        android:background="@drawable/bg_round_player"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toEndOf="@+id/roundTextView"
+        app:layout_constraintTop_toTopOf="@+id/roundTextView"
+        app:srcCompat="@drawable/ic_baseline_refresh_24" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewChannel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_size_400"
+        android:layout_marginTop="@dimen/margin_size_48"
+        android:layout_weight="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundTextView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/seek_bar_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewChannel">
+
+        <ImageButton
+            android:id="@+id/prevImageButton"
+            android:layout_width="@dimen/seek_bar_height"
+            android:layout_height="@dimen/seek_bar_height"
+            android:background="@drawable/bg_activity"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/nextImageButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_arrow_circle_left_24" />
+
+        <ImageButton
+            android:id="@+id/nextImageButton"
+            android:layout_width="@dimen/seek_bar_height"
+            android:layout_height="@dimen/seek_bar_height"
+            android:background="@drawable/bg_activity"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/prevImageButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_arrow_circle_right_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

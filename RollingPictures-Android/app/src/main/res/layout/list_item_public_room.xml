@@ -9,21 +9,23 @@
     android:paddingLeft="@dimen/fragment_height">
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/playerButton"
+    <TextView
+        android:id="@+id/publicRoomItemButton"
         style="@style/Text.ButtonOkStyle"
         android:layout_width="@dimen/player_box_width"
         android:layout_height="@dimen/player_box_height"
         android:layout_marginStart="@dimen/margin_size_4"
-        android:layout_marginEnd="@dimen/margin_size_4"
+        android:layout_marginEnd="@dimen/margin_size_8"
         android:layout_marginBottom="@dimen/margin_size_8"
+        android:paddingStart="@dimen/margin_size_10"
+        android:paddingTop="@dimen/margin_size_10"
         android:background="@drawable/bg_round_player"
-        android:drawableEnd="@drawable/crown"
+        android:text="@string/room_default_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.8">
-    </androidx.appcompat.widget.AppCompatButton>
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
