@@ -415,11 +415,25 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
+        val dispTopic6: Disposable = mStompClient!!.topic("/channel/setting/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+                val channelStmpResDto = mGson.fromJson(topicMessage.getPayload(), ChannelResDTO::class.java)
+                channelResDTO.data = channelStmpResDto
+
+                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                transaction.commit()
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
         compositeDisposable!!.add(dispTopic)
         compositeDisposable!!.add(dispTopic2)
         compositeDisposable!!.add(dispTopic3)
         compositeDisposable!!.add(dispTopic4)
         compositeDisposable!!.add(dispTopic5)
+        compositeDisposable!!.add(dispTopic6)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
     }
