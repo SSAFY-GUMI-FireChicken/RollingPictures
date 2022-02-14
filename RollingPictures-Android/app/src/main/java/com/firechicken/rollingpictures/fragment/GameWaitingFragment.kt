@@ -24,7 +24,6 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerL
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recyclerView
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.sectionResDTO
 import com.firechicken.rollingpictures.databinding.FragmentGameWaitingBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.dialog.GameSettingDialog
@@ -107,6 +106,8 @@ class GameWaitingFragment : Fragment() {
 
         fragmentGameWaitingBinding.startGameButton.setOnClickListener {
             makeGameChannel()
+
+
         }
 
         fragmentGameWaitingBinding.roomCodeTextView.text = channelResDTO.data.code
@@ -145,15 +146,12 @@ class GameWaitingFragment : Fragment() {
     private fun makeGameChannel() {
         val req = MakeGameChannelReqDTO(channelResDTO.data.id, loginUserResDTO.data.id)
 
-        Log.d(TAG, "makeGameChannel: ")
-
         GameChannelService().makeGameChannel(req, object :
             RetrofitCallback<SingleResult<GameChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<GameChannelResDTO>) {
                 Log.d(TAG, "makeGameChannel : responseData: ${responseData}")
                 if (responseData.data.id > 0L) {
                     gameChannelResDTO = responseData
-                    Log.d(TAG, "onSuccess: ${responseData}")
                     makeSection()
                 } else {
                     Log.d(TAG, "onSuccess: null")
@@ -173,16 +171,16 @@ class GameWaitingFragment : Fragment() {
         })
     }
 
+    //섹션 생성
     private fun makeSection() {
-        val req = SectionReqDTO(gameChannelResDTO.data.id, loginUserResDTO.data.id)
+        val req = SectionReqDTO(gameChannelResDTO.data.id, ApplicationClass.loginUserResDTO.data.id)
 
-        Log.d(TAG, "makeSection: ")
-
+        Log.d(TAG, "makeSection: ${req}")
         SectionService().makeSection(req, object : RetrofitCallback<ListResult<SectionResDTO>> {
             override fun onSuccess(code: Int, responseData: ListResult<SectionResDTO>) {
                 Log.d(TAG, "makeSection : responseData: ${responseData}")
                 if (responseData.data.isNotEmpty()) {
-                    sectionResDTO = responseData
+//                    sectionResDTO = responseData
                     Log.d(TAG, "onSuccess: ${responseData}")
                 } else {
                     Log.d(TAG, "onSuccess: null")
@@ -201,6 +199,8 @@ class GameWaitingFragment : Fragment() {
             }
         })
     }
+
+
 
     private fun toast(text: String) {
         Log.i(TAG, text)

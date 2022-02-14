@@ -4,19 +4,28 @@ import android.util.Log
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import com.firechicken.rollingpictures.util.RetrofitUtil
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
-private const val TAG = "SectionService_싸피"
+private const val TAG = "RoundService_싸피"
 
-class SectionService {
+class RoundService {
 
-    fun makeSection(req: SectionReqDTO, callback: RetrofitCallback<ListResult<SectionResDTO>>) {
-        RetrofitUtil.sectionService.makeSection(req).enqueue(object :
-            Callback<ListResult<SectionResDTO>> {
-            override fun onResponse(call: Call<ListResult<SectionResDTO>>, response: Response<ListResult<SectionResDTO>>) {
+    //라운드 등록
+    fun roundRegister(
+        req: RoundReqDTO,
+        multipartFile: MultipartBody.Part?,
+        callback: RetrofitCallback<SingleResult<RoundResDTO>>
+    ) {
+        RetrofitUtil.roundService.roundRegister(req, multipartFile).enqueue(object : Callback<SingleResult<RoundResDTO>> {
+            override fun onResponse(call: Call<SingleResult<RoundResDTO>>, response: Response<SingleResult<RoundResDTO>>) {
                 val res = response.body()
+                Log.d(TAG, "onResponse: ${res}")
+                Log.d(TAG, "onResponse: prev")
                 if (response.code() == 200) {
                     Log.d(TAG, "onResponse: 성공")
                     if (res != null) {
@@ -28,23 +37,27 @@ class SectionService {
                 }
             }
 
-            override fun onFailure(call: Call<ListResult<SectionResDTO>>, t: Throwable) {
+            override fun onFailure(call: Call<SingleResult<RoundResDTO>>, t: Throwable) {
                 Log.d(TAG, "onFailure: ")
                 callback.onError(t)
             }
         })
     }
 
-    fun getSection(
+
+    //라운드 조회
+    fun roundView(
         gameChannelId: Long,
-        userId: Long,
-        callback: RetrofitCallback<ListResult<SectionRetrieveResDTO>>
+        id: Long,
+//        keyword: String,
+        roundNumber: Int,
+        callback: RetrofitCallback<SingleResult<RoundResDTO>>
     ) {
-        RetrofitUtil.sectionService.getSection(gameChannelId, userId)
-            .enqueue(object : Callback<ListResult<SectionRetrieveResDTO>> {
+        RetrofitUtil.roundService.roundView(gameChannelId, id, roundNumber)
+            .enqueue(object : Callback<SingleResult<RoundResDTO>> {
                 override fun onResponse(
-                    call: Call<ListResult<SectionRetrieveResDTO>>,
-                    response: Response<ListResult<SectionRetrieveResDTO>>
+                    call: Call<SingleResult<RoundResDTO>>,
+                    response: Response<SingleResult<RoundResDTO>>
                 ) {
                     val res = response.body()
                     if (response.code() == 200) {
@@ -59,11 +72,10 @@ class SectionService {
                     }
                 }
 
-                override fun onFailure(call: Call<ListResult<SectionRetrieveResDTO>>, t: Throwable) {
+                override fun onFailure(call: Call<SingleResult<RoundResDTO>>, t: Throwable) {
                     Log.d(TAG, "onResponse3: ")
                     callback.onError(t)
                 }
             })
     }
-
 }

@@ -18,18 +18,24 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recyclerView
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
 import com.firechicken.rollingpictures.dialog.GameSettingDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 import com.firechicken.rollingpictures.dto.*
+import com.firechicken.rollingpictures.fragment.GameDrawingFragment
 import com.firechicken.rollingpictures.fragment.GameWaitingFragment
 import com.firechicken.rollingpictures.fragment.GameWritingFragment
 import com.firechicken.rollingpictures.service.ChannelService
+import com.firechicken.rollingpictures.service.SectionService
+import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import com.firechicken.rollingpictures.webrtc.CustomHttpClient
 import com.firechicken.rollingpictures.webrtc.CustomWebSocket
@@ -72,7 +78,7 @@ class GameActivity : AppCompatActivity() {
     private var httpClient: CustomHttpClient? = null
     private var isVoice: Boolean = false
 
-    val USERID = "USERID"
+    val USERID = "userId"
     val PASSCODE = "passcode"
 
     // 스텀프 관련 변수
@@ -90,6 +96,8 @@ class GameActivity : AppCompatActivity() {
 
         activityGameActivity = ActivityGameBinding.inflate(layoutInflater)
         setContentView(activityGameActivity.root)
+
+        gameChannelResDTO = SingleResult (GameChannelResDTO(0),"",0)
 
         // 시간 표시 (게임진행 중에만 사용함)
         val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
@@ -296,7 +304,8 @@ class GameActivity : AppCompatActivity() {
     private fun connectStomp() {
         val headers: MutableList<StompHeader> = ArrayList()
         Log.d(SSESION_TAG, "connectStomp: ${channelResDTO}")
-        headers.add(StompHeader(USERID, "${channelResDTO.data.users[0].id}"))
+
+        headers.add(StompHeader(USERID, "${prefs.getId()}"))
         headers.add(StompHeader(PASSCODE, "guest"))
         mStompClient!!.withClientHeartbeat(1000).withServerHeartbeat(1000)
         resetSubscriptions()
@@ -356,6 +365,16 @@ class GameActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
                 Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+                roundNum=1
+                var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
+                Log.d(TAG, "connectStomp: ${res}")
+                gameChannelResDTO.data.id = res
+                gameChannelResDTO.msg = "성공"
+                gameChannelResDTO.output = 1
+
+//                getSection(res, loginUserResDTO.data.id)
+
+
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                 transaction.commit()
@@ -377,6 +396,25 @@ class GameActivity : AppCompatActivity() {
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
+        val dispTopic5: Disposable = mStompClient!!.topic("/channel/game/next/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+
+                //channel/game/next 신호가 들어왔을 때 실행할 함수
+                roundNum = mGson.fromJson(topicMessage.getPayload(), Int::class.java)
+                if(roundNum%2==1){
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
+                    transaction.commit()
+                }else{
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameDrawingFragment())
+                    transaction.commit()
+                }
+
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
         val dispTopic6: Disposable = mStompClient!!.topic("/channel/setting/${channelResDTO.data.code}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -394,6 +432,7 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispTopic2)
         compositeDisposable!!.add(dispTopic3)
         compositeDisposable!!.add(dispTopic4)
+        compositeDisposable!!.add(dispTopic5)
         compositeDisposable!!.add(dispTopic6)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
@@ -427,6 +466,30 @@ class GameActivity : AppCompatActivity() {
             playerList = users
         }
         playerRecyclerViewAdapter.notifyDataSetChanged()
+    }
+
+
+    //섹션조회
+    private fun getSection(gameChannelId: Long, userId: Long) {
+        Log.d(TAG, "getSection: ")
+        SectionService().getSection(gameChannelId, userId, object : RetrofitCallback<ListResult<SectionRetrieveResDTO>> {
+            override fun onSuccess(code: Int, responseData: ListResult<SectionRetrieveResDTO>) {
+                if (responseData.output == 1) {
+                    //companion object에 나의 섹션 순서 저장
+                    Log.d(TAG, "onSuccess: ${responseData}")
+                } else {
+                    Log.d(TAG, "onSuccess: null")
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
+        })
     }
 
     // 스텀프 통신 해제

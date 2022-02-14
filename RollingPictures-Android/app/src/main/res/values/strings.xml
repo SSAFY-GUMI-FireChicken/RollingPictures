@@ -27,7 +27,8 @@
     <string name="public_room_list">공개방 목록</string>
     <string name="slash_round">2 / 6</string>
     <string name="complete_round">COMPLETE</string>
-    <string name="guide_round">다음 그림을 보고 제시어를 입력하세요.</string>
+    <string name="guide_round1">제시어를 입력하세요.</string>
+    <string name="guide_round2">다음 그림을 보고 제시어를 입력하세요.</string>
     <string name="end_game">게임 종료</string>
     <string name="exit_game">EXIT GAME</string>
     <string name="title_activity_game">GameActivity</string>
