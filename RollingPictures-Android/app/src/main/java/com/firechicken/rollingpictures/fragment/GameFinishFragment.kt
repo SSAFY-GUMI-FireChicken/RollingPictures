@@ -60,16 +60,8 @@ class GameFinishFragment : Fragment() {
 
 
         Log.d(TAG, "onViewCreated: 처음 리사이클러뷰 ")
-        if(sectionIdx==0){
-            fragmentGameFinishBinding.leftButton.visibility = View.GONE
-            fragmentGameFinishBinding.rightButton.visibility = View.VISIBLE
-        }else if(sectionIdx==sectionList!!.size-1){
-            fragmentGameFinishBinding.rightButton.visibility = View.GONE
-            fragmentGameFinishBinding.leftButton.visibility = View.VISIBLE
-        }else{
-            fragmentGameFinishBinding.rightButton.visibility = View.VISIBLE
-            fragmentGameFinishBinding.leftButton.visibility = View.VISIBLE
-        }
+
+        leftRightArrow()
 
         fragmentGameFinishBinding.rightButton.setOnClickListener {
             sectionIdx++
@@ -84,6 +76,19 @@ class GameFinishFragment : Fragment() {
         }
 
 
+    }
+
+    private fun leftRightArrow(){
+        if(sectionIdx==0){
+            fragmentGameFinishBinding.leftButton.visibility = View.GONE
+            fragmentGameFinishBinding.rightButton.visibility = View.VISIBLE
+        }else if(sectionIdx==sectionList!!.size-1){
+            fragmentGameFinishBinding.rightButton.visibility = View.GONE
+            fragmentGameFinishBinding.leftButton.visibility = View.VISIBLE
+        }else{
+            fragmentGameFinishBinding.rightButton.visibility = View.VISIBLE
+            fragmentGameFinishBinding.leftButton.visibility = View.VISIBLE
+        }
     }
 
     private fun synchronize(){
@@ -105,6 +110,7 @@ class GameFinishFragment : Fragment() {
                     sectionList = responseData.data
                     Log.d(TAG, "onSuccess: ${sectionList}")
 
+                    leftRightArrow()
                     synchronize()
 
                     Log.d(TAG, "onSuccess: 그림 조회")
@@ -129,37 +135,37 @@ class GameFinishFragment : Fragment() {
         })
     }
 
-    //섹션조회
-    private fun getSection(gameChannelId: Long, userId: Long) {
-        SectionService().getSection(gameChannelId, userId, object :
-            RetrofitCallback<ListResult<SectionRetrieveResDTO>> {
-            override fun onSuccess(code: Int, responseData: ListResult<SectionRetrieveResDTO>) {
-                if (responseData.output == 1) {
-                    roundList = responseData.data
-                    Log.d(TAG, "onSuccess: ${roundList}")
-
-                    synchronize()
-
-
-                    Log.d(TAG, "onSuccess: 그림 조회")
-                } else {
-                    Toast.makeText(
-                        context,
-                        "문제가 발생하였습니다. 다시 시도해주세요.1",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.2", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            override fun onError(t: Throwable) {
-                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-    }
+//    //섹션조회
+//    private fun getSection(gameChannelId: Long, userId: Long) {
+//        SectionService().getSection(gameChannelId, userId, object :
+//            RetrofitCallback<ListResult<SectionRetrieveResDTO>> {
+//            override fun onSuccess(code: Int, responseData: ListResult<SectionRetrieveResDTO>) {
+//                if (responseData.output == 1) {
+//                    roundList = responseData.data
+//                    Log.d(TAG, "onSuccess: ${roundList}")
+//
+//                    synchronize()
+//
+//
+//                    Log.d(TAG, "onSuccess: 그림 조회")
+//                } else {
+//                    Toast.makeText(
+//                        context,
+//                        "문제가 발생하였습니다. 다시 시도해주세요.1",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//
+//            override fun onFailure(code: Int) {
+//                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.2", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//
+//            override fun onError(t: Throwable) {
+//                Toast.makeText(context, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        })
+//    }
 }
