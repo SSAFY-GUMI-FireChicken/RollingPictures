@@ -28,7 +28,7 @@ class SectionRecyclerViewAdapter(
                 view.playerName1.visibility = View.VISIBLE
                 view.ImageView.visibility = View.GONE
                 view.playerName2.visibility = View.GONE
-                view.keywordTextView.setText(round.keyword)
+                view.keywordTextView.setText(round.img)
                 view.playerName1.setText(round.username)
 
             }else{
@@ -59,7 +59,7 @@ class SectionRecyclerViewAdapter(
         }
     }
 
-    override fun getItemCount(): Int = playerList.size
+    override fun getItemCount(): Int = sectionList[sectionIdx].roundInfos.size
 
 
 

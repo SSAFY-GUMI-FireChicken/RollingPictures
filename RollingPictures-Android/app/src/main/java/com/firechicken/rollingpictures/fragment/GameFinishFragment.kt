@@ -74,7 +74,6 @@ class GameFinishFragment : Fragment() {
         fragmentGameFinishBinding.rightButton.setOnClickListener {
             sectionIdx++
             getAllSection(gameChannelResDTO.data.id)
-//            ApplicationClass.sectionRecyclerViewAdapter.notifyDataSetChanged()
             ApplicationClass.sectionRecyclerView.smoothScrollToPosition(0)
         }
         fragmentGameFinishBinding.leftButton.setOnClickListener {
