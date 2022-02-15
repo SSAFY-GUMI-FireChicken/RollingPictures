@@ -58,7 +58,8 @@ class GameWritingFragment : Fragment() {
         roundView(gameChannelResDTO.data.id, ApplicationClass.loginUserResDTO.data.id, roundNum)
 
         completeButton.setOnClickListener {
-
+            completeButton.text = "SUBMITED"
+            completeButton.isEnabled = false
             Log.d(TAG, "onViewCreated: ${gameChannelResDTO.data.id}, ${prefs.getId()!!}, ${writingEditText.text.toString()}, ${roundNum}")
             val req = RoundReqDTO(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
             roundRegister(req)

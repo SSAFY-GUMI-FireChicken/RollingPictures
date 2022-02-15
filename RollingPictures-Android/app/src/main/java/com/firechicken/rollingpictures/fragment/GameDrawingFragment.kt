@@ -84,6 +84,8 @@ class GameDrawingFragment : Fragment() {
 
 
         binding.completeButton.setOnClickListener {
+            binding.completeButton.text = "SUBMITED"
+            binding.completeButton.isEnabled = false
             savePhoto()
         }
     }

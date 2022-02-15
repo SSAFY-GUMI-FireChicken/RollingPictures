@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.firechicken.rollingpictures.R
 import android.os.Handler
+import android.os.Looper
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -147,7 +148,12 @@ class GameActivity : AppCompatActivity() {
 
     // 헤드셋 아이콘을 클릭하여 음성채팅을 실시하는 메소드
     // 이미 음성채팅 중인 경우, 음성채팅을 해제한다.
-    fun buttonPressed(view: View?) {
+    fun buttonPressed(view: View) {
+
+        view.isEnabled = false
+        Handler(Looper.getMainLooper()).postDelayed({
+            view.isEnabled = true
+        }, 2000)
 
         // 음성 통신 토글 및 오디오 매니저 노말 모드로 초기화
         if(isVoice){
