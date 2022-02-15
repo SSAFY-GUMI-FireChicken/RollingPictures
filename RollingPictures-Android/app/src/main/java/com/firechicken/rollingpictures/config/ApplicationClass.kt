@@ -31,7 +31,7 @@ class ApplicationClass : Application() {
         //방의 플레이어 목록
         var playerList: MutableList<UserInfoResDTO> = mutableListOf()
         var sectionList: List<SectionAllRetrieveResDTO>?=null
-        var roundList: List<SectionRetrieveResDTO>?=null
+//        var roundList: List<SectionRetrieveResDTO>?=null
 
         //리사이클러뷰
         lateinit var recyclerView: RecyclerView
@@ -41,6 +41,9 @@ class ApplicationClass : Application() {
 
         //라운드 넘버
         var roundNum = 0
+
+        //최근 프래그먼트 (GameWaitingFragment : 0, GameWritingFragment : 1, GameDrawingFragment : 2, GameFinishFragment : 3)
+        var fragmentNum = -1
 
     }
 

@@ -47,6 +47,8 @@ class GameWritingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ApplicationClass.fragmentNum = 1
+
         if(roundNum==1){
             guideRoundTextView.setText(getString(R.string.guide_round1))
             pictureImageView.visibility = View.GONE

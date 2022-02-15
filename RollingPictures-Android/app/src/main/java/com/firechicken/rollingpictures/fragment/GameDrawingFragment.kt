@@ -65,6 +65,7 @@ class GameDrawingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        ApplicationClass.fragmentNum = 2
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
 

@@ -18,6 +18,7 @@ import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
@@ -57,6 +58,7 @@ class GameWaitingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentNum = 0
         prefs.setEnteredChannel(channelResDTO.data.code)
 
         for(player in channelResDTO.data.users){

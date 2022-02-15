@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
@@ -360,10 +361,13 @@ class GameActivity : AppCompatActivity() {
 
                 //channel/out 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
-                removePlayer(user)
 
-                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
-                transaction.commit()
+                //GameWaitingFragment에 있었다면
+                if(fragmentNum == 0){
+                    removePlayer(user)
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                    transaction.commit()
+                }
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -490,28 +494,6 @@ class GameActivity : AppCompatActivity() {
     }
 
 
-    //섹션조회
-    private fun getSection(gameChannelId: Long, userId: Long) {
-        Log.d(TAG, "getSection: ")
-        SectionService().getSection(gameChannelId, userId, object : RetrofitCallback<ListResult<SectionRetrieveResDTO>> {
-            override fun onSuccess(code: Int, responseData: ListResult<SectionRetrieveResDTO>) {
-                if (responseData.output == 1) {
-                    //companion object에 나의 섹션 순서 저장
-                    Log.d(TAG, "onSuccess: ${responseData}")
-                } else {
-                    Log.d(TAG, "onSuccess: null")
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-        })
-    }
 
     // 스텀프 통신 해제
     fun disconnectStomp() {
@@ -589,6 +571,7 @@ class GameActivity : AppCompatActivity() {
 
     // 어플리케이션이 Stop 됐을 때
     override fun onStop() {
+        fragmentNum = -1
         leaveSession()
         disconnectStomp()
         if (mRestPingDisposable != null) mRestPingDisposable.dispose()

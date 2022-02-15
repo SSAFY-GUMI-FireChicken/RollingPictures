@@ -29,7 +29,7 @@ class SectionRecyclerViewAdapter(
                 view.ImageView.visibility = View.GONE
                 view.playerName2.visibility = View.GONE
                 view.keywordTextView.setText(round.img)
-                view.playerName1.setText(round.username)
+                view.playerName1.setText(round.nickname)
 
             }else{
                 view.keywordTextView.visibility = View.GONE
@@ -37,7 +37,7 @@ class SectionRecyclerViewAdapter(
                 view.ImageView.visibility = View.VISIBLE
                 view.playerName2.visibility = View.VISIBLE
                 Glide.with(context!!).load(round.img).into(view.ImageView)
-                view.playerName2.setText(round.username)
+                view.playerName2.setText(round.nickname)
 
             }
 
