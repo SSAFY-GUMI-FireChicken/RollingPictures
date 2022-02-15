@@ -84,8 +84,6 @@ class GameDrawingFragment : Fragment() {
 
 
         binding.completeButton.setOnClickListener {
-//            transmitPictures()
-
             savePhoto()
         }
     }

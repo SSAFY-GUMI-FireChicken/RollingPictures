@@ -31,6 +31,7 @@ import com.firechicken.rollingpictures.dialog.GameSettingDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.fragment.GameDrawingFragment
+import com.firechicken.rollingpictures.fragment.GameFinishFragment
 import com.firechicken.rollingpictures.fragment.GameWaitingFragment
 import com.firechicken.rollingpictures.fragment.GameWritingFragment
 import com.firechicken.rollingpictures.service.ChannelService
@@ -372,9 +373,6 @@ class GameActivity : AppCompatActivity() {
                 gameChannelResDTO.msg = "성공"
                 gameChannelResDTO.output = 1
 
-//                getSection(res, loginUserResDTO.data.id)
-
-
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                 transaction.commit()
@@ -419,11 +417,27 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+                Log.d(TAG, "dispTopic6 Received " + topicMessage.getPayload())
                 val channelStmpResDto = mGson.fromJson(topicMessage.getPayload(), ChannelResDTO::class.java)
                 channelResDTO.data = channelStmpResDto
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                transaction.commit()
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
+
+        //게임 끝
+        val dispTopic7: Disposable = mStompClient!!.topic("/channel/end/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic7 Received " + topicMessage.getPayload())
+                var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
+                Log.d(TAG, "connectStomp: ${res}")
+
+
+                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameFinishFragment())
                 transaction.commit()
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
@@ -434,6 +448,7 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispTopic4)
         compositeDisposable!!.add(dispTopic5)
         compositeDisposable!!.add(dispTopic6)
+        compositeDisposable!!.add(dispTopic7)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
     }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter
+import com.firechicken.rollingpictures.adapter.SectionRecyclerViewAdapter
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.util.PreferenceUtil
 
@@ -29,10 +30,14 @@ class ApplicationClass : Application() {
 
         //방의 플레이어 목록
         var playerList: MutableList<UserInfoResDTO> = mutableListOf()
+        var sectionList: List<SectionAllRetrieveResDTO>?=null
+        var roundList: List<SectionRetrieveResDTO>?=null
 
         //리사이클러뷰
         lateinit var recyclerView: RecyclerView
+        lateinit var sectionRecyclerView: RecyclerView
         lateinit var playerRecyclerViewAdapter: PlayerRecyclerViewAdapter
+        lateinit var sectionRecyclerViewAdapter: SectionRecyclerViewAdapter
 
         //라운드 넘버
         var roundNum = 0
