@@ -15,6 +15,7 @@ public class SectionAllRetrieveResDTO {
     private Long sectionId;
     private List<RoundInfo> roundInfos = new ArrayList<>();
 
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class RoundInfo {
