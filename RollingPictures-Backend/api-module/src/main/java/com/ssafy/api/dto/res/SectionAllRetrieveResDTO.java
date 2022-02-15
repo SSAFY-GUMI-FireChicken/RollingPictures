@@ -20,6 +20,7 @@ public class SectionAllRetrieveResDTO {
     @AllArgsConstructor(staticName = "of")
     public static class RoundInfo {
         private String username;
+        private String nickname;
         private String keyword;
         private String img;
         private int roundNumber;

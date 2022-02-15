@@ -64,6 +64,7 @@ public class SectionService {
             for (Round round : section.getRounds()) {
                 dto.getRoundInfos().add(SectionAllRetrieveResDTO.RoundInfo.of(
                         round.getUser().getUsername(),
+                        round.getUser().getNickname(),
                         round.getKeyword(),
                         round.getImgSrc(),
                         round.getRoundNumber()));
