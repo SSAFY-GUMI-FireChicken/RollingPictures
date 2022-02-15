@@ -46,6 +46,7 @@ public class SectionService {
             result.add(SectionRetrieveResDTO.builder()
                     .sectionId(section.getId())
                     .userId(round.getUser().getId())
+                    .nickname(round.getUser().getNickname())
                     .roundNum(round.getRoundNumber())
                     .build());
         }
