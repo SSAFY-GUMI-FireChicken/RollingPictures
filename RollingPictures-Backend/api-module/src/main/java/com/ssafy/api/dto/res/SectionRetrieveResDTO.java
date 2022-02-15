@@ -9,6 +9,7 @@ import lombok.*;
 public class SectionRetrieveResDTO {
     private Long sectionId;
     private Long userId;
+    private String nickname;
     private String img;
     private String keyword;
     private Integer roundNum;
