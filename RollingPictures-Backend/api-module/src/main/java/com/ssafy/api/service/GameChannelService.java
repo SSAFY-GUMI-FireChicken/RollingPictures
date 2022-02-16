@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.GameChannelCreateReqDTO;
 import com.ssafy.api.dto.res.GameChannelCreateResDTO;
+import com.ssafy.api.dto.res.GameChannelGetResDTO;
 import com.ssafy.api.repository.ChannelRepository;
 import com.ssafy.api.repository.GameChannelRepository;
 import com.ssafy.core.code.GamePlayState;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -88,6 +90,11 @@ public class GameChannelService {
         return GameChannelCreateResDTO.builder()
                 .id(save.getId())
                 .build();
+    }
+
+    public GameChannel findGameChannelByCode(String Code) throws Exception{
+        GameChannel gameChannel = gameChannelRepository.findByCode(Code);
+        return gameChannel;
     }
 
     @Transactional
