@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import com.firechicken.rollingpictures.R
 import android.os.Handler
+import android.os.Looper
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -18,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
@@ -31,6 +33,7 @@ import com.firechicken.rollingpictures.dialog.GameSettingDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.fragment.GameDrawingFragment
+import com.firechicken.rollingpictures.fragment.GameFinishFragment
 import com.firechicken.rollingpictures.fragment.GameWaitingFragment
 import com.firechicken.rollingpictures.fragment.GameWritingFragment
 import com.firechicken.rollingpictures.service.ChannelService
@@ -125,19 +128,25 @@ class GameActivity : AppCompatActivity() {
 
     // 권한이 받아졌음을 boolean으로 return
     private fun arePermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_DENIED
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_DENIED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_DENIED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_DENIED)
     }
 
     // 메인 액티비티에서 권한을 허가 받지 못했으면, 권한을 요청함
     fun askForPermissions() {
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED)
         ) {
+            Log.d(TAG, "path0: ")
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.RECORD_AUDIO),
+                this, arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 MY_PERMISSIONS_REQUEST
             )
         }
@@ -146,7 +155,12 @@ class GameActivity : AppCompatActivity() {
 
     // 헤드셋 아이콘을 클릭하여 음성채팅을 실시하는 메소드
     // 이미 음성채팅 중인 경우, 음성채팅을 해제한다.
-    fun buttonPressed(view: View?) {
+    fun buttonPressed(view: View) {
+
+        view.isEnabled = false
+        Handler(Looper.getMainLooper()).postDelayed({
+            view.isEnabled = true
+        }, 2000)
 
         // 음성 통신 토글 및 오디오 매니저 노말 모드로 초기화
         if(isVoice){
@@ -353,10 +367,13 @@ class GameActivity : AppCompatActivity() {
 
                 //channel/out 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
-                removePlayer(user)
 
-                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
-                transaction.commit()
+                //GameWaitingFragment에 있었다면
+                if(fragmentNum == 0){
+                    removePlayer(user)
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                    transaction.commit()
+                }
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -371,9 +388,6 @@ class GameActivity : AppCompatActivity() {
                 gameChannelResDTO.data.id = res
                 gameChannelResDTO.msg = "성공"
                 gameChannelResDTO.output = 1
-
-//                getSection(res, loginUserResDTO.data.id)
-
 
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
@@ -419,11 +433,27 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
+                Log.d(TAG, "dispTopic6 Received " + topicMessage.getPayload())
                 val channelStmpResDto = mGson.fromJson(topicMessage.getPayload(), ChannelResDTO::class.java)
                 channelResDTO.data = channelStmpResDto
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                transaction.commit()
+
+            }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
+
+
+        //게임 끝
+        val dispTopic7: Disposable = mStompClient!!.topic("/channel/end/${channelResDTO.data.code}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage ->
+                Log.d(TAG, "dispTopic7 Received " + topicMessage.getPayload())
+                var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
+                Log.d(TAG, "connectStomp: ${res}")
+
+
+                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameFinishFragment())
                 transaction.commit()
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
@@ -434,6 +464,7 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispTopic4)
         compositeDisposable!!.add(dispTopic5)
         compositeDisposable!!.add(dispTopic6)
+        compositeDisposable!!.add(dispTopic7)
         mStompClient!!.connect(headers) //연결 시작
         Log.d(TAG, "conectStomp3: ")
     }
@@ -469,28 +500,6 @@ class GameActivity : AppCompatActivity() {
     }
 
 
-    //섹션조회
-    private fun getSection(gameChannelId: Long, userId: Long) {
-        Log.d(TAG, "getSection: ")
-        SectionService().getSection(gameChannelId, userId, object : RetrofitCallback<ListResult<SectionRetrieveResDTO>> {
-            override fun onSuccess(code: Int, responseData: ListResult<SectionRetrieveResDTO>) {
-                if (responseData.output == 1) {
-                    //companion object에 나의 섹션 순서 저장
-                    Log.d(TAG, "onSuccess: ${responseData}")
-                } else {
-                    Log.d(TAG, "onSuccess: null")
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-        })
-    }
 
     // 스텀프 통신 해제
     fun disconnectStomp() {
@@ -568,6 +577,7 @@ class GameActivity : AppCompatActivity() {
 
     // 어플리케이션이 Stop 됐을 때
     override fun onStop() {
+        fragmentNum = -1
         leaveSession()
         disconnectStomp()
         if (mRestPingDisposable != null) mRestPingDisposable.dispose()

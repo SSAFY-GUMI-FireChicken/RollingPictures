@@ -20,4 +20,11 @@ interface SectionApi {
         @Query("userId") userId: Long
     ): Call<ListResult<SectionRetrieveResDTO>>
 
+
+    // 모든 섹션조회
+    @GET("api/section/all")
+    fun getAllSection(
+        @Query("gameChannelId") gameChannelId: Long,
+    ): Call<ListResult<SectionAllRetrieveResDTO>>
+
 }

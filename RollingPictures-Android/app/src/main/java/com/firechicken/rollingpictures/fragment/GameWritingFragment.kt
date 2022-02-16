@@ -47,6 +47,8 @@ class GameWritingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ApplicationClass.fragmentNum = 1
+
         if(roundNum==1){
             guideRoundTextView.setText(getString(R.string.guide_round1))
             pictureImageView.visibility = View.GONE
@@ -58,7 +60,8 @@ class GameWritingFragment : Fragment() {
         roundView(gameChannelResDTO.data.id, ApplicationClass.loginUserResDTO.data.id, roundNum)
 
         completeButton.setOnClickListener {
-
+            completeButton.text = "SUBMITED"
+            completeButton.isEnabled = false
             Log.d(TAG, "onViewCreated: ${gameChannelResDTO.data.id}, ${prefs.getId()!!}, ${writingEditText.text.toString()}, ${roundNum}")
             val req = RoundReqDTO(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
             roundRegister(req)
