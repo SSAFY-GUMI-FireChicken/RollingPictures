@@ -15,12 +15,12 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin"
-        android:background="@drawable/bg_round"
+        android:background="@drawable/bg_round_player"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/slash_round"
-        tools:text="@string/slash_round" />
+        android:text="@string/game_info"
+        tools:text="@string/game_info" />
 
     <TextView
         android:id="@+id/guideRoundTextView"

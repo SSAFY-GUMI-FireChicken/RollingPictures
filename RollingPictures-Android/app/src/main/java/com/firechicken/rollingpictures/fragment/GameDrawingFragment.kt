@@ -3,9 +3,7 @@ package com.firechicken.rollingpictures.fragment
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,6 +19,7 @@ import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.activity.MainActivity
 import com.firechicken.rollingpictures.config.ApplicationClass
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
@@ -65,7 +64,7 @@ class GameDrawingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        ApplicationClass.fragmentNum = 2
+        fragmentNum = 2
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
 
@@ -83,6 +82,14 @@ class GameDrawingFragment : Fragment() {
         colorSelector()
         setBrushWidth()
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            // null 체크를 해줘야만 완료를 눌러 뷰가 사라졌을 때 실행 안하겠음을 실행할 수 있음
+            if(binding.completeButton != null && binding.completeButton.isEnabled){
+                binding.completeButton.text = "SUBMITED"
+                binding.completeButton.isEnabled = false
+                savePhoto()
+            }
+        }, 60000)
 
         binding.completeButton.setOnClickListener {
             binding.completeButton.text = "SUBMITED"

@@ -2,6 +2,8 @@ package com.firechicken.rollingpictures.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,7 +38,7 @@ class GameWritingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         (activity as GameActivity).apply {
-            timeProgressBar.visibility = View.VISIBLE
+            //timeProgressBar.visibility = View.VISIBLE
             roundTextView.setText("Round ${roundNum}")
         }
 
@@ -58,6 +60,16 @@ class GameWritingFragment : Fragment() {
         }
 
         roundView(gameChannelResDTO.data.id, ApplicationClass.loginUserResDTO.data.id, roundNum)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            // null 체크를 해줘야만 완료를 눌러 뷰가 사라졌을 때 실행 안하겠음을 실행할 수 있음
+            if(completeButton != null && completeButton.isEnabled){
+                completeButton.text = "SUBMITED"
+                completeButton.isEnabled = false
+                val req = RoundReqDTO(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
+                roundRegister(req)
+            }
+        }, 15000)
 
         completeButton.setOnClickListener {
             completeButton.text = "SUBMITED"
