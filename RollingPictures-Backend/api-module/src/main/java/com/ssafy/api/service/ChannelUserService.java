@@ -90,7 +90,7 @@ public class ChannelUserService {
                 ChannelUser newLeader = channelUser.getChannel().getChannelUsers().get(0);
                 newLeader.changeIsLeader(YNCode.Y);
 
-                socketService.sendChangingLeader(channelUser);
+                socketService.sendChangingLeader(newLeader);
             }
 
             socketService.sendOutChannelUser(channelUser);
