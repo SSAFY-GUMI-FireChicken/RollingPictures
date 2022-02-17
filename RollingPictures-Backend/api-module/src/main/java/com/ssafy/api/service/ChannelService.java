@@ -111,7 +111,7 @@ public class ChannelService {
      * @return
      */
     @Transactional(readOnly = false)
-    public void deleteUnconnectChannelUsers(Long gameChannelId) {
+    public void deleteDisconnectChannelUsers(Long gameChannelId) {
         Channel channel = channelRepository.findByGameChannel_Id(gameChannelId);
 
         channel.changeIsPlaying(YNCode.N);

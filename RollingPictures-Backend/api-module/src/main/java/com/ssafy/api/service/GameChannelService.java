@@ -3,7 +3,6 @@ package com.ssafy.api.service;
 import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.GameChannelCreateReqDTO;
 import com.ssafy.api.dto.res.GameChannelCreateResDTO;
-import com.ssafy.api.dto.res.GameChannelGetResDTO;
 import com.ssafy.api.repository.ChannelRepository;
 import com.ssafy.api.repository.GameChannelRepository;
 import com.ssafy.core.code.GamePlayState;
@@ -14,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,14 +54,8 @@ public class GameChannelService {
                 .code(findChannel.getCode())
                 .conPeopleCnt(0)
                 .curRoundNumber(1)
-                .gameChannelUserOrders(new ArrayList<>())
+                .gameChannelUserInfos(new ArrayList<>())
                 .build();
-
-        Progress progress = Progress.builder()
-                .gameChannel(gameChannel)
-                .build();
-
-        gameChannel.changeProgress(progress);
 
         int conPeopleNum = 0;
         int startOrder = 0;
@@ -74,12 +65,13 @@ public class GameChannelService {
             }
 
             channelUser.changeGamePlayState(GamePlayState.PLAYING);
-            GameChannelUserOrder gameChannelUserOrder = GameChannelUserOrder.builder()
+            GameChannelUserInfo gameChannelUserOrder = GameChannelUserInfo.builder()
                     .user(channelUser.getUser())
+                    .submitRoundNum(0)
                     .orderNum(startOrder++)
                     .build();
 
-            gameChannel.addGameChannelUserOrder(gameChannelUserOrder);
+            gameChannel.addGameChannelUserInfo(gameChannelUserOrder);
         }
 
         gameChannel.changeConPeopleCnt(conPeopleNum);

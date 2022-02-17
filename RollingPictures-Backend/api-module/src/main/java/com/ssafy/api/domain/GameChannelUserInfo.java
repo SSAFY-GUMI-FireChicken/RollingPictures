@@ -12,14 +12,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "game_channel_user_order")
-public class GameChannelUserOrder {
+@Table(name = "game_channel_user_info")
+public class GameChannelUserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "game_channel_user_order_id", nullable = false)
+    @Column(name = "game_channel_user_info_id", nullable = false)
     private Long id;
 
     private Integer orderNum;
+
+    private Integer submitRoundNum;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -31,6 +33,10 @@ public class GameChannelUserOrder {
 
     public void changeGameChannel(GameChannel gameChannel) {
         this.gameChannel = gameChannel;
-        gameChannel.getGameChannelUserOrders().add(this);
+        gameChannel.getGameChannelUserInfos().add(this);
+    }
+
+    public void changeSubmitRoundNum(Integer submitRoundNum) {
+        this.submitRoundNum = submitRoundNum;
     }
 }
