@@ -96,11 +96,6 @@ class GameActivity : AppCompatActivity() {
 
         gameChannelResDTO = SingleResult (GameChannelResDTO(0),"",0)
 
-        // 시간 표시 (게임진행 중에만 사용함)
-        val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow60)
-        //activityGameActivity.timeProgressBar.startAnimation(progressGrow)
-        activityGameActivity.timeProgressBar.visibility = View.GONE
-
         // 초기 게임방 대기 시 인원 설정
         for(users in channelResDTO.data.users){
             playerList.add(users)
@@ -118,6 +113,10 @@ class GameActivity : AppCompatActivity() {
         connectStomp()
         Log.d(SSESION_TAG, "onCreate2: ")
 
+        if (!arePermissionGranted()) {
+            val permissionsFragment: DialogFragment = PermissionsDialogFragment(this@GameActivity)
+            permissionsFragment.show(supportFragmentManager, "Permissions Fragment")
+        }
     }
 
     // 권한이 받아졌음을 boolean으로 return
@@ -391,10 +390,6 @@ class GameActivity : AppCompatActivity() {
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                 transaction.commit()
 
-                val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow15)
-                activityGameActivity.timeProgressBar.visibility = View.VISIBLE
-                activityGameActivity.timeProgressBar.startAnimation(progressGrow)
-
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
         val dispTopic4: Disposable = mStompClient!!.topic("/channel/leader/${channelResDTO.data.code}")
@@ -422,23 +417,19 @@ class GameActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
                 Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
-
+                Log.d(TAG, "묭 ")
                 //channel/game/next 신호가 들어왔을 때 실행할 함수
                 roundNum = mGson.fromJson(topicMessage.getPayload(), Int::class.java)
                 if(roundNum%2==1){
+                    Log.d(TAG, "수현님 GameActivity_싸피 GameWritingFragment "+ topicMessage.getPayload())
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                     transaction.commit()
-                    val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow15)
-                    activityGameActivity.timeProgressBar.visibility = View.VISIBLE
-                    activityGameActivity.timeProgressBar.startAnimation(progressGrow)
                 }else{
+                    Log.d(TAG, "수현님 GameActivity_싸피 GameDrawingFragment "+ topicMessage.getPayload())
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameDrawingFragment())
                     transaction.commit()
-                    val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow60)
-                    activityGameActivity.timeProgressBar.visibility = View.VISIBLE
-                    activityGameActivity.timeProgressBar.startAnimation(progressGrow)
                 }
-
+                Log.d(TAG, "묭3 ")
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -468,8 +459,6 @@ class GameActivity : AppCompatActivity() {
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameFinishFragment())
                 transaction.commit()
-                activityGameActivity.timeProgressBar.clearAnimation()
-                activityGameActivity.timeProgressBar.visibility = View.GONE
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 

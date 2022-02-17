@@ -9,7 +9,7 @@
         android:background="@android:color/transparent">
 
         <TextView
-            android:id="@+id/slashRoundTextView"
+            android:id="@+id/explainTextView"
             style="@style/Text.RoundText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,6 +19,7 @@
             android:background="@drawable/bg_round_player"
             android:gravity="center"
             android:text="@string/game_info"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/game_info" />
@@ -33,7 +34,7 @@
             android:padding="@dimen/padding_size_20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/slashRoundTextView"
+            app:layout_constraintTop_toBottomOf="@+id/explainTextView"
             app:layout_constraintWidth_percent="0.8" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -29,15 +29,18 @@ class SectionRecyclerViewAdapter(
                 view.ImageView.visibility = View.GONE
                 view.playerName2.visibility = View.GONE
                 view.keywordTextView.setText(round.img)
-                view.playerName1.setText(round.nickname)
-
+                if(round.roundNumber==1){
+                    view.playerName1.setText("출제한 사람 : ${round.nickname}")
+                }else{
+                    view.playerName1.setText("단어를 제출한 사람 : ${round.nickname}")
+                }
             }else{
                 view.keywordTextView.visibility = View.GONE
                 view.playerName1.visibility = View.GONE
                 view.ImageView.visibility = View.VISIBLE
                 view.playerName2.visibility = View.VISIBLE
                 Glide.with(context!!).load(round.img).into(view.ImageView)
-                view.playerName2.setText(round.nickname)
+                view.playerName2.setText("그림을 제출한 사람 : ${round.nickname}")
 
             }
 

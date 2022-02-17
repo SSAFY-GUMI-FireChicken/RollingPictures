@@ -7,18 +7,6 @@
     android:background="@drawable/bg_activity"
     tools:context=".activity.GameActivity">
 
-    <ProgressBar
-        android:id="@+id/timeProgressBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_size_4"
-        android:scaleY="3"
-        android:progressBackgroundTint="#FD0013"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageButton
         android:id="@+id/headSetImageButton"
         android:layout_width="wrap_content"
