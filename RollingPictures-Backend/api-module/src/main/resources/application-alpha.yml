@@ -39,7 +39,7 @@ spring:
 
   # 데이터 베이스 연결 설정
   datasource:
-    url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&amp;useSSL=false&amp;autoReconnection=true
+    url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: ssafy0107
@@ -52,7 +52,7 @@ spring:
     multipart:
       file-size-threshold: 15MB
       # 프로젝트 환경의 upload 파일을 저장할 경로
-      location: /home/dev/projects/ssafy/upload
+      location: /home/ubuntu/project/ssafy/web/upload
       max-file-size: 100MB
       max-request-size: 100MB
 
