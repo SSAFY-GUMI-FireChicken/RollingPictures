@@ -47,7 +47,7 @@ public class Channel extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private YNCode isPublic;
 
-    @OneToMany(mappedBy = "channel")
+    @OneToMany(mappedBy = "channel", fetch = LAZY, cascade = CascadeType.REMOVE)
     private List<ChannelUser> channelUsers = new ArrayList<>();
 
     @OneToOne(mappedBy = "channel", fetch = LAZY, cascade = CascadeType.REMOVE)

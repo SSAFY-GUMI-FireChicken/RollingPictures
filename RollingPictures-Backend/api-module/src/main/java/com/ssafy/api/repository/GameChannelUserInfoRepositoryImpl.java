@@ -2,8 +2,6 @@ package com.ssafy.api.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.api.domain.GameChannelUserOrder;
-import com.ssafy.api.domain.QGameChannelUserOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,29 +10,29 @@ import javax.persistence.EntityManager;
 
 import java.util.Optional;
 
-import static com.ssafy.api.domain.QGameChannelUserOrder.*;
+import static com.ssafy.api.domain.QGameChannelUserInfo.gameChannelUserInfo;
 
 @RequiredArgsConstructor
 @Repository
 @Transactional
-public class GameChannelUserOrderRepositoryImpl implements GameChannelUserOrderRepositoryCustom {
+public class GameChannelUserInfoRepositoryImpl implements GameChannelUserInfoRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
     @Override
     public Optional<Integer> findOrderNum(Long gameChannelId, Long userId) {
         return Optional.ofNullable(queryFactory
-                .select(gameChannelUserOrder.orderNum)
-                .from(gameChannelUserOrder)
+                .select(gameChannelUserInfo.orderNum)
+                .from(gameChannelUserInfo)
                 .where(gameChannelEq(gameChannelId), userEq(userId))
                 .fetchOne());
     }
 
     private BooleanExpression gameChannelEq(Long gameChannelId) {
-        return gameChannelId != null ? gameChannelUserOrder.gameChannel.id.eq(gameChannelId) : null;
+        return gameChannelId != null ? gameChannelUserInfo.gameChannel.id.eq(gameChannelId) : null;
     }
 
     private BooleanExpression userEq(Long userId) {
-        return userId != null ? gameChannelUserOrder.user.id.eq(userId) : null;
+        return userId != null ? gameChannelUserInfo.user.id.eq(userId) : null;
     }
 }
