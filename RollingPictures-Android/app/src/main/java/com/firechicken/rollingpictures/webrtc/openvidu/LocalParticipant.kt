@@ -4,11 +4,8 @@ import org.webrtc.*
 import java.util.ArrayList
 
 // 나
-class LocalParticipant(
-    participantName: String?,
-    session: Session,
-) :
-    Participant(participantName!!, session) {
+class LocalParticipant(participantName: String?, session: Session, ) : Participant(participantName!!, session) {
+
     private var surfaceTextureHelper: SurfaceTextureHelper? = null
     private val localIceCandidates: MutableCollection<IceCandidate>
 

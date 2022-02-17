@@ -86,7 +86,6 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var activityGameActivity: ActivityGameBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -109,9 +108,7 @@ class GameActivity : AppCompatActivity() {
         //websocket URL 지정
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, ApplicationClass.websocketURL)
 
-        Log.d(SSESION_TAG, "onCreate1: ")
         connectStomp()
-        Log.d(SSESION_TAG, "onCreate2: ")
 
         if (!arePermissionGranted()) {
             val permissionsFragment: DialogFragment = PermissionsDialogFragment(this@GameActivity)
@@ -146,7 +143,6 @@ class GameActivity : AppCompatActivity() {
             )
         }
     }
-
 
     // 헤드셋 아이콘을 클릭하여 음성채팅을 실시하는 메소드
     // 이미 음성채팅 중인 경우, 음성채팅을 해제한다.
@@ -207,7 +203,6 @@ class GameActivity : AppCompatActivity() {
                     @Throws(IOException::class)
                     // 일단 openvidu에 연결이 되면 > 해당 방에 접속함
                     override fun onResponse(call: Call, response: Response) {
-                        Log.d(SSESION_TAG, "responseString: " + response.body!!.string())
                         // Token Request
                         val tokenBody =
                             RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), "{}")
@@ -246,19 +241,16 @@ class GameActivity : AppCompatActivity() {
                                 }
 
                                 override fun onFailure(call: Call, e: IOException) {
-                                    Log.e(SSESION_TAG, "Error POST /api/tokens", e)
                                     connectionError()
                                 }
                             })
                     }
 
                     override fun onFailure(call: Call, e: IOException) {
-                        Log.e(SSESION_TAG, "Error POST /api/sessions", e)
                         connectionError()
                     }
                 })
         } catch (e: IOException) {
-            Log.e(SSESION_TAG, "Error getting token", e)
             e.printStackTrace()
             connectionError()
         }
@@ -301,7 +293,6 @@ class GameActivity : AppCompatActivity() {
         httpClient?.dispose()
     }
 
-
     private fun resetSubscriptions() {
         if (compositeDisposable != null) {
             compositeDisposable!!.dispose()
@@ -312,23 +303,18 @@ class GameActivity : AppCompatActivity() {
     //Stomp 연결
     private fun connectStomp() {
         val headers: MutableList<StompHeader> = ArrayList()
-        Log.d(SSESION_TAG, "connectStomp: ${channelResDTO}")
 
         headers.add(StompHeader(USERID, "${prefs.getId()}"))
         headers.add(StompHeader(PASSCODE, "guest"))
         mStompClient!!.withClientHeartbeat(1000).withServerHeartbeat(1000)
         resetSubscriptions()
-        Log.d(SSESION_TAG, "connectStomp1: ")
         val dispLifecycle: Disposable = mStompClient!!.lifecycle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { lifecycleEvent ->
                 when (lifecycleEvent.getType()) {
                     LifecycleEvent.Type.OPENED -> toast("Stomp connection opened")
-                    LifecycleEvent.Type.ERROR -> {
-                        Log.e(SSESION_TAG, "Stomp connection error", lifecycleEvent.getException())
-                        toast("Stomp connection error")
-                    }
+                    LifecycleEvent.Type.ERROR -> toast("Stomp connection error")
                     LifecycleEvent.Type.CLOSED -> {
                         toast("Stomp connection closed")
                         resetSubscriptions()
@@ -343,7 +329,6 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic Received " + topicMessage.getPayload())
 
                 //channel/in 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
@@ -352,22 +337,19 @@ class GameActivity : AppCompatActivity() {
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                 transaction.commit()
 
-
-
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
         val dispTopic2: Disposable = mStompClient!!.topic("/channel/out/${channelResDTO.data.code}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic2 Received " + topicMessage.getPayload())
 
                 //channel/out 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
                 removePlayer(user)
+
                 //GameWaitingFragment에 있었다면
                 if(fragmentNum == 0){
-
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                     transaction.commit()
                 }
@@ -378,14 +360,12 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic3 Received " + topicMessage.getPayload())
+
                 roundNum=1
                 var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
-                Log.d(TAG, "connectStomp: ${res}")
                 gameChannelResDTO.data.id = res
                 gameChannelResDTO.msg = "성공"
                 gameChannelResDTO.output = 1
-
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                 transaction.commit()
@@ -396,19 +376,15 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic4 Received " + topicMessage.getPayload())
 
                 //channel/leader 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
                 updateLeader(user)
 
                 if(fragmentNum == 0){
-                    Log.d(TAG, "밍 ")
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                     transaction.commit()
-                    Log.d(TAG, "밍1 " )
                 }
-
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -416,20 +392,16 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
-                Log.d(TAG, "묭 ")
+
                 //channel/game/next 신호가 들어왔을 때 실행할 함수
                 roundNum = mGson.fromJson(topicMessage.getPayload(), Int::class.java)
                 if(roundNum%2==1){
-                    Log.d(TAG, "수현님 GameActivity_싸피 GameWritingFragment "+ topicMessage.getPayload())
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                     transaction.commit()
                 }else{
-                    Log.d(TAG, "수현님 GameActivity_싸피 GameDrawingFragment "+ topicMessage.getPayload())
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameDrawingFragment())
                     transaction.commit()
                 }
-                Log.d(TAG, "묭3 ")
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -437,7 +409,7 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic6 Received " + topicMessage.getPayload())
+
                 val channelStmpResDto = mGson.fromJson(topicMessage.getPayload(), ChannelResDTO::class.java)
                 channelResDTO.data = channelStmpResDto
 
@@ -452,10 +424,8 @@ class GameActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
-                Log.d(TAG, "dispTopic7 Received " + topicMessage.getPayload())
-                var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
-                Log.d(TAG, "connectStomp: ${res}")
 
+                var res = mGson.fromJson(topicMessage.getPayload(), Long::class.java)
 
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameFinishFragment())
                 transaction.commit()
@@ -470,7 +440,6 @@ class GameActivity : AppCompatActivity() {
         compositeDisposable!!.add(dispTopic6)
         compositeDisposable!!.add(dispTopic7)
         mStompClient!!.connect(headers) //연결 시작
-        Log.d(TAG, "conectStomp3: ")
     }
 
     //player 입장
@@ -487,7 +456,6 @@ class GameActivity : AppCompatActivity() {
         playerList = channelResDTO.data.users
         playerRecyclerViewAdapter.notifyDataSetChanged()
         recyclerView.smoothScrollToPosition(playerList.size - 1)
-
     }
 
     //Leader 변경
@@ -501,25 +469,7 @@ class GameActivity : AppCompatActivity() {
             playerList = users
         }
         playerRecyclerViewAdapter.notifyDataSetChanged()
-//        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
-//        for(player in channelResDTO.data.users){
-//            if(player.id== ApplicationClass.loginUserResDTO.data.id){
-//                if(player.isLeader=="Y"){
-//                    gameWaitingFragment.startGameButton.setText("START GAME")
-//                    gameWaitingFragment.startGameButton.setEnabled(true)
-//                    gameWaitingFragment.settingImageButton.visibility = View.VISIBLE
-//                }else{
-//                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
-//                    gameWaitingFragment.startGameButton.setTextSize(16F)
-//                    gameWaitingFragment.startGameButton.setEnabled(false)
-//                    gameWaitingFragment.settingImageButton.visibility = View.GONE
-//                }
-//                break
-//            }
-//        }
     }
-
-
 
     // 스텀프 통신 해제
     fun disconnectStomp() {
@@ -561,7 +511,6 @@ class GameActivity : AppCompatActivity() {
 
             override fun onError(t: Throwable) {
                 toast("outChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
-
             }
         })
     }
@@ -569,27 +518,20 @@ class GameActivity : AppCompatActivity() {
     // 방장이 방의 설정을 수정했을 때
     fun updateChannel(changedChannel: MakeChannelReqDTO) {
 
-        Log.d(TAG, "makeChannel: ")
-
         ChannelService().updateChannel(changedChannel, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
-                Log.d(TAG, "updateChannel ChannelResDTO: ${responseData}")
                 if (responseData.data.id > 0) {
                     channelResDTO = responseData
-                    Log.d(TAG, "onSuccess: ${responseData}")
                 } else {
-                    Log.d(TAG, "onSuccess: null")
                     toast("makeChannel에서 문제가 발생하였습니다. 다시 시도해주세요.")
                 }
             }
 
             override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
                 toast("makeChannel에서 실패문제가 발생하였습니다. 다시 시도해주세요.")
             }
 
             override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
                 toast("makeChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
             }
         })
@@ -606,7 +548,6 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun toast(text: String) {
-        Log.i(TAG, text)
         Toast.makeText(this@GameActivity, text, Toast.LENGTH_SHORT).show()
     }
 }

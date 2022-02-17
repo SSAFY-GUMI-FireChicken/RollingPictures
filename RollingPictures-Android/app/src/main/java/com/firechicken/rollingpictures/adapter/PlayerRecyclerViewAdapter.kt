@@ -20,16 +20,11 @@ class PlayerRecyclerViewAdapter(
             view.playerButton.text = player.nickname
             view.playerButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             if (playerList[position].isLeader == "Y") {
-                view.playerButton.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    context.getResources().getDrawable(R.drawable.crown),
-                    null
-                )
+                view.playerButton.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                    context.getResources().getDrawable(R.drawable.crown), null)
             }
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserInfoHolder {
         val view =
@@ -37,16 +32,11 @@ class PlayerRecyclerViewAdapter(
         return UserInfoHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: UserInfoHolder, position: Int) {
         holder.apply {
             bindInfo(playerList[position])
-
         }
     }
 
     override fun getItemCount(): Int = playerList.size
-
-
-
 }

@@ -1,7 +1,6 @@
 package com.firechicken.rollingpictures.webrtc.openvidu
 
 import android.os.AsyncTask
-import android.util.Log
 import android.view.View
 import com.firechicken.rollingpictures.activity.*
 import com.firechicken.rollingpictures.webrtc.observer.CustomPeerConnectionObserver
@@ -13,11 +12,8 @@ import org.webrtc.PeerConnectionFactory.InitializationOptions
 import java.util.ArrayList
 import java.util.HashMap
 
-class Session(
-    val id: String,
-    val token: String,
-    activity: GameActivity
-) {
+class Session(val id: String, val token: String, activity: GameActivity) {
+
     private var localParticipant: LocalParticipant? = null
     private val remoteParticipants: MutableMap<String, RemoteParticipant> =
         HashMap<String, RemoteParticipant>()
@@ -93,12 +89,14 @@ class Session(
                     }
                 }
             })
+
         peerConnection!!.addTrack(localParticipant?.audioTrack) //Add audio track to create transReceiver
 
         for (transceiver in peerConnection.transceivers) {
             //We set both audio and video in receive only mode
             transceiver.direction = RtpTransceiver.RtpTransceiverDirection.RECV_ONLY
         }
+
         remoteParticipants[connectionId]?.peerConnection = (peerConnection)
     }
 
@@ -107,7 +105,7 @@ class Session(
         localParticipant!!.peerConnection?.createOffer(object : CustomSdpObserver("createOffer") {
             override fun onCreateSuccess(sessionDescription: SessionDescription) {
                 super.onCreateSuccess(sessionDescription)
-                Log.i("createOffer SUCCESS", sessionDescription.toString())
+
                 localParticipant!!.peerConnection?.setLocalDescription(
                     CustomSdpObserver("createOffer_setLocalDescription"),
                     sessionDescription
@@ -115,9 +113,7 @@ class Session(
                 websocket?.publishVideo(sessionDescription)
             }
 
-            override fun onCreateFailure(s: String) {
-                Log.e("createOffer ERROR", s)
-            }
+            override fun onCreateFailure(s: String) {}
         }, constraints)
     }
 
@@ -131,11 +127,10 @@ class Session(
             ?.createAnswer(object : CustomSdpObserver("createAnswerSubscribing") {
                 override fun onCreateSuccess(sessionDescription: SessionDescription) {
                     super.onCreateSuccess(sessionDescription)
-                    Log.i("createAnswer SUCCESS", sessionDescription.toString())
+
                     remoteParticipant.peerConnection!!.setLocalDescription(object :
                         CustomSdpObserver("createAnswerSubscribing_setLocalDescription") {
                         override fun onSetSuccess() {
-                            Log.d("teteaa", "!aaaaaaaaaaaaaaaaaa")
                             websocket?.receiveVideoFrom(
                                 sessionDescription,
                                 remoteParticipant,
@@ -143,15 +138,11 @@ class Session(
                             )
                         }
 
-                        override fun onSetFailure(s: String) {
-                            Log.e("setRemoteDescription ER", s!!)
-                        }
+                        override fun onSetFailure(s: String) {}
                     }, sessionDescription)
                 }
 
-                override fun onCreateFailure(s: String) {
-                    Log.e("createAnswer ERROR", s!!)
-                }
+                override fun onCreateFailure(s: String) {}
             }, constraints)
     }
 
@@ -195,7 +186,6 @@ class Session(
                 if (remoteParticipant.peerConnection != null) {
                     remoteParticipant.peerConnection!!.close()
                 }
-                //views_container.removeView(remoteParticipant.getView())
             }
         }
         AsyncTask.execute {

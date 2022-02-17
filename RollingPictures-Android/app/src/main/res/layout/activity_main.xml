@@ -8,7 +8,6 @@
     android:padding="@dimen/padding_size_20"
     tools:context=".activity.MainActivity">
 
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/fragment_height"
@@ -52,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/fab_margin"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="@dimen/margin_size_4"
             android:text="@string/welcome_message" />
     </LinearLayout>
 
@@ -109,4 +108,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createButton"
         app:layout_constraintWidth_percent="0.8" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

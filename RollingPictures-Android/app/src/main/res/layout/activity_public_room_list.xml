@@ -30,7 +30,6 @@
         app:layout_constraintTop_toTopOf="@+id/roundTextView"
         app:srcCompat="@drawable/ic_baseline_refresh_24" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChannel"
         android:layout_width="match_parent"
@@ -74,5 +73,7 @@
             app:layout_constraintStart_toEndOf="@+id/prevImageButton"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_arrow_circle_right_24" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

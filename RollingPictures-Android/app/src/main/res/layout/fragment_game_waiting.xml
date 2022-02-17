@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_size_10"
-        android:text="10/10"
+        android:text="@string/player_cnt"
         android:textSize="@dimen/player_list_title_size"
         app:layout_constraintBottom_toBottomOf="@+id/playerTitleTextView"
         app:layout_constraintStart_toEndOf="@+id/playerTitleTextView"
@@ -128,6 +128,5 @@
         app:layout_constraintStart_toEndOf="@+id/playerCountTextView"
         app:layout_constraintTop_toBottomOf="@+id/roomCodeTextView"
         app:srcCompat="@drawable/ic_baseline_settings_applications_24" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

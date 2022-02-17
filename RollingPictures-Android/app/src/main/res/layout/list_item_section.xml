@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/fragment_height">
 
-
     <TextView
         android:id="@+id/keywordTextView"
         android:layout_width="@dimen/margin_size_300"
@@ -17,7 +16,7 @@
         android:background="@drawable/bg_input"
         android:elevation="@dimen/layout_size_15"
         android:gravity="center"
-        android:text="TextView"
+        android:text="@string/answer"
         android:textAlignment="center"
         android:textSize="@dimen/button_text_size"
         android:textStyle="bold"
@@ -47,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_size_30"
         android:layout_marginTop="@dimen/margin_size_10"
-        android:text="TextView"
+        android:text="@string/ex_publisher"
         android:textColor="@color/design_default_color_primary"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_size_10"
         android:layout_marginEnd="@dimen/margin_size_30"
-        android:text="TextView"
+        android:text="@string/ex_sender"
         android:textColor="@color/design_default_color_primary"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintBottom_toBottomOf="parent"

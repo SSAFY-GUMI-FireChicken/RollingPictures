@@ -46,6 +46,4 @@ class PreferenceUtil(context: Context) {
         editor.putString("in_channel", code)
         editor.apply()
     }
-
 }
-
