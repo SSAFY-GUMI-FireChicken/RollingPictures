@@ -20,7 +20,6 @@ public class GameChannelUserInfoService {
     public ProgressCode isNextRound(int roundNumber, Long userId) {
         GameChannelUserInfo gameChannelUserInfo = gameChannelUserInfoRepository.findByUser_Id(userId);
         GameChannel gameChannel = gameChannelUserInfo.getGameChannel();
-        System.out.println("어ㅐ");
 
         if (gameChannel.getCurRoundNumber() != roundNumber || gameChannelUserInfo.getSubmitRoundNum() >= roundNumber) {
             System.out.println(roundNumber);
