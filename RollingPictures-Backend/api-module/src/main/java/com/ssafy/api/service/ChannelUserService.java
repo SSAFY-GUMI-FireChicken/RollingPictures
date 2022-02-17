@@ -142,7 +142,7 @@ public class ChannelUserService {
                 channelUserRepository.save(channelUser);
             }
         } else {
-            deleteChannelUser(channelUser);
+            channelUserRepository.save(channelUser);
         }
     }
 
