@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
     Channel findTopByCode(String code);
+    Channel findByGameChannel_Id(Long gameChannelId);
 
     long countByIsPublicAndIsPlaying(YNCode isPublic, YNCode isPlaying);
 

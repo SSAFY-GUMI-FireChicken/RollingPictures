@@ -13,8 +13,6 @@ import com.ssafy.api.service.common.SingleResult;
 import com.ssafy.core.code.JoinCode;
 import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collections;
 
-@Api(tags = {"01. 유저"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -45,7 +42,6 @@ public class SignController {
 
 
     // 회원가입
-    @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userSignUp(@RequestBody @Valid SignUpReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
@@ -77,7 +73,6 @@ public class SignController {
     }
 
     // 회원정보수정
-    @ApiOperation(value = "회원정보수정", notes = "회원정보수정")
     @PutMapping( produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<UserIdResDTO> userInfoUpdate(@RequestBody @Valid UserInfoUpdateReqDTO req) throws Exception{
         // uid 중복되는 값이 존재하는지 확인 (uid = 고유한 값)
@@ -92,7 +87,6 @@ public class SignController {
     }
 
     // 로그인
-    @ApiOperation(value="로그인",notes="로그인")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<LoginUserResDTO> login(@Valid LoginUserReqDTO req) throws Exception{
         // UID 값과 회원가입 타입으로 해당되는 정보 조회

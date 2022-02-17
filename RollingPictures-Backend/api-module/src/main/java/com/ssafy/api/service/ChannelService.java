@@ -1,11 +1,14 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.domain.Channel;
+import com.ssafy.api.domain.ChannelUser;
 import com.ssafy.api.dto.req.MakeChannelReqDTO;
 import com.ssafy.api.dto.res.ChannelListResDTO;
 import com.ssafy.api.dto.res.ChannelResDTO;
 import com.ssafy.api.repository.ChannelRepository;
+import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.core.code.YNCode;
+import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -20,6 +24,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ChannelService {
     private final ChannelRepository channelRepository;
+    private final ChannelUserRepository channelUserRepository;
+    private final SocketService socketService;
 
     /**
      * code로 방 조회
@@ -96,5 +102,93 @@ public class ChannelService {
         result.setChannels(list);
 
         return result;
+    }
+
+
+    /**
+     * 채널 상태 변경 & 연결되지 않은 유저 자동 퇴장
+     * @param
+     * @return
+     */
+    @Transactional(readOnly = false)
+    public void deleteUnconnectChannelUsers(Long gameChannelId) {
+        Channel channel = channelRepository.findByGameChannel_Id(gameChannelId);
+
+        channel.changeIsPlaying(YNCode.N);
+        List<ChannelUser> users = channel.getChannelUsers();
+
+        boolean isDeletedLeader = false;
+        ChannelUser newLeader = null;
+
+        Iterator<ChannelUser> iter = users.iterator();
+
+        while (iter.hasNext()) {
+            ChannelUser channelUser = iter.next();
+
+            if (channelUser.getSessionId() == null || channelUser.getSessionId().equals(null)) {
+                iter.remove();
+
+                if (channelUser.getIsLeader() == YNCode.Y) {
+                    isDeletedLeader = true;
+                }
+
+                channelUser.getChannel().changeCurPeopleCnt(-1);
+                channelUserRepository.delete(channelUser);
+
+                socketService.sendOutChannelUser(channelUser);
+            } else if (isDeletedLeader) {
+                isDeletedLeader = false;
+                newLeader = channelUser;
+                newLeader.changeIsLeader(YNCode.Y);
+            }
+        }
+
+        if (newLeader != null) {
+            socketService.sendChangingLeader(newLeader);
+        }
+
+        channelRepository.save(channel);
+    }
+
+    @Transactional(readOnly = false)
+    public ChannelResDTO changeChannelSetting(MakeChannelReqDTO req) throws ApiMessageException {
+        ChannelUser channelUser = channelUserRepository.findByUser_Id(req.getId());
+
+        if (channelUser == null) {
+            throw new ApiMessageException("방에 입장한 상태가 아닙니다.");
+        } else if (channelUser.getIsLeader() == YNCode.N) {
+            throw new ApiMessageException("방장만 변경할 수 있습니다.");
+        }
+
+        Channel channel = channelUser.getChannel();
+
+        channel.changeTitle(req.getTitle());
+        channel.changeIsPublic(req.getIsPublic());
+
+        if (req.getMaxPeopleCnt() < channel.getCurPeopleCnt()) {
+            throw new ApiMessageException("최대 인원을 현재 인원보다 적게 변경할 수 없습니다.");
+        } else if (req.getMaxPeopleCnt() > 6) {
+            throw new ApiMessageException("최대 인원 수를 6 이상으로 설정할 수 없습니다.");
+        } else {
+            channel.changeMaxPeopleCnt(req.getMaxPeopleCnt());
+        }
+
+        Channel channelChk = channelRepository.save(channel);
+        if (channelChk == null) {
+            throw new ApiMessageException("방 옵션 변경에 실패하였습니다.");
+        } else {
+            ChannelResDTO channelResDTO = ChannelResDTO.builder()
+                    .id(channel.getId())
+                    .code(channel.getCode())
+                    .isPublic(channel.getIsPublic())
+                    .curPeopleCnt(channel.getCurPeopleCnt())
+                    .maxPeopleCnt(channel.getMaxPeopleCnt())
+                    .title(channel.getTitle())
+                    .users(channel.changeToUserInfo())
+                    .build();
+
+            socketService.sendChangingOption(channelResDTO);
+            return channelResDTO;
+        }
     }
 }

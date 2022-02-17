@@ -53,7 +53,7 @@ class UserEditDialog(context: Context) : Dialog(context) {
             if (editText.text.toString() == "") {
                 Toast.makeText(dialog.context, "변경할 닉네임을 입력하세요.", Toast.LENGTH_SHORT).show()
             } else {
-                userInfoUpdate(editText.text.toString(), prefs.getId())
+                userInfoUpdate(editText.text.toString(), prefs.getUid())
                 dialogListener.onDialogOkClick(editText.text.toString())
                 dialog.dismiss()
             }
@@ -76,7 +76,7 @@ class UserEditDialog(context: Context) : Dialog(context) {
 
     }
 
-    private fun userInfoUpdate(nickname: String?, userId: Long?) {
+    private fun userInfoUpdate(nickname: String?, userId: String?) {
         val user = UserInfoUpdateReqDTO(nickname, userId)
         Log.d(TAG, "userInfoUpdate: ${user}")
         UserService().userInfoUpdate(user, object : RetrofitCallback<SingleResult<UserIdResDTO>> {

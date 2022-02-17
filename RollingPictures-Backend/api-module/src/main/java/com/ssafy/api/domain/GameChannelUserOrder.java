@@ -26,7 +26,7 @@ public class GameChannelUserOrder {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "game_channel_game_channel_id")
+    @JoinColumn(name = "game_channel_id")
     private GameChannel gameChannel;
 
     public void changeGameChannel(GameChannel gameChannel) {

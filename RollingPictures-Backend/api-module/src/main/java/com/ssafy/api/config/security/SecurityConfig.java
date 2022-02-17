@@ -30,8 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
-        web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**",
-                "/swagger-ui.html", "/webjars/**", "/swagger/**");
     }
 
     @Override
@@ -50,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                     // permitAll() 처리한 경로의 API는 JWT 값이 없어도 실행 가능
                     .antMatchers("/api/round/**","/api/test/**","/api/nickname/**", "/api/auth/**",
-                            "/api/channel/**", "/api/section/**", "/api/gamechannel/**", "/rolling-pictures/**").permitAll()
+                            "/api/channel/**", "/api/section/**", "/api/gamechannel/**","/api/channeluser/**", "/rolling-pictures/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
                     .anyRequest().hasRole("USER")
                 .and()

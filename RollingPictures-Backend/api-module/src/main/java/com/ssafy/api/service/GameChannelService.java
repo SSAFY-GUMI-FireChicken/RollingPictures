@@ -1,20 +1,22 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.domain.Channel;
-import com.ssafy.api.domain.ChannelUser;
-import com.ssafy.api.domain.GameChannel;
-import com.ssafy.api.domain.GameChannelUserOrder;
+import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.GameChannelCreateReqDTO;
 import com.ssafy.api.dto.res.GameChannelCreateResDTO;
+import com.ssafy.api.dto.res.GameChannelGetResDTO;
 import com.ssafy.api.repository.ChannelRepository;
 import com.ssafy.api.repository.GameChannelRepository;
+import com.ssafy.core.code.GamePlayState;
+import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 public class GameChannelService {
     private final GameChannelRepository gameChannelRepository;
     private final ChannelRepository channelRepository;
-    private final SocketService socketService;
 
     public boolean isExistId(Long gameChannelId) {
         GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
@@ -36,6 +37,12 @@ public class GameChannelService {
         Channel findChannel = channelRepository.findChannelById(dto.getChannelId())
                 .orElseThrow(() -> new ApiMessageException("잘못된 채널입니다."));
 
+        if ("Y".equals(findChannel.getIsPlaying().getValue())) {
+            throw new ApiMessageException("현재 게임 중인 방입니다.");
+        } else {
+            deleteGameChannel(dto.getChannelId());
+        }
+
         for (ChannelUser channelUser : findChannel.getChannelUsers()) {
             if ("Y".equals(channelUser.getIsLeader().getValue())) {
                 long userId = channelUser.getUser().getId();
@@ -45,18 +52,28 @@ public class GameChannelService {
             }
         }
 
-        if (gameChannelRepository.findByChannel(findChannel).isPresent()) {
-            throw new ApiMessageException("이미 게임방이 존재합니다.");
-        }
-
         GameChannel gameChannel = GameChannel.builder()
                 .channel(findChannel)
                 .code(findChannel.getCode())
+                .conPeopleCnt(0)
+                .curRoundNumber(1)
                 .gameChannelUserOrders(new ArrayList<>())
                 .build();
 
+        Progress progress = Progress.builder()
+                .gameChannel(gameChannel)
+                .build();
+
+        gameChannel.changeProgress(progress);
+
+        int conPeopleNum = 0;
         int startOrder = 0;
         for (ChannelUser channelUser : findChannel.getChannelUsers()) {
+            if (channelUser.getSessionId() != null && !channelUser.getSessionId().equals(null)) {
+                conPeopleNum++;
+            }
+
+            channelUser.changeGamePlayState(GamePlayState.PLAYING);
             GameChannelUserOrder gameChannelUserOrder = GameChannelUserOrder.builder()
                     .user(channelUser.getUser())
                     .orderNum(startOrder++)
@@ -64,10 +81,24 @@ public class GameChannelService {
 
             gameChannel.addGameChannelUserOrder(gameChannelUserOrder);
         }
+
+        gameChannel.changeConPeopleCnt(conPeopleNum);
+        gameChannel.getChannel().changeIsPlaying(YNCode.Y);
+
         GameChannel save = gameChannelRepository.save(gameChannel);
 
         return GameChannelCreateResDTO.builder()
                 .id(save.getId())
                 .build();
+    }
+
+    public GameChannel findGameChannelByCode(String Code) throws Exception{
+        GameChannel gameChannel = gameChannelRepository.findByCode(Code);
+        return gameChannel;
+    }
+
+    @Transactional
+    public void deleteGameChannel(Long channelId) {
+        gameChannelRepository.deleteByChannel_Id(channelId);
     }
 }

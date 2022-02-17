@@ -16,8 +16,6 @@ import com.ssafy.core.code.YNCode;
 import com.ssafy.api.domain.Channel;
 import com.ssafy.api.domain.User;
 import com.ssafy.core.exception.ApiMessageException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -28,7 +26,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
-@Api(tags = {"02. 방"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +39,6 @@ public class ChannelController {
     private static final Logger logger = LoggerFactory.getLogger(ChannelController.class);
 
     @Transactional
-    @ApiOperation(value = "방 생성", notes = "방 생성")
     @PostMapping
     public @ResponseBody SingleResult<ChannelResDTO> makeChannel(@RequestBody @Valid MakeChannelReqDTO req) throws Exception {
         Channel channelChk = null;
@@ -55,6 +51,10 @@ public class ChannelController {
         ChannelUser channelUser = channelUserService.findByUser(user);
         if (channelUser != null) {
             throw new ApiMessageException("이미 방에 입장한 상태입니다.");
+        }
+
+        if (req.getMaxPeopleCnt() > 6) {
+            throw new ApiMessageException("최대 인원 수를 6 이상으로 설정할 수 없습니다.");
         }
 
         channelChk = channelService.createChannel(req);
@@ -74,7 +74,6 @@ public class ChannelController {
     }
 
     @Transactional
-    @ApiOperation(value = "방 입장", notes = "방 입장")
     @PostMapping(value = "/user")
     public SingleResult<ChannelResDTO> inChannel(@RequestBody @Valid InOutChannelReqDTO req) throws Exception {
         Channel channel = channelService.findByCode(req.getCode());
@@ -98,8 +97,7 @@ public class ChannelController {
 
         ArrayList<UserInfoResDTO> resUserList = channelUserService.createChannelUser(channel, user, YNCode.N);
 
-        return responseService.getSingleResult(ChannelResDTO
-                .builder()
+        return responseService.getSingleResult(ChannelResDTO.builder()
                 .id(channel.getId())
                 .code(channel.getCode())
                 .isPublic(channel.getIsPublic())
@@ -112,7 +110,6 @@ public class ChannelController {
     }
 
     @Transactional
-    @ApiOperation(value = "방 퇴장", notes = "방 퇴장")
     @DeleteMapping(value = "/user")
     public CommonResult outChannel(@RequestBody @Valid InOutChannelReqDTO req) throws Exception {
         User user = signService.findUserById(req.getId());
@@ -133,10 +130,19 @@ public class ChannelController {
     }
 
     @Transactional
-    @ApiOperation(value = "공개방 목록 조회", notes = "공개방 목록 조회")
     @GetMapping
     public SingleResult<ChannelListResDTO> getChannelList(@RequestParam(value="page", defaultValue = "0") int page,
                                                           @RequestParam(value="batch" , defaultValue = "10") int batch) {
         return responseService.getSingleResult(channelService.getChannelList(page, batch));
+    }
+
+    @Transactional
+    @PutMapping
+    public @ResponseBody SingleResult<ChannelResDTO> changeChannelSetting(@RequestBody @Valid MakeChannelReqDTO req) {
+        try {
+            return responseService.getSingleResult(channelService.changeChannelSetting(req));
+        } catch (ApiMessageException apiMessageException) {
+            throw apiMessageException;
+        }
     }
 }

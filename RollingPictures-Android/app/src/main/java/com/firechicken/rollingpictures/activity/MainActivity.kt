@@ -56,11 +56,16 @@ class MainActivity : AppCompatActivity() {
             entranceButton.setOnClickListener {
                 activityMainBinding.roomCodeEditText.text.apply{
                     if(toString()==""){
-                        Toast.makeText(this@MainActivity, "방 코드를 입력하세요.", Toast.LENGTH_SHORT).show()
+                        toast("방 코드를 입력하세요.")
                     }else{
                         inChannel(toString(), prefs.getId()!!)
                     }
                 }
+            }
+
+            enterPublicButton.setOnClickListener{
+                val intent = Intent(this@MainActivity, PublicRoomListActivity::class.java)
+                startActivity(intent)
             }
 
         }
@@ -71,20 +76,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // 권한이 받아졌음을 boolean으로 return
     private fun arePermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.RECORD_AUDIO
-        ) != PackageManager.PERMISSION_DENIED
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_DENIED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_DENIED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_DENIED)
     }
 
-    // 권한을 요청함
+    // 메인 액티비티에서 권한을 허가 받지 못했으면, 권한을 요청함
     fun askForPermissions() {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED)
         ) {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.RECORD_AUDIO),
+                this, arrayOf(Manifest.permission.RECORD_AUDIO
+                    , Manifest.permission.READ_EXTERNAL_STORAGE
+                    , Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 MY_PERMISSIONS_REQUEST
             )
         }
@@ -99,38 +114,38 @@ class MainActivity : AppCompatActivity() {
                 if(responseData.data != null){
                     if (responseData.data.id > 0) {
                         ApplicationClass.channelResDTO = responseData
-                        val intent = Intent(this@MainActivity, GameWaitingActivity::class.java)
+                        val intent = Intent(this@MainActivity, GameActivity::class.java)
                         intent.putExtra("code", roomcode)
                         startActivity(intent)
                     } else {
                         Log.d(TAG, "onSuccess: null")
-                        Toast.makeText(
-                            this@MainActivity,
-                            "문제가 발생하였습니다. 다시 시도해주세요.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toast("inChannel에서 문제가 발생하였습니다. 다시 시도해주세요.")
                     }
                 }else{
-                    Toast.makeText(
-                        this@MainActivity,
-                        "존재하지 않는 방 코드입니다. 다시 입력해주세요.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if(responseData.msg == "방 정보가 없습니다."){
+                        toast("존재하지 않는 방 코드입니다. 다시 입력해주세요.")
+                    }else{
+                        toast("해당 방은 정원초과 입니다.")
+                    }
+
                 }
             }
 
             override fun onFailure(code: Int) {
                 Log.d(TAG, "onFailure: ")
-                Toast.makeText(this@MainActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                    .show()
+                toast("inChannel에서 실패문제가 발생하였습니다. 다시 시도해주세요.")
             }
 
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
-                Toast.makeText(this@MainActivity, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                    .show()
+                toast("inChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
             }
         })
+    }
+
+    private fun toast(text: String) {
+        Log.i(TAG, text)
+        Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
     }
 
 }

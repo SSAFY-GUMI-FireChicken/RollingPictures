@@ -31,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
             outChannel(prefs.getEnteredChannel(),prefs.getId()!!)
         }
 
+
+        //비정상종료시 안전장치로 다시 실행시켰을 때 들어있었던 채널 퇴장하게 함.
         if (prefs.getNickName() != "") {
             activityLoginBinding.nickNameEditText.apply {
                 setText(prefs.getNickName())

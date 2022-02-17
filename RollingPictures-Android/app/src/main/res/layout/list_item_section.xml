@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/fragment_height">
+
+
+    <TextView
+        android:id="@+id/keywordTextView"
+        android:layout_width="@dimen/margin_size_300"
+        android:layout_height="@dimen/seek_bar_height"
+        android:layout_marginTop="@dimen/margin_size_30"
+        android:background="@drawable/bg_input"
+        android:elevation="@dimen/layout_size_15"
+        android:gravity="center"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="@dimen/button_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ImageView"
+        android:layout_width="@dimen/margin_size_200"
+        android:layout_height="@dimen/margin_size_200"
+        android:layout_marginTop="@dimen/margin_size_10"
+        android:layout_marginEnd="@dimen/margin_size_30"
+        android:background="@drawable/balloon"
+        android:elevation="@dimen/layout_size_15"
+        android:paddingStart="@dimen/margin_size_4"
+        android:paddingEnd="@dimen/margin_size_4"
+        android:paddingTop="@dimen/margin_size_8"
+        android:paddingBottom="@dimen/margin_size_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerName1"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/playerName1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_size_30"
+        android:layout_marginTop="@dimen/margin_size_10"
+        android:text="TextView"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/keywordTextView" />
+
+    <TextView
+        android:id="@+id/playerName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_size_10"
+        android:layout_marginEnd="@dimen/margin_size_30"
+        android:text="TextView"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ImageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

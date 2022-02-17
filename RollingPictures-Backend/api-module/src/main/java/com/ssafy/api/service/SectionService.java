@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.SectionCreateReqDTO;
+import com.ssafy.api.dto.res.SectionAllRetrieveResDTO;
 import com.ssafy.api.dto.res.SectionCreateResDTO;
 import com.ssafy.api.dto.res.SectionRetrieveResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
@@ -45,8 +46,30 @@ public class SectionService {
             result.add(SectionRetrieveResDTO.builder()
                     .sectionId(section.getId())
                     .userId(round.getUser().getId())
+                    .nickname(round.getUser().getNickname())
                     .roundNum(round.getRoundNumber())
                     .build());
+        }
+        return result;
+    }
+
+    public List<SectionAllRetrieveResDTO> getSection(Long gameChannelId) throws Exception {
+        GameChannel findGameChannel = gameChannelRepository.findById(gameChannelId)
+                .orElseThrow(() -> new ApiMessageException("잘못된 게임방 정보입니다."));
+
+        List<SectionAllRetrieveResDTO> result = new ArrayList<>();
+        for (Section section : findGameChannel.getSections()) {
+            SectionAllRetrieveResDTO dto = new SectionAllRetrieveResDTO();
+            dto.setSectionId(section.getId());
+            for (Round round : section.getRounds()) {
+                dto.getRoundInfos().add(SectionAllRetrieveResDTO.RoundInfo.of(
+                        round.getUser().getUsername(),
+                        round.getUser().getNickname(),
+                        round.getKeyword(),
+                        round.getImgSrc(),
+                        round.getRoundNumber()));
+            }
+            result.add(dto);
         }
         return result;
     }
@@ -67,6 +90,10 @@ public class SectionService {
         if (sections.size() > 0) {
             throw new ApiMessageException("이미 해당 게임방에 섹션이 생성되었습니다.");
         }
+
+        findGameChannel.getProgress().changeDonePeopleCnt(0);
+        findGameChannel.getProgress().changeStartDate();
+
         Channel channel = channelService.findByCode(findGameChannel.getCode());
         List<ChannelUser> userList = channel.getChannelUsers();
         Collections.shuffle(userList);

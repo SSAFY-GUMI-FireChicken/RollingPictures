@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="0dp">
+    android:paddingLeft="@dimen/fragment_height">
 
 
     <androidx.appcompat.widget.AppCompatButton

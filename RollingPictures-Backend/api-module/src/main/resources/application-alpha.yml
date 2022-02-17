@@ -30,16 +30,16 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties.hibernate:
       # 재시작 시 JPA Entity(DB 테이블 데이터)를 새로 생성할지 여부 (create:기존데이터 삭제 후 신규 생성, udpate:신규 데이터만 업데이트, none:아무 실행도 하지 않음)
-      hbm2ddl.auto: none
-      format_sql: true
-      show_sql: true
-      use_sql_comments: true
+      hbm2ddl.auto: update
+      format_sql: false
+      show_sql: false
+      use_sql_comments: false
     generate-ddl: true
     open-in-view: false
 
   # 데이터 베이스 연결 설정
   datasource:
-    url: jdbc:mysql://i6d208.p.ssafy.io:3306/ssafy_web_db?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: ssafy0107
