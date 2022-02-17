@@ -72,7 +72,7 @@ spring:
 
 server:
   # 프로젝트 환경의 포트 설정
-  port: 8185
+  port: 8180
   domain: i6d208.p.ssafy.io
   ssl:
     key-store-type: PKCS12
