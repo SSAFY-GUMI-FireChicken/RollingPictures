@@ -107,8 +107,12 @@ public class ChannelUserService {
      * @return channelUser
      */
     @Transactional(readOnly = false)
-    public ChannelUser changeSessionId(Long userId, String sessionId) {
+    public void changeSessionId(Long userId, String sessionId) {
        ChannelUser channelUser = channelUserRepository.findByUser_Id(userId);
+       if (channelUser == null) {
+           return;
+       }
+
        channelUser.changeSessionId(sessionId);
 
         if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
@@ -122,7 +126,7 @@ public class ChannelUserService {
             }
         }
 
-        return channelUserRepository.save(channelUser);
+        channelUserRepository.save(channelUser);
     }
 
     /**
@@ -159,11 +163,11 @@ public class ChannelUserService {
                         if (channelUser.getChannel().getGameChannel().getCurRoundNumber() > channelUser.getChannel().getCurPeopleCnt()) {
                             socketService.sendGameEnd(channelUser.getChannel().getCode(), channelUser.getChannel().getGameChannel().getCurRoundNumber());
                             channelService.deleteDisconnectChannelUsers(channelUser.getChannel().getGameChannel().getId());
+                            gameChannelUserInfoRepository.save(gameChannelUserInfo);
+                            return;
                         } else {
                             socketService.sendNextSignal(channelUser.getChannel().getCode(), channelUser.getChannel().getGameChannel().getCurRoundNumber());
                         }
-                    } else {
-                        System.out.println(channelUser.getChannel().getGameChannel().getConPeopleCnt()+" "+gameChannelUserInfo.getGameChannel().getDonePeopleCnt());
                     }
                 }
 
