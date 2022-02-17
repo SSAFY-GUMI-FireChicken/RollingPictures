@@ -5,14 +5,13 @@ pipeline {
         stage('Git clonning and Build') {
             steps {
                 echo 'Git Clonning...'
-                git url: 'http://lab.ssafy.com/seung7642/jenkins-test',
-                    credentialsId: 'username-password'
+                git url: 'https://lab.ssafy.com/s06-webmobile4-sub2/S06P12D208',
+                    credentialsId: 'jenkins-credentials-id'
 
                 sh 'ls -al'
                 dir('RollingPictures-Backend/') {
-                    sh 'java -version'
-                    sh './gradlew build'
-                    sh 'ls -al api-module/build/libs'
+                    sh './gradlew cleanQuerydslSourcesDir'
+                    sh './gradlew bootJar'
                 }
             }
             post {
@@ -28,9 +27,9 @@ pipeline {
         stage('Docker build') {
             steps {
                 echo 'Docker building...'
-                sh 'pwd'
-                sh 'ls -al RollingPictures-Backend/api-module'
-                sh 'docker build -t rolling-pictures:latest RollingPictures-Backend/'
+                dir('RollingPictures-Backend/') {
+                    sh 'docker build -t rolling-pictures:latest .'
+                }
             }
             post {
                 failure {
@@ -42,8 +41,8 @@ pipeline {
         stage('Docker run') {
             steps {
                 echo 'Docker running...'
-                sh 'docker ps -f name=rolling-pictures:latest -q | xargs --no-run-if-empty docker container stop'
-                sh 'docker container ls -a --filter ancestor=rolling-pictures --filter status=exited -q | xargs -r docker container rm'
+                sh 'docker ps -f name=rolling-pictures -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a --filter name=rolling-pictures --filter status=exited -q | xargs -r docker container rm'
                 sh 'docker images --no-trunc -a -q --filter="dangling=true" | xargs --no-run-if-empty docker rmi'
                 sh 'docker run -d -p 8185:8185 --name rolling-pictures rolling-pictures:latest'
             }

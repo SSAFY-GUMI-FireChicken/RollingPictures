@@ -35,6 +35,12 @@ public class GameChannelController {
         }
     }
 
+
+    @DeleteMapping("/{id}")
+    public SingleResult<Boolean> deleteGameChannel(@PathVariable("id") Long gameChannleId) {
+        return responseService.getSingleResult(true);
+    }
+
     @GetMapping
     public SingleResult<GameChannelGetResDTO> getGameChannel(@RequestBody  @Valid GameChannelGetReqDTO req) throws Exception {
 

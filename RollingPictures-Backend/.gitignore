@@ -1,7 +1,6 @@
 /.idea/
 /.gradle/
 /core-module/src/test/
-/gradle/
 /core-module/build/
 /api-module/build/
 
