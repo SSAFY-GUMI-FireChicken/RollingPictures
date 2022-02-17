@@ -63,5 +63,7 @@
                 android:text="@string/os_content_android_draw" />
 
         </LinearLayout>
+
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

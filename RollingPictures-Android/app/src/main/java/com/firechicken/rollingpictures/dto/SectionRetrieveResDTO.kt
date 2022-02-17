@@ -5,5 +5,5 @@ data class SectionRetrieveResDTO(
     var keyword: String,
     var roundNum: Int,
     var sectionId: Long,
-    var userId: Long,
+    var userId: Long
 )

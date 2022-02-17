@@ -19,16 +19,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/roundTextView" />
 
-<!--    <ImageButton-->
-<!--        android:id="@+id/micImageButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="@dimen/margin_size_32"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:src="@drawable/ic_baseline_mic_off_24"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/headSetImageButton" />-->
-
     <TextView
         android:id="@+id/roundTextView"
         style="@style/Text.TitleStyle"

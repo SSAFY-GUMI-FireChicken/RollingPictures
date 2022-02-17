@@ -23,13 +23,8 @@ class CustomHttpClient(baseUrl: String, basicAuth: String) {
 
     // 통신을 위한 okhttp
     @Throws(IOException::class)
-    fun httpCall(
-        url: String,
-        method: String?,
-        contentType: String?,
-        body: RequestBody?,
-        callback: Callback?
-    ) {
+    fun httpCall(url: String, method: String?, contentType: String?, body: RequestBody?, callback: Callback?) {
+
         var url = url
         url = if (url.startsWith("/")) url.substring(1) else url
         val request: Request = Request.Builder()
@@ -47,22 +42,13 @@ class CustomHttpClient(baseUrl: String, basicAuth: String) {
 
     init {
         try {
-
             val trustAllCerts = arrayOf<TrustManager>(
                 object : X509TrustManager {
                     @Throws(CertificateException::class)
-                    override fun checkClientTrusted(
-                        chain: Array<X509Certificate>,
-                        authType: String
-                    ) {
-                    }
+                    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
 
                     @Throws(CertificateException::class)
-                    override fun checkServerTrusted(
-                        chain: Array<X509Certificate>,
-                        authType: String
-                    ) {
-                    }
+                    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
 
                     override fun getAcceptedIssuers(): Array<X509Certificate> {
                         return emptyArray()
@@ -77,12 +63,10 @@ class CustomHttpClient(baseUrl: String, basicAuth: String) {
 
             client = OkHttpClient.Builder().sslSocketFactory(sslSocketFactory, object : X509TrustManager {
                 @Throws(CertificateException::class)
-                override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-                }
+                override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
 
                 @Throws(CertificateException::class)
-                override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-                }
+                override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
 
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
                     return arrayOf()

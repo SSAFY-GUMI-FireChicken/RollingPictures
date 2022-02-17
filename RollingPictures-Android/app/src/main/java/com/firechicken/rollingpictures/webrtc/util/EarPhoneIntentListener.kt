@@ -10,11 +10,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.AudioManager.ADJUST_RAISE
-import android.util.Log
 import com.firechicken.rollingpictures.webrtc.openvidu.Session
 import java.lang.IllegalArgumentException
 
 class EarPhoneIntentListener private constructor(private val context: Context, val session: Session) {
+
     var mBluetoothAdapter: BluetoothAdapter? = null
     var mBluetoothHeadset: BluetoothHeadset? = null
     var mAudioManager: AudioManager? = null
@@ -58,9 +58,7 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
                 enableSpeaker()
                 context.unregisterReceiver(mHeadsetBroadcastReceiver)
                 mBluetoothHeadset = null
-                Log.d("kiaa", " ================== 무선 이어폰 연결해제")
             } catch (il: IllegalArgumentException) {
-                Log.i(TAG, "Headset broadcast receiver wasn't registered yet.")
             }
         }
 
@@ -70,8 +68,6 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
             disableSpeaker()
             mBluetoothHeadset = proxy as BluetoothHeadset
 
-
-
             context.registerReceiver(
                 mHeadsetBroadcastReceiver,
                 IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED)
@@ -79,7 +75,6 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
             val f = IntentFilter(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED)
             f.priority = Int.MAX_VALUE
             context.registerReceiver(mHeadsetBroadcastReceiver, f)
-            Log.d("kiaa", " ================== 무선 이어폰 연결")
         }
     }
 
@@ -93,9 +88,9 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
                     BluetoothHeadset.STATE_DISCONNECTED
                 )
                 if (state == BluetoothHeadset.STATE_AUDIO_CONNECTED) {
+
                 } else if (state == BluetoothHeadset.STATE_AUDIO_DISCONNECTED) {
-                    Log.d("kiaa", "disConnected")
-                    // Hangup of bluetooth headset pressed.
+
                 }
             }
         }
@@ -118,7 +113,6 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
             audioManager.isSpeakerphoneOn = false
             audioManager.mode = AudioManager.MODE_NORMAL
             session.getLocalParticipant()?.audioTrack?.setVolume(0.0)
-
         }
     }
 
@@ -129,10 +123,8 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
                 // if : 출력 장치 (스피커로) / 유선 이어폰 X
                 // else : 출력 장치 (유선 이어폰으로) / 스피커 X
                 if (intent.getIntExtra("state", 0) == 0) {
-                    Log.d("kiaa", " ================== 유선 이어폰 연결해제")
                     enableSpeaker()
                 } else if (intent.getIntExtra("state", 0) == 1) {
-                    Log.d("kiaa", " ================== 유선 이어폰 연결")
                     disableSpeaker()
                 }
             }
@@ -140,7 +132,6 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
     }
 
     companion object {
-        private const val TAG = "BluetoothIntent"
         private var earPhoneIntentListener: EarPhoneIntentListener? = null
         fun getInstance(context: Context, session: Session): EarPhoneIntentListener? {
             if (earPhoneIntentListener == null) {
@@ -149,5 +140,4 @@ class EarPhoneIntentListener private constructor(private val context: Context, v
             return earPhoneIntentListener
         }
     }
-
 }

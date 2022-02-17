@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/fragment_height">
 
-
     <TextView
         android:id="@+id/publicRoomItemButton"
         style="@style/Text.ButtonOkStyle"
@@ -28,6 +27,3 @@
     </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-

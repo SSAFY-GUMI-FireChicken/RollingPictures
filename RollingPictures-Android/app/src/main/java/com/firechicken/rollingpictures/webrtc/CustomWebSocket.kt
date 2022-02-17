@@ -40,7 +40,6 @@ class CustomWebSocket(
     activity: GameActivity
 ) :
     AsyncTask<GameActivity?, Void?, Void?>(), WebSocketListener {
-    private val TAG = "CustomWebSocketListener"
     private val PING_MESSAGE_INTERVAL = 5
     private val trustManagers = arrayOf<TrustManager>(object : X509TrustManager {
         override fun getAcceptedIssuers(): Array<X509Certificate> {
@@ -48,14 +47,10 @@ class CustomWebSocket(
         }
 
         @Throws(CertificateException::class)
-        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-            Log.i(TAG, ": authType: $authType")
-        }
+        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
 
         @Throws(CertificateException::class)
-        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-            Log.i(TAG, ": authType: $authType")
-        }
+        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
     })
     private val RPC_ID = AtomicInteger(0)
     private val ID_PING = AtomicInteger(-1)
@@ -77,7 +72,6 @@ class CustomWebSocket(
     * */
     @Throws(Exception::class)
     override fun onTextMessage(websocket: WebSocket, text: String) {
-        Log.i(TAG, "Text Message $text")
         val json = JSONObject(text)
         if (json.has(JsonConstants.RESULT)) {
             handleServerResponse(json)
@@ -94,7 +88,7 @@ class CustomWebSocket(
 
         if (result.has("value") && result.getString("value") == "pong") {
             // 1. ping : 서버가 클라이언트의 연결을 인식하고 보낸 응답
-            Log.i(TAG, "pong")
+
         } else if (rpcId == ID_JOINROOM.get()) {
             // 2. join room : 방에 들어갔을 때 (추가적으로 방안에 있던 사용자 추가 등)
             val localParticipant = session.getLocalParticipant()
@@ -151,9 +145,7 @@ class CustomWebSocket(
                 override fun onSetSuccess() {
                     subscriptionInitiatedFromServer(remoteParticipant, streamId)
                 }
-                override fun onSetFailure(s: String) {
-                    Log.i("setRemoteDescription ER", s)
-                }
+                override fun onSetFailure(s: String) {}
             }, remoteSdpOffer)
         } else if (IDS_RECEIVEVIDEO.containsKey(rpcId)) {
             // 6. receivedVideo : 미디어 정보(음성 정보)를 받았을 때 (받아야하는 정보 삭제)
@@ -172,7 +164,7 @@ class CustomWebSocket(
             // 7. onIceCandidate : 후보를 잘 찾아왔을 때 (후보자에서 삭제)
             IDS_ONICECANDIDATE.remove(rpcId)
         } else {
-            Log.e(TAG, "Unrecognized server response: $result")
+
         }
     }
 
@@ -261,7 +253,7 @@ class CustomWebSocket(
     @Throws(JSONException::class)
     private fun handleServerEvent(json: JSONObject) {
         if (!json.has(JsonConstants.PARAMS)) {
-            Log.e(TAG, "No params $json")
+
         } else {
             val params = JSONObject(json.getString(JsonConstants.PARAMS))
             val method = json.getString(JsonConstants.METHOD)
@@ -293,7 +285,6 @@ class CustomWebSocket(
             jsonObject.put("id", id)
             jsonObject.put("params", paramsJson)
         } catch (e: JSONException) {
-            Log.e(TAG, "JSONException raised on sendJson", e)
             return -1
         }
         websocket.sendText(jsonObject.toString())
@@ -314,10 +305,7 @@ class CustomWebSocket(
                     val streamId = stream.getString("id")
                     subscribe(remoteParticipant, streamId)
                 }
-            } catch (e: Exception) {
-
-                Log.e(TAG, "Error in addRemoteParticipantsAlreadyInRoom: " + e.localizedMessage)
-            }
+            } catch (e: Exception) { }
         }
     }
 
@@ -371,9 +359,7 @@ class CustomWebSocket(
         remoteParticipant!!.dispose()
         val mainHandler: Handler = Handler(activity.getMainLooper())
         val myRunnable = Runnable {
-            session.removeView(
-                remoteParticipant.view
-            )
+            session.removeView(remoteParticipant.view)
         }
         mainHandler.post(myRunnable)
     }
@@ -429,9 +415,7 @@ class CustomWebSocket(
                     receiveVideoFrom(sessionDescription, remoteParticipant, streamId)
                 }
 
-                override fun onCreateFailure(s: String) {
-                    Log.e("createOffer error", s)
-                }
+                override fun onCreateFailure(s: String) {}
             }, sdpConstraints)
     }
 
@@ -455,176 +439,93 @@ class CustomWebSocket(
     }
 
     @Throws(Exception::class)
-    override fun onStateChanged(websocket: WebSocket, newState: WebSocketState) {
-        Log.i(TAG, "State changed: " + newState.name)
-    }
+    override fun onStateChanged(websocket: WebSocket, newState: WebSocketState) {}
 
     @Throws(Exception::class)
     override fun onConnected(ws: WebSocket, headers: Map<String, List<String>>) {
-        Log.i(TAG, "Connected")
         pingMessageHandler()
         joinRoom()
     }
 
     @Throws(Exception::class)
     override fun onConnectError(websocket: WebSocket, cause: WebSocketException) {
-        Log.e(TAG, "Connect error: $cause")
     }
 
     @Throws(Exception::class)
-    override fun onDisconnected(
-        websocket: WebSocket,
-        serverCloseFrame: WebSocketFrame,
-        clientCloseFrame: WebSocketFrame,
-        closedByServer: Boolean
-    ) {
-        Log.e(
-            TAG,
-            "Disconnected " + serverCloseFrame.closeReason + " " + clientCloseFrame.closeReason + " " + closedByServer
-        )
-    }
+    override fun onDisconnected(websocket: WebSocket, serverCloseFrame: WebSocketFrame, clientCloseFrame: WebSocketFrame,
+        closedByServer: Boolean) {}
 
     @Throws(Exception::class)
-    override fun onFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Frame")
-    }
+    override fun onFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onContinuationFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Continuation Frame")
-    }
+    override fun onContinuationFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onTextFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Text Frame")
-    }
+    override fun onTextFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onBinaryFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Binary Frame")
-    }
+    override fun onBinaryFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onCloseFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Close Frame")
-    }
+    override fun onCloseFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onPingFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Ping Frame")
-    }
+    override fun onPingFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onPongFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Pong Frame")
-    }
+    override fun onPongFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onTextMessage(websocket: WebSocket, data: ByteArray) {
-    }
+    override fun onTextMessage(websocket: WebSocket, data: ByteArray) {}
 
     @Throws(Exception::class)
-    override fun onBinaryMessage(websocket: WebSocket, binary: ByteArray) {
-        Log.i(TAG, "Binary Message")
-    }
+    override fun onBinaryMessage(websocket: WebSocket, binary: ByteArray) {}
 
     @Throws(Exception::class)
-    override fun onSendingFrame(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Sending Frame")
-    }
+    override fun onSendingFrame(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onFrameSent(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Frame sent")
-    }
+    override fun onFrameSent(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onFrameUnsent(websocket: WebSocket, frame: WebSocketFrame) {
-        Log.i(TAG, "Frame unsent")
-    }
+    override fun onFrameUnsent(websocket: WebSocket, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onThreadCreated(websocket: WebSocket, threadType: ThreadType, thread: Thread) {
-        Log.i(TAG, "Thread created")
-    }
+    override fun onThreadCreated(websocket: WebSocket, threadType: ThreadType, thread: Thread) {}
 
     @Throws(Exception::class)
-    override fun onThreadStarted(websocket: WebSocket, threadType: ThreadType, thread: Thread) {
-        Log.i(TAG, "Thread started")
-    }
+    override fun onThreadStarted(websocket: WebSocket, threadType: ThreadType, thread: Thread) {}
 
     @Throws(Exception::class)
-    override fun onThreadStopping(websocket: WebSocket, threadType: ThreadType, thread: Thread) {
-        Log.i(TAG, "Thread stopping")
-    }
+    override fun onThreadStopping(websocket: WebSocket, threadType: ThreadType, thread: Thread) {}
 
     @Throws(Exception::class)
-    override fun onError(websocket: WebSocket, cause: WebSocketException) {
-        Log.e(TAG, "Error!")
-    }
+    override fun onError(websocket: WebSocket, cause: WebSocketException) {}
 
     @Throws(Exception::class)
-    override fun onFrameError(
-        websocket: WebSocket,
-        cause: WebSocketException,
-        frame: WebSocketFrame
-    ) {
-        Log.e(TAG, "Frame error!")
-    }
+    override fun onFrameError(websocket: WebSocket, cause: WebSocketException, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onMessageError(
-        websocket: WebSocket,
-        cause: WebSocketException,
-        frames: List<WebSocketFrame>
-    ) {
-        Log.e(TAG, "Message error! $cause")
-    }
+    override fun onMessageError(websocket: WebSocket, cause: WebSocketException, frames: List<WebSocketFrame>) {}
 
     @Throws(Exception::class)
-    override fun onMessageDecompressionError(
-        websocket: WebSocket, cause: WebSocketException,
-        compressed: ByteArray
-    ) {
-        Log.e(TAG, "Message decompression error!")
-    }
+    override fun onMessageDecompressionError(websocket: WebSocket, cause: WebSocketException, compressed: ByteArray) {}
 
     @Throws(Exception::class)
-    override fun onTextMessageError(
-        websocket: WebSocket,
-        cause: WebSocketException,
-        data: ByteArray
-    ) {
-        Log.e(TAG, "Text message error! $cause")
-    }
+    override fun onTextMessageError(websocket: WebSocket, cause: WebSocketException, data: ByteArray) {}
 
     @Throws(Exception::class)
-    override fun onSendError(
-        websocket: WebSocket,
-        cause: WebSocketException,
-        frame: WebSocketFrame
-    ) {
-        Log.e(TAG, "Send error! $cause")
-    }
+    override fun onSendError(websocket: WebSocket, cause: WebSocketException, frame: WebSocketFrame) {}
 
     @Throws(Exception::class)
-    override fun onUnexpectedError(websocket: WebSocket, cause: WebSocketException) {
-        Log.e(TAG, "Unexpected error! $cause")
-    }
+    override fun onUnexpectedError(websocket: WebSocket, cause: WebSocketException) {}
 
     @Throws(Exception::class)
-    override fun handleCallbackError(websocket: WebSocket, cause: Throwable) {
-        Log.e(TAG, "Handle callback error! $cause")
-    }
+    override fun handleCallbackError(websocket: WebSocket, cause: Throwable) {}
 
     @Throws(Exception::class)
-    override fun onSendingHandshake(
-        websocket: WebSocket,
-        requestLine: String,
-        headers: List<Array<String>>
-    ) {
-        Log.i(TAG, "Sending Handshake! Hello!")
-    }
+    override fun onSendingHandshake(websocket: WebSocket, requestLine: String, headers: List<Array<String>>) {}
 
     private fun pingMessageHandler() {
         val initialDelay = 0L
@@ -645,7 +546,6 @@ class CustomWebSocket(
             val url = URL(openviduUrl)
             if (url.port > -1) "wss://" + url.host + ":" + url.port + "/openvidu" else "wss://" + url.host + "/openvidu"
         } catch (e: MalformedURLException) {
-            Log.e(TAG, "Wrong URL", e)
             e.printStackTrace()
             ""
         }
@@ -662,7 +562,6 @@ class CustomWebSocket(
             websocket.addListener(this)
             websocket.connect()
         } catch (e: KeyManagementException) {
-            Log.e("WebSocket error", e.message!!)
             val mainHandler: Handler = Handler(activity.getMainLooper())
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
@@ -672,7 +571,6 @@ class CustomWebSocket(
             mainHandler.post(myRunnable)
             websocketCancelled = true
         } catch (e: NoSuchAlgorithmException) {
-            Log.e("WebSocket error", e.message!!)
             val mainHandler: Handler = Handler(activity.getMainLooper())
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
@@ -682,7 +580,6 @@ class CustomWebSocket(
             mainHandler.post(myRunnable)
             websocketCancelled = true
         } catch (e: IOException) {
-            Log.e("WebSocket error", e.message!!)
             val mainHandler: Handler = Handler(activity.getMainLooper())
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
@@ -692,7 +589,6 @@ class CustomWebSocket(
             mainHandler.post(myRunnable)
             websocketCancelled = true
         } catch (e: WebSocketException) {
-            Log.e("WebSocket error", e.message!!)
             val mainHandler: Handler = Handler(activity.getMainLooper())
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
@@ -708,5 +604,4 @@ class CustomWebSocket(
     init {
         this.activity = activity
     }
-
 }

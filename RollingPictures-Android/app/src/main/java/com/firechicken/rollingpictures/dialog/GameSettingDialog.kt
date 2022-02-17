@@ -15,8 +15,6 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channel
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.dto.MakeChannelReqDTO
 
-private const val TAG = "GameSettingDialog_싸피"
-
 class GameSettingDialog(context: Context) : Dialog(context) {
 
     interface OnDialogClickListener {
@@ -39,7 +37,6 @@ class GameSettingDialog(context: Context) : Dialog(context) {
             show()
         }
 
-
         val roomTitleEditText = dialog.findViewById<EditText>(R.id.roomTitleEditText)
         val publicButton = dialog.findViewById<AppCompatButton>(R.id.publicButton)
         val privateButton = dialog.findViewById<AppCompatButton>(R.id.privateButton)
@@ -59,6 +56,7 @@ class GameSettingDialog(context: Context) : Dialog(context) {
             privateButton.setBackgroundDrawable(getDrawable(dialog.context,R.drawable.bg_round))
             publicButton.setBackgroundDrawable(getDrawable(dialog.context,R.drawable.bg_tool_detail))
         }
+
         publicButton.setOnClickListener {
             isPublic = "Y"
             publicButton.setBackgroundDrawable(getDrawable(dialog.context,R.drawable.bg_round))
@@ -107,6 +105,5 @@ class GameSettingDialog(context: Context) : Dialog(context) {
         cancelButton.setOnClickListener {
             dialog.dismiss()
         }
-
     }
 }

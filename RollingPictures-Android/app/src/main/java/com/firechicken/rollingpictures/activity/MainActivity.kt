@@ -6,7 +6,6 @@ import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.firechicken.rollingpictures.databinding.ActivityMainBinding
 import androidx.core.app.ActivityCompat
@@ -21,8 +20,6 @@ import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
 import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.util.RetrofitCallback
-
-private const val TAG = "MainActivity_싸피"
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,7 +64,6 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, PublicRoomListActivity::class.java)
                 startActivity(intent)
             }
-
         }
 
         if (!arePermissionGranted()) {
@@ -75,7 +71,6 @@ class MainActivity : AppCompatActivity() {
             permissionsFragment.show(supportFragmentManager, "Permissions Fragment")
         }
     }
-
 
     // 권한이 받아졌음을 boolean으로 return
     private fun arePermissionGranted(): Boolean {
@@ -107,10 +102,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun inChannel(roomcode: String, userId: Long) {
         val req = InOutChannelReqDTO(roomcode, userId)
-        Log.d(TAG, "inChannel: ")
         ChannelService().inChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
-                Log.d(TAG, "responseData.data.id: ${responseData.data}")
                 if(responseData.data != null){
                     if (responseData.data.id > 0) {
                         ApplicationClass.channelResDTO = responseData
@@ -118,7 +111,6 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("code", roomcode)
                         startActivity(intent)
                     } else {
-                        Log.d(TAG, "onSuccess: null")
                         toast("inChannel에서 문제가 발생하였습니다. 다시 시도해주세요.")
                     }
                 }else{
@@ -132,20 +124,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
                 toast("inChannel에서 실패문제가 발생하였습니다. 다시 시도해주세요.")
             }
 
             override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
                 toast("inChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
             }
         })
     }
 
     private fun toast(text: String) {
-        Log.i(TAG, text)
         Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
     }
-
 }
+

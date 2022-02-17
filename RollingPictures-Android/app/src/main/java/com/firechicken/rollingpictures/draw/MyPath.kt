@@ -5,11 +5,6 @@ import java.io.ObjectInputStream
 import java.io.Serializable
 import java.util.*
 
-/**
- * SPDX-FileCopyrightText: © 2018 Divyanshu Bhargava <https://github.com/divyanshub024/AndroidDraw>
- * SPDX-License-Identifier: Apache-2.0 License
- */
-
 class MyPath : Path(), Serializable {
     val actions = LinkedList<Action>()
 
