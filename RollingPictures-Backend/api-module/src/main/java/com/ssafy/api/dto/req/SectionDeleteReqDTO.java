@@ -1,6 +1,5 @@
 package com.ssafy.api.dto.req;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class SectionDeleteReqDTO {
     @NotNull
-    @ApiModelProperty(value = "방코드", required = true, example = "")
     private String code;
 
 

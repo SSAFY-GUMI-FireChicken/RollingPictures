@@ -1,6 +1,5 @@
 package com.ssafy.api.dto.res;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Builder
@@ -8,6 +7,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SectionDeleteResDTO {
-    @ApiModelProperty(value = "섹션 id", required = true, example = "1")
     private Long id;
 }

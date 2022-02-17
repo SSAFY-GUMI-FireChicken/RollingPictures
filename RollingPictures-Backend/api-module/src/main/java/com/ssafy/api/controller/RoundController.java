@@ -6,30 +6,22 @@ import com.ssafy.api.domain.User;
 import com.ssafy.api.dto.req.RoundReqDTO;
 import com.ssafy.api.dto.res.RoundResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
-import com.ssafy.api.repository.RoundRepository;
 import com.ssafy.api.repository.SectionRepository;
 import com.ssafy.api.service.*;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.S3Uploader;
 import com.ssafy.api.service.common.SingleResult;
-import com.ssafy.core.code.ProgressCode;
-import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Api(tags = {"06. 라운드"})
 @Slf4j
 @RequiredArgsConstructor // Lombok 라이브러리, final 필드에 대한 생성자를 생성함.
 @RestController
@@ -47,7 +39,6 @@ public class RoundController {
     private final ChannelService channelService;
 
 
-    @ApiOperation(value = "라운드 등록", notes = "라운드 등록")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> roundRegister(
             @RequestPart @Valid RoundReqDTO req,
@@ -57,7 +48,6 @@ public class RoundController {
                 || channelUserRepository.findByUser_Id(req.getId()).getSessionId().equals(null)) {
             throw new ApiMessageException("STOMP 연결이 필요한 유저입니다.");
         }
-
 
         User currentUser = signService.findUserById(req.getId());
         List<User> userOrders = sectionRepository.findOrder(req.getGameChannelId());
@@ -100,7 +90,6 @@ public class RoundController {
         return responseService.getSingleResult(RoundResDTO.builder().id(roundId).build());
     }
 
-    @ApiOperation(value = "라운드 조회", notes = "라운드 조회")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public SingleResult<RoundResDTO> roundView(@Valid RoundReqDTO req) throws Exception {
 
