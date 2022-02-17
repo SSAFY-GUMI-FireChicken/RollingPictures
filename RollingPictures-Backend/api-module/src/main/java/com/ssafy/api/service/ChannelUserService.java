@@ -1,11 +1,10 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.domain.Channel;
-import com.ssafy.api.domain.ChannelUser;
-import com.ssafy.api.domain.User;
+import com.ssafy.api.domain.*;
 import com.ssafy.api.dto.req.InOutChannelReqDTO;
 import com.ssafy.api.dto.res.UserInfoResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
+import com.ssafy.api.repository.GameChannelUserInfoRepository;
 import com.ssafy.core.code.GamePlayState;
 import com.ssafy.core.code.YNCode;
 import com.ssafy.core.exception.ApiMessageException;
@@ -23,6 +22,7 @@ public class ChannelUserService {
     private final ChannelService channelService;
     private final SocketService socketService;
     private final GameChannelService gameChannelService;
+    private  final GameChannelUserInfoRepository gameChannelUserInfoRepository;
 
     /**
      * channelUser 생성 후 리턴
@@ -113,6 +113,13 @@ public class ChannelUserService {
 
         if (channelUser.getChannel().getIsPlaying() == YNCode.Y) {
             channelUser.getChannel().getGameChannel().changeConPeopleCnt(1);
+
+            GameChannelUserInfo gameChannelUserInfo = gameChannelUserInfoRepository.findByUser_Id(userId);
+
+            if (gameChannelUserInfo.getSubmitRoundNum() == gameChannelUserInfo.getGameChannel().getCurRoundNumber()) {
+                gameChannelUserInfo.getGameChannel().changeDonePeopleCnt(gameChannelUserInfo.getGameChannel().getDonePeopleCnt() + 1);
+                gameChannelUserInfoRepository.save(gameChannelUserInfo);
+            }
         }
 
         return channelUserRepository.save(channelUser);
@@ -139,6 +146,28 @@ public class ChannelUserService {
             if (channelUser.getChannel().getGameChannel().getConPeopleCnt() == 0) {
                 channelService.deleteChannel(channelUser.getChannel());
             } else {
+                GameChannelUserInfo gameChannelUserInfo = gameChannelUserInfoRepository.findByUser_Id(channelUser.getUser().getId());
+
+                if (gameChannelUserInfo.getSubmitRoundNum() == channelUser.getChannel().getGameChannel().getCurRoundNumber()) {
+                    gameChannelUserInfo.getGameChannel().changeDonePeopleCnt(gameChannelUserInfo.getGameChannel().getDonePeopleCnt() - 1);
+                } else {
+                    if (channelUser.getChannel().getGameChannel().getConPeopleCnt() <= gameChannelUserInfo.getGameChannel().getDonePeopleCnt()) {
+                        channelUser.getChannel().getGameChannel().changeDonePeopleCnt(0);
+                        channelUser.getChannel().getGameChannel().changeStartDate();
+                        channelUser.getChannel().getGameChannel().addCurRoundNumber();
+
+                        if (channelUser.getChannel().getGameChannel().getCurRoundNumber() > channelUser.getChannel().getCurPeopleCnt()) {
+                            socketService.sendGameEnd(channelUser.getChannel().getCode(), channelUser.getChannel().getGameChannel().getCurRoundNumber());
+                            channelService.deleteDisconnectChannelUsers(channelUser.getChannel().getGameChannel().getId());
+                        } else {
+                            socketService.sendNextSignal(channelUser.getChannel().getCode(), channelUser.getChannel().getGameChannel().getCurRoundNumber());
+                        }
+                    } else {
+                        System.out.println(channelUser.getChannel().getGameChannel().getConPeopleCnt()+" "+gameChannelUserInfo.getGameChannel().getDonePeopleCnt());
+                    }
+                }
+
+                gameChannelUserInfoRepository.save(gameChannelUserInfo);
                 channelUserRepository.save(channelUser);
             }
         } else {

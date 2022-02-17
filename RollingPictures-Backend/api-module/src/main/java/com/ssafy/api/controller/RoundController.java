@@ -33,10 +33,10 @@ public class RoundController {
     private final ResponseService responseService;
     private final SignService signService;
     private final SectionRepository sectionRepository;
-    private final ProgressService progressService;
     private final SocketService socketService;
     private final ChannelUserRepository channelUserRepository;
     private final ChannelService channelService;
+    private final GameChannelUserInfoService gameChannelUserInfoService;
 
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,14 +74,13 @@ public class RoundController {
                 .build();
         long roundId = roundService.post(round);
 
-        switch (progressService.isNextRound(req.getRoundNumber(), req.getGameChannelId())) {
+        switch (gameChannelUserInfoService.isNextRound(req.getRoundNumber(), req.getId())) {
             case NEXT:
                 socketService.sendNextSignal(section.getCode(), req.getRoundNumber() + 1);
-                System.out.println(req);
                 break;
             case END :
                 socketService.sendGameEnd(section.getCode(), req.getRoundNumber() + 1);
-                channelService.deleteUnconnectChannelUsers(req.getGameChannelId());
+                channelService.deleteDisconnectChannelUsers(req.getGameChannelId());
                 break;
             case NONE :
                 break;

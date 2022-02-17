@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,10 @@ public class GameChannel {
 
     private Integer conPeopleCnt;
 
+    private Integer donePeopleCnt;
+
+    private LocalDateTime startDate;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "channel_id")
     private Channel channel;
@@ -37,22 +44,14 @@ public class GameChannel {
     private List<Section> sections = new ArrayList<>();
 
     @OneToMany(mappedBy = "gameChannel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameChannelUserOrder> gameChannelUserOrders = new ArrayList<>();
-
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "progress_id")
-    private Progress progress;
+    private List<GameChannelUserInfo> gameChannelUserInfos = new ArrayList<>();
 
     public void addSection(Section section) {
         section.changeGameChannel(this);
     }
 
-    public void addGameChannelUserOrder(GameChannelUserOrder order) {
-        order.changeGameChannel(this);
-    }
-
-    public void changeProgress(Progress progress) {
-        this.progress = progress;
+    public void addGameChannelUserInfo(GameChannelUserInfo info) {
+        info.changeGameChannel(this);
     }
 
     public void changeConPeopleCnt(int amount) {
@@ -61,6 +60,14 @@ public class GameChannel {
 
     public void addCurRoundNumber() {
         curRoundNumber++;
+    }
+
+    public void changeDonePeopleCnt(int donePeopleCnt) {
+        this.donePeopleCnt = donePeopleCnt;
+    }
+
+    public void changeStartDate() {
+        startDate = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 
     @Override

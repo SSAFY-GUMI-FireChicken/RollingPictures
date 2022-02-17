@@ -542,9 +542,16 @@ class GameActivity : AppCompatActivity() {
         fragmentNum = -1
         leaveSession()
         disconnectStomp()
+        activityGameActivity.headSetImageButton.setImageResource(R.drawable.ic_baseline_headset_off_24)
+        isVoice = false
         if (mRestPingDisposable != null) mRestPingDisposable.dispose()
         if (compositeDisposable != null) compositeDisposable!!.dispose()
         super.onStop()
+    }
+
+    override fun onRestart() {
+        connectStomp()
+        super.onRestart()
     }
 
     private fun toast(text: String) {

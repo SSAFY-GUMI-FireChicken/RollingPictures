@@ -7,7 +7,7 @@ import com.ssafy.api.dto.res.SectionCreateResDTO;
 import com.ssafy.api.dto.res.SectionRetrieveResDTO;
 import com.ssafy.api.repository.ChannelUserRepository;
 import com.ssafy.api.repository.GameChannelRepository;
-import com.ssafy.api.repository.GameChannelUserOrderRepository;
+import com.ssafy.api.repository.GameChannelUserInfoRepository;
 import com.ssafy.api.repository.SectionRepository;
 import com.ssafy.core.exception.ApiMessageException;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class SectionService {
     private final SectionRepository sectionRepository;
     private final GameChannelRepository gameChannelRepository;
     private final ChannelUserRepository channelUserRepository;
-    private final GameChannelUserOrderRepository gameChannelUserOrderRepository;
+    private final GameChannelUserInfoRepository gameChannelUserOrderRepository;
     private final ChannelService channelService;
     private final SocketService socketService;
 
@@ -91,8 +91,8 @@ public class SectionService {
             throw new ApiMessageException("이미 해당 게임방에 섹션이 생성되었습니다.");
         }
 
-        findGameChannel.getProgress().changeDonePeopleCnt(0);
-        findGameChannel.getProgress().changeStartDate();
+        findGameChannel.changeDonePeopleCnt(0);
+        findGameChannel.changeStartDate();
 
         Channel channel = channelService.findByCode(findGameChannel.getCode());
         List<ChannelUser> userList = channel.getChannelUsers();

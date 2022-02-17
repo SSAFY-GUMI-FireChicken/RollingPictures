@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface GameChannelUserOrderRepositoryCustom {
+public interface GameChannelUserInfoRepositoryCustom {
     Optional<Integer> findOrderNum(Long gameChannelId, Long userId);
 }
