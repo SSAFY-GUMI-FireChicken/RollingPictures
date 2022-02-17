@@ -95,7 +95,8 @@ class LoginActivity : AppCompatActivity() {
     private fun login(password: String, type: String, uid: String) {
         UserService().login(password, type, uid, object : RetrofitCallback<SingleResult<LoginUserResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<LoginUserResDTO>) {
-                if (responseData.data.id > 0L) {
+
+                if (responseData.output==1) {
                     loginUserResDTO = responseData
                     prefs.setId(loginUserResDTO.data.id)
                     Toast.makeText(this@LoginActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
