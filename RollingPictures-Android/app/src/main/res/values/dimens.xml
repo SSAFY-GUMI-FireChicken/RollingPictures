@@ -54,6 +54,7 @@
     <dimen name="margin_size_60">60dp</dimen>
     <dimen name="margin_size_68">68dp</dimen>
     <dimen name="margin_size_140">140dp</dimen>
+    <dimen name="margin_size_200">200dp</dimen>
     <dimen name="margin_size_300">300dp</dimen>
     <dimen name="margin_size_400">400dp</dimen>
 

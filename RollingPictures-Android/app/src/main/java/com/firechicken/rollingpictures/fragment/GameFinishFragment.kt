@@ -17,6 +17,7 @@ import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.adapter.PlayerRecyclerViewAdapter
 import com.firechicken.rollingpictures.adapter.SectionRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.sectionList
@@ -48,9 +49,8 @@ class GameFinishFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        ApplicationClass.fragmentNum = 3
+        fragmentNum = 3
         (activity as GameActivity).apply {
-            timeProgressBar.visibility = View.GONE
             roundTextView.setText("Sketchbook")
         }
         fragmentGameFinishBinding = FragmentGameFinishBinding.inflate(inflater, container, false)

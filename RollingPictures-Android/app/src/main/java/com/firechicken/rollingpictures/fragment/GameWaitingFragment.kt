@@ -63,11 +63,14 @@ class GameWaitingFragment : Fragment() {
 
         for(player in channelResDTO.data.users){
             if(player.id== loginUserResDTO.data.id){
+                Log.d(TAG, "밍11 ")
                 if(player.isLeader=="Y"){
+                    Log.d(TAG, "밍22 ")
                     startGameButton.setText("START GAME")
                     startGameButton.setEnabled(true)
                     settingImageButton.visibility = VISIBLE
                 }else{
+                    Log.d(TAG, "밍33 ")
                     startGameButton.setText("WAITING FOR GAME TO START...")
                     startGameButton.setTextSize(16F)
                     startGameButton.setEnabled(false)
@@ -107,8 +110,12 @@ class GameWaitingFragment : Fragment() {
         }
 
         fragmentGameWaitingBinding.startGameButton.setOnClickListener {
-            makeGameChannel()
-
+            Log.d("test", "playerList.size : ${playerList.size}")
+            if(playerList.size == 1){
+                toast( "최소 두명 이상이 있어야 게임을 진행할 수 있습니다.")
+            }else{
+                makeGameChannel()
+            }
 
         }
 

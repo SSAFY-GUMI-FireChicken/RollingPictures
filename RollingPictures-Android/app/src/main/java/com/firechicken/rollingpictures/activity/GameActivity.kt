@@ -1,7 +1,6 @@
 package com.firechicken.rollingpictures.activity
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,13 +14,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.firechicken.rollingpictures.config.ApplicationClass
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.channelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerRecyclerViewAdapter
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
@@ -29,7 +26,6 @@ import com.firechicken.rollingpictures.config.ApplicationClass.Companion.recycle
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
 import com.firechicken.rollingpictures.databinding.ActivityGameBinding
 import com.firechicken.rollingpictures.dialog.GameExitDialog
-import com.firechicken.rollingpictures.dialog.GameSettingDialog
 import com.firechicken.rollingpictures.dialog.PermissionsDialogFragment
 import com.firechicken.rollingpictures.dto.*
 import com.firechicken.rollingpictures.fragment.GameDrawingFragment
@@ -37,8 +33,6 @@ import com.firechicken.rollingpictures.fragment.GameFinishFragment
 import com.firechicken.rollingpictures.fragment.GameWaitingFragment
 import com.firechicken.rollingpictures.fragment.GameWritingFragment
 import com.firechicken.rollingpictures.service.ChannelService
-import com.firechicken.rollingpictures.service.SectionService
-import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 import com.firechicken.rollingpictures.webrtc.CustomHttpClient
 import com.firechicken.rollingpictures.webrtc.CustomWebSocket
@@ -102,11 +96,6 @@ class GameActivity : AppCompatActivity() {
 
         gameChannelResDTO = SingleResult (GameChannelResDTO(0),"",0)
 
-        // 시간 표시 (게임진행 중에만 사용함)
-        val progressGrow = AnimationUtils.loadAnimation(this, R.anim.grow)
-        //activityGameActivity.timeProgressBar.startAnimation(progressGrow)
-        activityGameActivity.timeProgressBar.visibility = View.GONE
-
         // 초기 게임방 대기 시 인원 설정
         for(users in channelResDTO.data.users){
             playerList.add(users)
@@ -124,6 +113,10 @@ class GameActivity : AppCompatActivity() {
         connectStomp()
         Log.d(SSESION_TAG, "onCreate2: ")
 
+        if (!arePermissionGranted()) {
+            val permissionsFragment: DialogFragment = PermissionsDialogFragment(this@GameActivity)
+            permissionsFragment.show(supportFragmentManager, "Permissions Fragment")
+        }
     }
 
     // 권한이 받아졌음을 boolean으로 return
@@ -138,15 +131,17 @@ class GameActivity : AppCompatActivity() {
 
     // 메인 액티비티에서 권한을 허가 받지 못했으면, 권한을 요청함
     fun askForPermissions() {
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)||
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED)||
                 (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED)||
                 (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED)
         ) {
-            Log.d(TAG, "path0: ")
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                this, arrayOf(Manifest.permission.RECORD_AUDIO
+                    , Manifest.permission.READ_EXTERNAL_STORAGE
+                    , Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 MY_PERMISSIONS_REQUEST
             )
         }
@@ -357,6 +352,8 @@ class GameActivity : AppCompatActivity() {
                 val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                 transaction.commit()
 
+
+
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
         val dispTopic2: Disposable = mStompClient!!.topic("/channel/out/${channelResDTO.data.code}")
@@ -367,10 +364,10 @@ class GameActivity : AppCompatActivity() {
 
                 //channel/out 신호가 들어왔을 때 실행할 함수
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
-
+                removePlayer(user)
                 //GameWaitingFragment에 있었다면
                 if(fragmentNum == 0){
-                    removePlayer(user)
+
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
                     transaction.commit()
                 }
@@ -405,8 +402,13 @@ class GameActivity : AppCompatActivity() {
                 val user = mGson.fromJson(topicMessage.getPayload(), UserInfoResDTO::class.java)
                 updateLeader(user)
 
-                val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
-                transaction.commit()
+                if(fragmentNum == 0){
+                    Log.d(TAG, "밍 ")
+                    val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWaitingFragment())
+                    transaction.commit()
+                    Log.d(TAG, "밍1 " )
+                }
+
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -415,17 +417,19 @@ class GameActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage ->
                 Log.d(TAG, "dispTopic5 Received " + topicMessage.getPayload())
-
+                Log.d(TAG, "묭 ")
                 //channel/game/next 신호가 들어왔을 때 실행할 함수
                 roundNum = mGson.fromJson(topicMessage.getPayload(), Int::class.java)
                 if(roundNum%2==1){
+                    Log.d(TAG, "수현님 GameActivity_싸피 GameWritingFragment "+ topicMessage.getPayload())
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameWritingFragment())
                     transaction.commit()
                 }else{
+                    Log.d(TAG, "수현님 GameActivity_싸피 GameDrawingFragment "+ topicMessage.getPayload())
                     val transaction = supportFragmentManager.beginTransaction().replace(R.id.frameLayout, GameDrawingFragment())
                     transaction.commit()
                 }
-
+                Log.d(TAG, "묭3 ")
 
             }) { throwable -> Log.e(TAG, "Error on subscribe topic", throwable) }
 
@@ -472,7 +476,7 @@ class GameActivity : AppCompatActivity() {
     //player 입장
     private fun addPlayer(user: UserInfoResDTO) {
         channelResDTO.data.users.add(user)
-            playerList = channelResDTO.data.users
+        playerList = channelResDTO.data.users
         playerRecyclerViewAdapter.notifyDataSetChanged()
         recyclerView.smoothScrollToPosition(playerList.size - 1)
     }
@@ -497,6 +501,22 @@ class GameActivity : AppCompatActivity() {
             playerList = users
         }
         playerRecyclerViewAdapter.notifyDataSetChanged()
+//        var gameWaitingFragment: GameWaitingFragment = supportFragmentManager.findFragmentById(R.id.frameLayout) as GameWaitingFragment
+//        for(player in channelResDTO.data.users){
+//            if(player.id== ApplicationClass.loginUserResDTO.data.id){
+//                if(player.isLeader=="Y"){
+//                    gameWaitingFragment.startGameButton.setText("START GAME")
+//                    gameWaitingFragment.startGameButton.setEnabled(true)
+//                    gameWaitingFragment.settingImageButton.visibility = View.VISIBLE
+//                }else{
+//                    gameWaitingFragment.startGameButton.setText("WAITING FOR GAME TO START...")
+//                    gameWaitingFragment.startGameButton.setTextSize(16F)
+//                    gameWaitingFragment.startGameButton.setEnabled(false)
+//                    gameWaitingFragment.settingImageButton.visibility = View.GONE
+//                }
+//                break
+//            }
+//        }
     }
 
 

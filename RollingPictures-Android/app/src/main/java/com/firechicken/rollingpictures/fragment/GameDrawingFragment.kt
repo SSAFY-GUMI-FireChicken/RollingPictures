@@ -1,11 +1,10 @@
 package com.firechicken.rollingpictures.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
@@ -21,6 +21,7 @@ import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.activity.MainActivity
 import com.firechicken.rollingpictures.config.ApplicationClass
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.loginUserResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
@@ -56,6 +57,7 @@ class GameDrawingFragment : Fragment() {
 
     private lateinit var binding: FragmentGameDrawingBinding
     private var isBrushSettingOpen: Boolean = false
+    lateinit var explainTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,14 +67,14 @@ class GameDrawingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        ApplicationClass.fragmentNum = 2
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
+        fragmentNum = 2
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game_drawing, container, false)
 
         (activity as GameActivity).roundTextView.setText("Round ${roundNum}")
         return binding.root
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -83,6 +85,14 @@ class GameDrawingFragment : Fragment() {
         colorSelector()
         setBrushWidth()
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            // null 체크를 해줘야만 완료를 눌러 뷰가 사라졌을 때 실행 안하겠음을 실행할 수 있음
+            if(fragmentNum==2 && binding.completeButton.isEnabled){
+                explainTextView = view.findViewById(R.id.explainTextView)
+                explainTextView.setTextColor(R.color.red_dark)
+                explainTextView.setText("다음 라운드로 넘어갈 수 있도록 완료해주세요!!!")
+            }
+        }, 60000)
 
         binding.completeButton.setOnClickListener {
             binding.completeButton.text = "SUBMITED"
@@ -297,7 +307,7 @@ class GameDrawingFragment : Fragment() {
         RoundService().roundRegister(req, multipartFile, object : RetrofitCallback<SingleResult<RoundResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
                 if (responseData.output==1) {
-
+                    Log.d(TAG, "수현님 GameDrawingFragment_싸피 $responseData")
                     Log.d(TAG, "onSuccess: ${responseData.data.imgSrc}")
                 } else {
                     Toast.makeText(

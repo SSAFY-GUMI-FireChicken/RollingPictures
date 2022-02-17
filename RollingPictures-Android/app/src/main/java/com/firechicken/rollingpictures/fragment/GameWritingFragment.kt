@@ -1,17 +1,22 @@
 package com.firechicken.rollingpictures.fragment
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.firechicken.rollingpictures.R
 import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.config.ApplicationClass
+import com.firechicken.rollingpictures.config.ApplicationClass.Companion.fragmentNum
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.gameChannelResDTO
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.prefs
 import com.firechicken.rollingpictures.config.ApplicationClass.Companion.roundNum
@@ -27,6 +32,8 @@ import kotlinx.android.synthetic.main.fragment_game_writing.completeButton
 private const val TAG = "GameWritingFragment_싸피"
 class GameWritingFragment : Fragment() {
 
+    lateinit var explainTextView:TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -36,7 +43,6 @@ class GameWritingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         (activity as GameActivity).apply {
-            timeProgressBar.visibility = View.VISIBLE
             roundTextView.setText("Round ${roundNum}")
         }
 
@@ -45,9 +51,10 @@ class GameWritingFragment : Fragment() {
     }
 
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ApplicationClass.fragmentNum = 1
+        fragmentNum = 1
 
         if(roundNum==1){
             guideRoundTextView.setText(getString(R.string.guide_round1))
@@ -59,10 +66,20 @@ class GameWritingFragment : Fragment() {
 
         roundView(gameChannelResDTO.data.id, ApplicationClass.loginUserResDTO.data.id, roundNum)
 
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            // null 체크를 해줘야만 완료를 눌러 뷰가 사라졌을 때 실행 안하겠음을 실행할 수 있음
+            if(fragmentNum==1 && completeButton.isEnabled){
+                explainTextView = view.findViewById(R.id.explainTextView)
+                explainTextView.setTextColor(R.color.red_dark)
+                explainTextView.setText("다음 라운드로 넘어갈 수 있도록 완료해주세요!!!")
+            }
+        }, 15000)
+
         completeButton.setOnClickListener {
             completeButton.text = "SUBMITED"
             completeButton.isEnabled = false
-            Log.d(TAG, "onViewCreated: ${gameChannelResDTO.data.id}, ${prefs.getId()!!}, ${writingEditText.text.toString()}, ${roundNum}")
+            Log.d(TAG, "setOnClickListener onViewCreated: ${gameChannelResDTO.data.id}, ${prefs.getId()!!}, ${writingEditText.text.toString()}, ${roundNum}")
             val req = RoundReqDTO(gameChannelResDTO.data.id, prefs.getId()!!, writingEditText.text.toString(), roundNum)
             roundRegister(req)
         }
@@ -72,7 +89,8 @@ class GameWritingFragment : Fragment() {
         RoundService().roundRegister(req, null, object : RetrofitCallback<SingleResult<RoundResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<RoundResDTO>) {
                 if (responseData.output==1) {
-
+                    Log.d(TAG, "수현님 GameWritingFragment_싸피 $responseData")
+                    Log.d(TAG, "묭묭 $responseData")
                 } else {
                     Toast.makeText(
                         context,

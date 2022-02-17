@@ -7,20 +7,20 @@
     android:background="@android:color/transparent">
 
     <TextView
-        android:id="@+id/slashRoundTextView"
+        android:id="@+id/explainTextView"
         style="@style/Text.RoundText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin"
-        android:background="@drawable/bg_round"
+        android:background="@drawable/bg_round_player"
         android:gravity="center"
+        android:text="@string/game_info"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/slash_round"
-        tools:text="@string/slash_round" />
+        tools:text="@string/game_info" />
 
     <TextView
         android:id="@+id/guideRoundTextView"
@@ -30,7 +30,7 @@
         android:text="@string/guide_round1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slashRoundTextView"
+        app:layout_constraintTop_toBottomOf="@+id/explainTextView"
         tools:text="@string/guide_round1" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -63,16 +63,14 @@
 
     <ImageView
         android:id="@+id/pictureImageView"
-        android:layout_width="411dp"
+        android:layout_width="@dimen/margin_size_400"
         android:layout_height="0dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toTopOf="@+id/writingEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideRoundTextView"
-        app:layout_constraintVertical_bias="0.489"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

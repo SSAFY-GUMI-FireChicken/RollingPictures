@@ -7,38 +7,27 @@
     android:background="@drawable/bg_activity"
     tools:context=".activity.GameActivity">
 
-    <ProgressBar
-        android:id="@+id/timeProgressBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_size_4"
-        android:scaleY="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageButton
         android:id="@+id/headSetImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_size_8"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:onClick="buttonPressed"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_baseline_headset_off_24"
-        app:layout_constraintEnd_toStartOf="@+id/micImageButton"
-        app:layout_constraintTop_toTopOf="@+id/roundTextView" />
-
-    <ImageButton
-        android:id="@+id/micImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_size_32"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_baseline_mic_off_24"
+        android:onClick="buttonPressed"
+        android:src="@drawable/ic_baseline_headset_off_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/headSetImageButton" />
+        app:layout_constraintTop_toTopOf="@+id/roundTextView" />
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/micImageButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="@dimen/margin_size_32"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:src="@drawable/ic_baseline_mic_off_24"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/headSetImageButton" />-->
 
     <TextView
         android:id="@+id/roundTextView"
