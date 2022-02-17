@@ -39,7 +39,7 @@ spring:
 
   # 데이터 베이스 연결 설정
   datasource:
-    url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&amp;useSSL=false&amp;autoReconnection=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: ssafy0107
