@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -18,17 +17,13 @@ import com.firechicken.rollingpictures.dto.UserInfoUpdateReqDTO
 import com.firechicken.rollingpictures.service.UserService
 import com.firechicken.rollingpictures.util.RetrofitCallback
 
-private const val TAG = "UserEditDialog_싸피"
-
-
 class UserEditDialog(context: Context) : Dialog(context) {
+
     interface OnDialogClickListener {
         fun onDialogOkClick(nickname: String)
     }
-
     private val dialog = Dialog(context)
     private lateinit var dialogListener: OnDialogClickListener
-
     fun setOnClickListener(listener: OnDialogClickListener) {
         dialogListener = listener
     }
@@ -41,7 +36,6 @@ class UserEditDialog(context: Context) : Dialog(context) {
             setCancelable(true)
             show()
         }
-
 
         val editText = dialog.findViewById<EditText>(R.id.editText)
         val charNum = dialog.findViewById<TextView>(R.id.CharNumTextView)
@@ -77,34 +71,26 @@ class UserEditDialog(context: Context) : Dialog(context) {
     }
 
     private fun userInfoUpdate(nickname: String?, userId: String?) {
+
         val user = UserInfoUpdateReqDTO(nickname, userId)
-        Log.d(TAG, "userInfoUpdate: ${user}")
         UserService().userInfoUpdate(user, object : RetrofitCallback<SingleResult<UserIdResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<UserIdResDTO>) {
                 if (responseData.data.id > 0L) {
-                    Log.d(TAG, "onSuccess: ${responseData}")
                     prefs.setNickName(nickname!!)
                     Toast.makeText(dialog.context, "닉네임이 변경되었습니다.", Toast.LENGTH_SHORT).show()
                 } else {
-                    Log.d(TAG, "onSuccess: null")
-                    Toast.makeText(
-                        dialog.context,
-                        "문제가 발생하였습니다. 다시 시도해주세요.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(dialog.context, "문제가 발생하였습니다. 다시 시도해주세요.",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
                 Toast.makeText(dialog.context, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 
             override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
                 Toast.makeText(dialog.context, "문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
         })
     }
-
 }

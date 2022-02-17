@@ -7,16 +7,14 @@ import android.graphics.drawable.ColorDrawable
 import android.widget.TextView
 import com.firechicken.rollingpictures.R
 
-private const val TAG = "GameExitDialog_싸피"
-
 class GameExitDialog(context: Context) : Dialog(context){
+
     interface OnDialogClickListener {
         fun onDialogOkClick()
     }
 
     val dialog = Dialog(context)
     private lateinit var dialogListener: OnDialogClickListener
-
 
     fun setOnClickListener(listener: OnDialogClickListener) {
         dialogListener = listener

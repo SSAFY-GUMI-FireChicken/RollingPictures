@@ -7,12 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firechicken.rollingpictures.R
-import com.firechicken.rollingpictures.config.ApplicationClass.Companion.playerList
 import com.firechicken.rollingpictures.dto.RoundInfo
 import com.firechicken.rollingpictures.dto.SectionAllRetrieveResDTO
-import com.firechicken.rollingpictures.dto.SectionRetrieveResDTO
-import kotlinx.android.synthetic.main.fragment_game_writing.*
-import kotlinx.android.synthetic.main.list_item_player.view.*
 import kotlinx.android.synthetic.main.list_item_section.view.*
 
 class SectionRecyclerViewAdapter(
@@ -41,19 +37,15 @@ class SectionRecyclerViewAdapter(
                 view.playerName2.visibility = View.VISIBLE
                 Glide.with(context!!).load(round.img).into(view.ImageView)
                 view.playerName2.setText("그림을 제출한 사람 : ${round.nickname}")
-
             }
-
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionInfoHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.list_item_section, parent, false)
         return SectionInfoHolder(view)
     }
-
 
     override fun onBindViewHolder(holder: SectionInfoHolder, position: Int) {
         holder.apply {
@@ -63,7 +55,4 @@ class SectionRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = sectionList[sectionIdx].roundInfos.size
-
-
-
 }

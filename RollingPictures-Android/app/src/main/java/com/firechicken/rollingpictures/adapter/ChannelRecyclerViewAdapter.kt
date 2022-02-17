@@ -34,13 +34,10 @@ class ChannelRecyclerViewAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelInfoHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item_public_room, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_public_room, parent, false)
         return ChannelInfoHolder(view)
     }
-
 
     override fun onBindViewHolder(holder: ChannelInfoHolder, position: Int) {
         holder.apply {
@@ -49,5 +46,4 @@ class ChannelRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = channelList.size
-
 }

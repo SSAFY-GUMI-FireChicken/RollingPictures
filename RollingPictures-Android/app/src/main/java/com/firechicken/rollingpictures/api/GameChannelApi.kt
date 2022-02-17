@@ -10,5 +10,4 @@ interface GameChannelApi {
     //게임 방 생성
     @POST("api/gamechannel")
     fun makeGameChannel(@Body body: MakeGameChannelReqDTO): Call<SingleResult<GameChannelResDTO>>
-
 }

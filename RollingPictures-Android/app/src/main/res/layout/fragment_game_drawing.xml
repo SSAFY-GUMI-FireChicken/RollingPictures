@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_size_16"
             android:background="@color/white"
-            android:elevation="4dp"
+            android:elevation="@dimen/margin_size_4"
             app:layout_constraintBottom_toTopOf="@+id/drawView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +92,6 @@
                 app:layout_constraintStart_toEndOf="@id/circleView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/draw_tool" />
-
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/eraserImageButton"
@@ -145,7 +144,7 @@
             android:layout_height="@dimen/fragment_height"
             android:layout_marginBottom="@dimen/margin_size_16"
             android:background="@color/white"
-            android:elevation="3dp"
+            android:elevation="@dimen/margin_size_4"
             app:layout_constraintBottom_toTopOf="@+id/completeButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

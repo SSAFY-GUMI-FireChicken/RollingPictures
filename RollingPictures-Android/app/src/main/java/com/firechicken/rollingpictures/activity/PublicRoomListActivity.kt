@@ -3,7 +3,6 @@ package com.firechicken.rollingpictures.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,8 +15,6 @@ import com.firechicken.rollingpictures.dto.InOutChannelReqDTO
 import com.firechicken.rollingpictures.dto.SingleResult
 import com.firechicken.rollingpictures.service.ChannelService
 import com.firechicken.rollingpictures.util.RetrofitCallback
-
-private const val TAG = "PublicRoomList_싸피"
 
 class PublicRoomListActivity : AppCompatActivity() {
 
@@ -40,24 +37,23 @@ class PublicRoomListActivity : AppCompatActivity() {
         }
 
         activityPublicRoomListBinding.prevImageButton.setOnClickListener {
-            if(listIdx==0){
+            if(listIdx==0) {
                 toast("가장 첫 페이지 입니다!")
-            }else{
+            }else {
                 searchChannelList(--listIdx, 10)
             }
-
         }
+
         activityPublicRoomListBinding.nextImageButton.setOnClickListener {
-            if(listIdx==totalCnt/10){
+            if(listIdx==totalCnt/10) {
                 toast("가장 마지막 페이지 입니다!")
-            }else{
+            }else {
                 searchChannelList(++listIdx, 10)
             }
         }
     }
 
     private fun searchChannelList(page: Int, batch: Int) {
-        Log.d(TAG, "searchChannelList: ")
         ChannelService().searchChannelList(page, batch, object :
             RetrofitCallback<SingleResult<ChannelListResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelListResDTO>) {
@@ -72,27 +68,18 @@ class PublicRoomListActivity : AppCompatActivity() {
                     totalCnt = responseData.data.totalCnt.toInt()
 
                     adapterRefresh()
-
-                    Log.d(TAG, "responseData.data.totalCnt: ${responseData.data.totalCnt}")
-
                 } else {
-                    Log.d(TAG, "onSuccess: null")
-                    Toast.makeText(
-                        this@PublicRoomListActivity,
-                        "문제가 발생하였습니다. 다시 시도해주세요.1",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@PublicRoomListActivity, "문제가 발생하였습니다. 다시 시도해주세요.1",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
                 Toast.makeText(this@PublicRoomListActivity, "문제가 발생하였습니다. 다시 시도해주세요.2", Toast.LENGTH_SHORT)
                     .show()
             }
 
             override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
                 Toast.makeText(this@PublicRoomListActivity, "문제가 발생하였습니다. 다시 시도해주세요.3", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -116,10 +103,8 @@ class PublicRoomListActivity : AppCompatActivity() {
 
     fun inChannel(roomcode: String, userId: Long) {
         val req = InOutChannelReqDTO(roomcode, userId)
-        Log.d(TAG, "inChannel: ")
         ChannelService().inChannel(req, object : RetrofitCallback<SingleResult<ChannelResDTO>> {
             override fun onSuccess(code: Int, responseData: SingleResult<ChannelResDTO>) {
-                Log.d(TAG, "responseData.data.id: ${responseData.data}")
                 if(responseData.data != null){
                     if (responseData.data.id > 0) {
                         ApplicationClass.channelResDTO = responseData
@@ -127,7 +112,6 @@ class PublicRoomListActivity : AppCompatActivity() {
                         intent.putExtra("code", roomcode)
                         startActivity(intent)
                     } else {
-                        Log.d(TAG, "onSuccess: null")
                         toast("inChannel에서 문제가 발생하였습니다. 다시 시도해주세요.")
                     }
                 }else{
@@ -136,24 +120,20 @@ class PublicRoomListActivity : AppCompatActivity() {
                     }else{
                         toast("해당 방은 정원초과 입니다.")
                     }
-
                 }
             }
 
             override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
                 toast("inChannel에서 실패문제가 발생하였습니다. 다시 시도해주세요.")
             }
 
             override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
                 toast("inChannel에서 에러문제가 발생하였습니다. 다시 시도해주세요.")
             }
         })
     }
 
     private fun toast(text: String) {
-        Log.i(TAG, text)
         Toast.makeText(this@PublicRoomListActivity, text, Toast.LENGTH_SHORT).show()
     }
 }

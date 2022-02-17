@@ -11,7 +11,9 @@ import com.firechicken.rollingpictures.activity.GameActivity
 import com.firechicken.rollingpictures.activity.MainActivity
 
 class PermissionsDialogFragment(private val activity: Activity) : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         val builder = AlertDialog.Builder(
             requireActivity()
         )

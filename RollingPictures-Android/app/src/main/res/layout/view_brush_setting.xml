@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/padding_size_10"
     android:background="@drawable/bg_tool_detail"
-    android:elevation="5dp"
+    android:elevation="@dimen/margin_size_4"
     android:orientation="vertical">
 
     <SeekBar
@@ -137,8 +137,5 @@
             app:tint="@color/palette_gray"/>
 
     </LinearLayout>
-    
-
-
 
 </LinearLayout>

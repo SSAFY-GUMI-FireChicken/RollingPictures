@@ -1,11 +1,11 @@
 package com.firechicken.rollingpictures.webrtc.openvidu
 
-import android.util.Log
 import org.webrtc.*
 import java.lang.IllegalStateException
 import java.util.ArrayList
 
 abstract class Participant {
+
     var connectionId: String? = null
     var participantName: String
         protected set
@@ -31,7 +31,6 @@ abstract class Participant {
             try {
                 peerConnection!!.close()
             } catch (e: IllegalStateException) {
-                Log.e("Dispose PeerConnection", e.message!!)
             }
         }
     }

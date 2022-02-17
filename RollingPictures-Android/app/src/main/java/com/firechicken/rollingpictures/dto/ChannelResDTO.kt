@@ -1,7 +1,6 @@
 package com.firechicken.rollingpictures.dto
 
 data class ChannelResDTO(
-
     var id: Long,
     var code: String,
     var title: String,

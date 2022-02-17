@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/fragment_height">
 
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/playerButton"
         style="@style/Text.ButtonOkStyle"

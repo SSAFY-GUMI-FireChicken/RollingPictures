@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RollingPictures-Android</string>
+    <string name="app_name">RollingPictures</string>
     <string name="welcome_message"> 님, 환영합니다!</string>
     <string name="game_start">GAME START</string>
     <string name="create_room">CREATE ROOM</string>
@@ -62,5 +62,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
     <string name="maximum_count">정원은 최대 6명입니다.</string>
     <string name="room_default_title">그리기 초보만</string>
     <string name="room_default_cnt">3</string>
+    <string name="set_room">방 설정</string>
+    <string name="player_cnt">10/10</string>
+    <string name="ex_publisher">TextView</string>
+    <string name="ex_sender">TextView</string>
+    <string name="answer">TextView</string>
 
 </resources>
