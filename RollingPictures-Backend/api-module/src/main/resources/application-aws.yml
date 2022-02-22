@@ -10,5 +10,5 @@ cloud:
       auto: false
     credentials:
       accessKey: AKIA4X5SSSG7A44IYGM7
-      secretKey: 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
+      secretKey:
       instanceProfile: true
